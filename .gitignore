@@ -1,0 +1,7 @@
+# R stuff
+.Rhistory
+.Rproj.user/*
+
+# Data files
+*.csv
+*.xml
