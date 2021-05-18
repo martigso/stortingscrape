@@ -5,3 +5,4 @@
 # Data files
 *.csv
 *.xml
+.Rproj.user
