@@ -1,0 +1,13 @@
+Package: stortingscrape
+Type: Package
+Title: Easily access data from the Norwegian Parliament (Stortinget) API
+Version: 0.1
+Authors@R: person("Martin", "Soyland", email = "martin.soyland@stv.uio.no",
+                  role = c("aut", "cre"))
+Description: Package for retriving information from the Norwegian Parliament.
+Depends: R (>= 3.1.0)
+Encoding: UTF-8
+Imports: rvest
+License: NLOD
+LazyData: true
+RoxygenNote: 7.1.1

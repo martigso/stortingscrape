@@ -1,6 +1,8 @@
 # R stuff
 .Rhistory
 .Rproj.user/*
+./src/r/tests
+.Rbuildignore
 
 # Data files
 *.csv
