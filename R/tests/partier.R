@@ -6,6 +6,7 @@ suppressMessages(library(readr))
 dir.create("./data/partier/xml/", recursive = TRUE, showWarnings = FALSE)
 dir.create("./data/partier/csv/", recursive = TRUE, showWarnings = FALSE)
 
+# You would want to check whether the "./data/sesjoner/csv/sesjoner.csv" data is outdated before running this script
 sesjoner <- read_csv("./data/sesjoner/csv/sesjoner.csv", col_types = cols())
 
 dls <- gsub(".xml", "", list.files("./data/partier/xml/"))
