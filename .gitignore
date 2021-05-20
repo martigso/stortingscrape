@@ -1,7 +1,11 @@
 # R stuff
 .Rhistory
 .Rproj.user/*
+<<<<<<< HEAD
 ./R/tests
+=======
+./src/r/tests
+>>>>>>> 93a11cb1f50d0907969bb1fed05f9a20b8bb4409
 .Rbuildignore
 
 # Data files
