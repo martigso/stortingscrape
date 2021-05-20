@@ -1,7 +1,7 @@
 # R stuff
 .Rhistory
 .Rproj.user/*
-./src/r/tests
+./R/tests
 .Rbuildignore
 
 # Data files
