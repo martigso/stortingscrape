@@ -2,11 +2,12 @@
 #' 
 #' A function for retrieving Norwegian MPs for a given parliamentary period from the parliament API
 #' 
-#' @usage get_parlperiod_mps(periodid = NA)
+#' @usage get_parlperiod_mps(periodid = NA, good_manners = 0)
 #' 
 #' @param periodid Character string indicating the id of the parliamentary period to retrieve.
+#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
 #' 
-#' @return A data.frame with respnse date, version, date of death/birth, first and last name, id, and gender of the requested MP.
+#' @return A data.frame with response date, version, date of death/birth, first and last name, id, and gender of the requested MP.
 #' 
 #' @family get_mp_data
 #' 
@@ -15,20 +16,17 @@
 #' # Request one MP by id
 #' get_parlperiod_mps("2005-2009")
 #' 
-#' # Request several MPs by id
-#' ids <- c("1961-65", "1997-01", "MAAA")
-#' 
-#' mps <- lapply(ids, get_parlperiod_mps)
-#' 
+#' # Request MPs from several periods by id
+#' ids <- c("1961-65", "1997-01", "2009-2013")
+#' mps <- lapply(ids, get_parlperiod_mps, good_manners = 2)
 #' mps <- do.call(rbind, mps)
-#' 
 #' 
 #' @export
 #' 
 
 
 
-get_parlperiod_mps <- function(periodid){
+get_parlperiod_mps <- function(periodid, good_manners = 0){
   
   require(rvest)
   
@@ -44,7 +42,11 @@ get_parlperiod_mps <- function(periodid){
                     gender = tmp %>% html_nodes("representanter_liste > representant > kjoenn") %>% html_text(),
                     period_id = tmp %>% html_nodes("stortingsperiode_id") %>% html_text())
   
+  message(paste(periodid, "done"))
+  
+  Sys.sleep(good_manners)
+  
   return(tmp)
   
-  
 }
+

@@ -5,6 +5,7 @@
 #' @usage get_mp(id = NA)
 #' 
 #' @param id Character string indicating the id of the MP to retrieve.
+#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
 #' 
 #'
 #' @return A data.frame with respnse date, version, date of death/birth, first and last name, id, and gender of the requested MP.
@@ -19,7 +20,7 @@
 #' # Request several MPs by id
 #' ids <- c("AAMH", "AMSK", "MAAA")
 #' 
-#' mps <- lapply(ids, get_mp)
+#' mps <- lapply(ids, get_mp, good_manners = 2)
 #' 
 #' mps <- do.call(rbind, mps)
 #' 
@@ -29,7 +30,7 @@
 
 
 
-get_mp <- function(id){
+get_mp <- function(id, good_manners = 0){
   
   require(rvest)
   
@@ -44,7 +45,10 @@ get_mp <- function(id){
                     id = tmp %>% html_nodes("id") %>% html_text(),
                     gender = tmp %>% html_nodes("kjoenn") %>% html_text())
   
+  message(paste0(id, " (", tmp$firstname, " ", tmp$lastname, ") done."))
+  
+  Sys.sleep(good_manners)
+  
   return(tmp)
   
-
 }

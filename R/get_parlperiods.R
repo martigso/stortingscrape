@@ -19,7 +19,7 @@
 
 
 
-get_parlperiods <- function(periodid){
+get_parlperiods <- function(){
   
   require(rvest)
   
