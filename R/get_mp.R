@@ -1,10 +1,10 @@
 #' Extract information on specific MPs
 #' 
-#' A function for retreiving information on Norwegian MPs from the parliament API
+#' A function for retrieving information on Norwegian MPs from the parliament API
 #' 
 #' @usage get_mp(id = NA)
 #' 
-#' @param id Character string indicating the id of the MP to retreive.
+#' @param id Character string indicating the id of the MP to retrieve.
 #' 
 #'
 #' @return A data.frame with respnse date, version, date of death/birth, first and last name, id, and gender of the requested MP.

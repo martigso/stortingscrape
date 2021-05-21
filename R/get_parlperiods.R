@@ -1,6 +1,6 @@
 #' Get Parliamentary Periods
 #' 
-#' A function for retreiving dates of the parliamentary periods after WWII
+#' A function for retrieving dates of the parliamentary periods after WWII
 #' 
 #' @usage get_parlperiods() 
 #' 

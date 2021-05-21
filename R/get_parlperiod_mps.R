@@ -1,10 +1,10 @@
 #' Get list of MPs in a given parliamentary period
 #' 
-#' A function for retreiving Norwegian MPs for a given parliamentary period from the parliament API
+#' A function for retrieving Norwegian MPs for a given parliamentary period from the parliament API
 #' 
 #' @usage get_parlperiod_mps(periodid = NA)
 #' 
-#' @param periodid Character string indicating the id of the parliamentary period to retreive.
+#' @param periodid Character string indicating the id of the parliamentary period to retrieve.
 #' 
 #' @return A data.frame with respnse date, version, date of death/birth, first and last name, id, and gender of the requested MP.
 #' 
