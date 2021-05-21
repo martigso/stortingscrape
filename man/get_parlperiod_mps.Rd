@@ -4,33 +4,35 @@
 \alias{get_parlperiod_mps}
 \title{Get list of MPs in a given parliamentary period}
 \usage{
-get_parlperiod_mps(periodid = NA)
+get_parlperiod_mps(periodid = NA, good_manners = 0)
 }
 \arguments{
-\item{periodid}{Character string indicating the id of the parliamentary period to retreive.}
+\item{periodid}{Character string indicating the id of the parliamentary period to retrieve.}
+
+\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with respnse date, version, date of death/birth, first and last name, id, and gender of the requested MP.
+A data.frame with response date, version, date of death/birth, first and last name, id, and gender of the requested MP.
 }
 \description{
-A function for retreiving Norwegian MPs for a given parliamentary period from the parliament API
+A function for retrieving Norwegian MPs for a given parliamentary period from the parliament API
 }
 \examples{
 # Request one MP by id
 get_parlperiod_mps("2005-2009")
 
-# Request several MPs by id
-ids <- c("1961-65", "1997-01", "MAAA")
-
-mps <- lapply(ids, get_parlperiod_mps)
-
+# Request MPs from several periods by id
+ids <- c("1961-65", "1997-01", "2009-2013")
+mps <- lapply(ids, get_parlperiod_mps, good_manners = 2)
 mps <- do.call(rbind, mps)
-
 
 }
 \seealso{
 Other get_mp_data: 
+\code{\link{get_counties}()},
+\code{\link{get_mp_pic}()},
 \code{\link{get_mp}()},
-\code{\link{get_parlperiods}()}
+\code{\link{get_parlperiods}()},
+\code{\link{get_parlsessions}()}
 }
 \concept{get_mp_data}

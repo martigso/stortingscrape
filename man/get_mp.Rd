@@ -7,13 +7,15 @@
 get_mp(id = NA)
 }
 \arguments{
-\item{id}{Character string indicating the id of the MP to retreive.}
+\item{id}{Character string indicating the id of the MP to retrieve.}
+
+\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
 A data.frame with respnse date, version, date of death/birth, first and last name, id, and gender of the requested MP.
 }
 \description{
-A function for retreiving information on Norwegian MPs from the parliament API
+A function for retrieving information on Norwegian MPs from the parliament API
 }
 \examples{
 # Request one MP by id
@@ -22,7 +24,7 @@ get_mp("AAMH")
 # Request several MPs by id
 ids <- c("AAMH", "AMSK", "MAAA")
 
-mps <- lapply(ids, get_mp)
+mps <- lapply(ids, get_mp, good_manners = 2)
 
 mps <- do.call(rbind, mps)
 
@@ -30,7 +32,10 @@ mps <- do.call(rbind, mps)
 }
 \seealso{
 Other get_mp_data: 
+\code{\link{get_counties}()},
+\code{\link{get_mp_pic}()},
 \code{\link{get_parlperiod_mps}()},
-\code{\link{get_parlperiods}()}
+\code{\link{get_parlperiods}()},
+\code{\link{get_parlsessions}()}
 }
 \concept{get_mp_data}

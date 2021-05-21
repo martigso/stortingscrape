@@ -10,7 +10,7 @@ get_parlperiods()
 A data.frame with from/to date and id for all parliamentary periods after WWII
 }
 \description{
-A function for retreiving dates of the parliamentary periods after WWII
+A function for retrieving dates of the parliamentary periods after WWII
 }
 \examples{
 
@@ -20,7 +20,10 @@ get_parlperiods()
 }
 \seealso{
 Other get_mp_data: 
+\code{\link{get_counties}()},
+\code{\link{get_mp_pic}()},
 \code{\link{get_mp}()},
-\code{\link{get_parlperiod_mps}()}
+\code{\link{get_parlperiod_mps}()},
+\code{\link{get_parlsessions}()}
 }
 \concept{get_mp_data}
