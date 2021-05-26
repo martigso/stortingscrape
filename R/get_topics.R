@@ -66,7 +66,7 @@ get_topics <- function(keep_sub_topics = TRUE){
       name = tmp %>% html_elements("emne_liste > emne > navn") %>% html_text())
     
   }
-
+  
   return(tmp)
   
 }

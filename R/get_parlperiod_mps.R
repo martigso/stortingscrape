@@ -2,12 +2,13 @@
 #' 
 #' A function for retrieving Norwegian MPs for a given parliamentary period from the parliament API
 #' 
-#' @usage get_parlperiod_mps(periodid = NA, good_manners = 0)
+#' @usage get_parlperiod_mps(periodid = NA, substitute = FALSE, good_manners = 0)
 #' 
 #' @param periodid Character string indicating the id of the parliamentary period to retrieve.
+#' @param substitute Logical. Whether or not to include substitute MPs.
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
 #' 
-#' @return A data.frame with response date, version, date of death/birth, first and last name, id, and gender of the requested MP.
+#' @return A data.frame with response date, version, date of death/birth, first and last name, id, and gender... of the requested MP.
 #' 
 #' @family get_mp_data
 #' 
@@ -27,9 +28,16 @@
 
 
 
-get_parlperiod_mps <- function(periodid = NA, good_manners = 0){
+get_parlperiod_mps <- function(periodid = NA, substitute = FALSE, good_manners = 0){
   
-  tmp <- read_html(paste0("https://data.stortinget.no/eksport/representanter?stortingsperiode=", periodid))
+  if(substitute == FALSE){
+    
+    tmp <- read_html(paste0("https://data.stortinget.no/eksport/representanter?stortingsperiode=", periodid))
+    
+  } else if(substitute == TRUE){
+    tmp <- read_html(paste0("https://data.stortinget.no/eksport/representanter?stortingsperiode=", periodid, "&vararepresentanter=true"))
+    
+  }
   
   tmp <- data.frame(response_date = tmp %>% html_nodes("representanter_liste > representant > respons_dato_tid") %>% html_text(),
                     version = tmp %>% html_nodes("representanter_liste > representant > versjon") %>% html_text(),
@@ -39,6 +47,9 @@ get_parlperiod_mps <- function(periodid = NA, good_manners = 0){
                     firstname = tmp %>% html_nodes("representanter_liste > representant > fornavn") %>% html_text(),
                     id = tmp %>% html_nodes("representanter_liste > representant > id") %>% html_text(),
                     gender = tmp %>% html_nodes("representanter_liste > representant > kjoenn") %>% html_text(),
+                    county_id = tmp %>% html_nodes("representanter_liste > representant > fylke > id") %>% html_text(),
+                    party_id = tmp %>% html_nodes("representanter_liste > representant > parti > id") %>% html_text(),
+                    substitute_mp = tmp %>% html_nodes("representanter_liste > representant > vara_representant") %>% html_text(),
                     period_id = tmp %>% html_nodes("stortingsperiode_id") %>% html_text())
   
   message(paste(periodid, "done"))

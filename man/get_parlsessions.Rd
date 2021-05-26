@@ -25,6 +25,7 @@ Other get_mp_data:
 \code{\link{get_mp}()},
 \code{\link{get_parlperiod_mps}()},
 \code{\link{get_parlperiods}()},
+\code{\link{get_session_interpellations}()},
 \code{\link{get_topics}()}
 }
 \concept{get_mp_data}

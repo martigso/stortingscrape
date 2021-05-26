@@ -4,15 +4,17 @@
 \alias{get_parlperiod_mps}
 \title{Get list of MPs in a given parliamentary period}
 \usage{
-get_parlperiod_mps(periodid = NA, good_manners = 0)
+get_parlperiod_mps(periodid = NA, substitute = FALSE, good_manners = 0)
 }
 \arguments{
 \item{periodid}{Character string indicating the id of the parliamentary period to retrieve.}
 
+\item{substitute}{Logical. Whether or not to include substitute MPs.}
+
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with response date, version, date of death/birth, first and last name, id, and gender of the requested MP.
+A data.frame with response date, version, date of death/birth, first and last name, id, and gender... of the requested MP.
 }
 \description{
 A function for retrieving Norwegian MPs for a given parliamentary period from the parliament API
@@ -34,6 +36,7 @@ Other get_mp_data:
 \code{\link{get_mp}()},
 \code{\link{get_parlperiods}()},
 \code{\link{get_parlsessions}()},
+\code{\link{get_session_interpellations}()},
 \code{\link{get_topics}()}
 }
 \concept{get_mp_data}
