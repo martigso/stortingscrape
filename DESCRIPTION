@@ -8,6 +8,7 @@ Description: Package for retriving information from the Norwegian Parliament.
 Depends: R (>= 3.1.0)
 Encoding: UTF-8
 Imports: rvest
-License: NLOD
+Suggests: imager
+License: GPL (>= 3)
 LazyData: true
 RoxygenNote: 7.1.1

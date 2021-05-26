@@ -4,7 +4,7 @@
 \alias{get_mp_pic}
 \title{Retrieve picture of specific MPs}
 \usage{
-get_mp_pic(id = NA, size = "middels", destfile = NA, show_plot = FALSE)
+get_mp_pic(id = NA, size = "middels", destfile = NA, show_plot = FALSE, good_manners = 0)
 }
 \arguments{
 \item{id}{Character string indicating the id of the MP to retrieve.}
@@ -13,7 +13,7 @@ get_mp_pic(id = NA, size = "middels", destfile = NA, show_plot = FALSE)
 
 \item{destfile}{Character string specifying where to save the picture}
 
-\item{show_plot}{Logical. FALSE (default) if no plot should be produced and TRUE if plot should be produced.}
+\item{show_plot}{Logical. FALSE (default) if no plot should be produced and TRUE if plot should be produced. Requires the "imager" package.}
 
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
@@ -29,7 +29,8 @@ get_mp_pic(id = "AAMH", destfile = "~/Pictures/AAMH.jpeg", show_plot = TRUE, siz
 
 # With good manners for multiple calls
 lapply(c("AAMH", "CIH", "TKF"), function(x){
-  get_mp_pic(id = x, destfile = paste0("~/Pictures/", x), show_plot = TRUE, size = "stort", good_manners = 2)
+  get_mp_pic(id = x, destfile = paste0("~/Pictures/", x), 
+  show_plot = TRUE, size = "stort", good_manners = 2)
 })
 
 }
@@ -39,6 +40,7 @@ Other get_mp_data:
 \code{\link{get_mp}()},
 \code{\link{get_parlperiod_mps}()},
 \code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()}
+\code{\link{get_parlsessions}()},
+\code{\link{get_topics}()}
 }
 \concept{get_mp_data}

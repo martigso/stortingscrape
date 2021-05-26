@@ -4,7 +4,7 @@
 \alias{get_mp}
 \title{Extract information on specific MPs}
 \usage{
-get_mp(id = NA)
+get_mp(id = NA, good_manners = 0)
 }
 \arguments{
 \item{id}{Character string indicating the id of the MP to retrieve.}
@@ -12,7 +12,7 @@ get_mp(id = NA)
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with respnse date, version, date of death/birth, first and last name, id, and gender of the requested MP.
+A data.frame with response date, version, date of death/birth, first and last name, id, and gender of the requested MP.
 }
 \description{
 A function for retrieving information on Norwegian MPs from the parliament API
@@ -28,7 +28,6 @@ mps <- lapply(ids, get_mp, good_manners = 2)
 
 mps <- do.call(rbind, mps)
 
-
 }
 \seealso{
 Other get_mp_data: 
@@ -36,6 +35,7 @@ Other get_mp_data:
 \code{\link{get_mp_pic}()},
 \code{\link{get_parlperiod_mps}()},
 \code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()}
+\code{\link{get_parlsessions}()},
+\code{\link{get_topics}()}
 }
 \concept{get_mp_data}

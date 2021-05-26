@@ -2,12 +2,12 @@
 #' 
 #' A function for retrieving Norwegian MP pictures by id.
 #' 
-#' @usage get_mp_pic(id = NA, size = "middels", destfile = NA, show_plot = FALSE)
+#' @usage get_mp_pic(id = NA, size = "middels", destfile = NA, show_plot = FALSE, good_manners = 0)
 #' 
 #' @param id Character string indicating the id of the MP to retrieve.
 #' @param size Character string size of the picture. Accepts values "lite" (small), "middels" (medium -- default), and "stort" (big).
 #' @param destfile Character string specifying where to save the picture
-#' @param show_plot Logical. FALSE (default) if no plot should be produced and TRUE if plot should be produced.
+#' @param show_plot Logical. FALSE (default) if no plot should be produced and TRUE if plot should be produced. Requires the "imager" package.
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
 #' 
 #' @return Picture of the requested MP in the preferred size.
@@ -20,15 +20,19 @@
 #' 
 #' # With good manners for multiple calls
 #' lapply(c("AAMH", "CIH", "TKF"), function(x){
-#'   get_mp_pic(id = x, destfile = paste0("~/Pictures/", x), show_plot = TRUE, size = "stort", good_manners = 2)
+#'   get_mp_pic(id = x, destfile = paste0("~/Pictures/", x), 
+#'   show_plot = TRUE, size = "stort", good_manners = 2)
 #' })
+#' 
+#' @import rvest
+#' @importFrom utils download.file 
 #' 
 #' @export
 #' 
 
 
 
-get_mp_pic <- function(id, size = "middels", destfile = NA, show_plot = FALSE, good_manners = 0){
+get_mp_pic <- function(id = NA, size = "middels", destfile = NA, show_plot = FALSE, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/personbilde?personid=", id, "&storrelse=", size)
   

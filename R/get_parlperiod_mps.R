@@ -21,14 +21,13 @@
 #' mps <- lapply(ids, get_parlperiod_mps, good_manners = 2)
 #' mps <- do.call(rbind, mps)
 #' 
+#' @import rvest
 #' @export
 #' 
 
 
 
-get_parlperiod_mps <- function(periodid, good_manners = 0){
-  
-  require(rvest)
+get_parlperiod_mps <- function(periodid = NA, good_manners = 0){
   
   tmp <- read_html(paste0("https://data.stortinget.no/eksport/representanter?stortingsperiode=", periodid))
   

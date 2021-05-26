@@ -4,13 +4,13 @@
 \alias{get_counties}
 \title{Get list of MPs in a given parliamentary period}
 \usage{
-get_counties(periodid = NA)
+get_counties(historical = FALSE)
 }
 \arguments{
-\item{periodid}{Character string indicating the id of the parliamentary period to retrieve.}
+\item{historical}{Logical. Whether or not to include historical counties.}
 }
 \value{
-A data.frame with respnse date, version, date of death/birth, first and last name, id, and gender of the requested MP.
+A data.frame with response date, version, county id, county name, and indication on whether county is historical.
 }
 \description{
 A function for retrieving Norwegian MPs for a given parliamentary period from the parliament API
@@ -22,7 +22,6 @@ get_counties()
 # With historical counties
 get_counties(historical = TRUE)
 
-
 }
 \seealso{
 Other get_mp_data: 
@@ -30,6 +29,7 @@ Other get_mp_data:
 \code{\link{get_mp}()},
 \code{\link{get_parlperiod_mps}()},
 \code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()}
+\code{\link{get_parlsessions}()},
+\code{\link{get_topics}()}
 }
 \concept{get_mp_data}

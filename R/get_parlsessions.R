@@ -11,8 +11,10 @@
 #' 
 #' @examples 
 #' 
-#' get_parlsessions()
+#' parlses <- get_parlsessions()
+#' parlses
 #' 
+#' @import rvest
 #' 
 #' @export
 #' 
@@ -20,8 +22,6 @@
 
 
 get_parlsessions <- function(){
-  
-  require(rvest)
   
   tmp <- read_html("https://data.stortinget.no/eksport/sesjoner")
   

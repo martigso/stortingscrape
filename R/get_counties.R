@@ -2,11 +2,11 @@
 #' 
 #' A function for retrieving Norwegian MPs for a given parliamentary period from the parliament API
 #' 
-#' @usage get_counties(periodid = NA)
+#' @usage get_counties(historical = FALSE)
 #' 
-#' @param periodid Character string indicating the id of the parliamentary period to retrieve.
+#' @param historical Logical. Whether or not to include historical counties.
 #' 
-#' @return A data.frame with respnse date, version, date of death/birth, first and last name, id, and gender of the requested MP.
+#' @return A data.frame with response date, version, county id, county name, and indication on whether county is historical.
 #' 
 #' @family get_mp_data
 #' 
@@ -18,6 +18,7 @@
 #' # With historical counties
 #' get_counties(historical = TRUE)
 #' 
+#' @import rvest
 #' 
 #' @export
 #' 
@@ -26,7 +27,6 @@
 
 get_counties <- function(historical = FALSE){
   
-  require(rvest)
   
   if(historical == FALSE){
     

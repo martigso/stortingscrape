@@ -33,6 +33,7 @@ Other get_mp_data:
 \code{\link{get_mp_pic}()},
 \code{\link{get_mp}()},
 \code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()}
+\code{\link{get_parlsessions}()},
+\code{\link{get_topics}()}
 }
 \concept{get_mp_data}

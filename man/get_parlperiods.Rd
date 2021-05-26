@@ -14,8 +14,8 @@ A function for retrieving dates of the parliamentary periods after WWII
 }
 \examples{
 
-get_parlperiods()
-
+parlper <- get_parlperiods()
+parlper
 
 }
 \seealso{
@@ -24,6 +24,7 @@ Other get_mp_data:
 \code{\link{get_mp_pic}()},
 \code{\link{get_mp}()},
 \code{\link{get_parlperiod_mps}()},
-\code{\link{get_parlsessions}()}
+\code{\link{get_parlsessions}()},
+\code{\link{get_topics}()}
 }
 \concept{get_mp_data}

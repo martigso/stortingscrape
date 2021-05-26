@@ -2,13 +2,13 @@
 #' 
 #' A function for retrieving information on Norwegian MPs from the parliament API
 #' 
-#' @usage get_mp(id = NA)
+#' @usage get_mp(id = NA, good_manners = 0)
 #' 
 #' @param id Character string indicating the id of the MP to retrieve.
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
 #' 
 #'
-#' @return A data.frame with respnse date, version, date of death/birth, first and last name, id, and gender of the requested MP.
+#' @return A data.frame with response date, version, date of death/birth, first and last name, id, and gender of the requested MP.
 #' 
 #' @family get_mp_data
 #' 
@@ -24,15 +24,13 @@
 #' 
 #' mps <- do.call(rbind, mps)
 #' 
-#' 
+#' @import rvest
 #' @export
 #' 
 
 
 
-get_mp <- function(id, good_manners = 0){
-  
-  require(rvest)
+get_mp <- function(id = NA, good_manners = 0){
   
   tmp <- read_html(paste0("https://data.stortinget.no/eksport/person?personid=", id))
     

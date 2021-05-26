@@ -11,18 +11,17 @@
 #' 
 #' @examples 
 #' 
-#' get_parlperiods()
+#' parlper <- get_parlperiods()
+#' parlper
 #' 
-#' 
+#' @import rvest
 #' @export
 #' 
 
 
 
 get_parlperiods <- function(){
-  
-  require(rvest)
-  
+
   tmp <- read_html("https://data.stortinget.no/eksport/stortingsperioder")
   
   tmp <- data.frame(response_date = tmp %>% html_nodes("stortingsperioder_liste > stortingsperiode > respons_dato_tid") %>% html_text(),
