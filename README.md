@@ -2,6 +2,22 @@
 
 Under construction!
 
+## Usage example
+
+```
+sessions <- get_parlsessions()
+qsesh <- get_session_questions(sessions$id[9], q_type = "interpellasjoner")
+
+library(pbmcapply) # for progress bar. never use paralell on scraping
+
+int1213 <- pbmclapply(qsesh$id, function(x){
+  
+  get_question(x, good_manners = 2)
+  
+}, mc.cores = 1)
+
+test <- do.call(rbind, int1213)
+```
 
 ## To do
 
@@ -9,9 +25,9 @@ Under construction!
 - ~~Sesjoner~~
 - ~~Fylker~~
 - ~~Emner~~
-- Partier
-- Alle partier
-- Komiteer
+- ~~Partier~~
+- ~~Alle partier~~
+- ~~Komiteer~~
 - Alle komiteer
 - Delegasjoner
 - ~~Person~~
@@ -21,7 +37,7 @@ Under construction!
 - Dagens representanter (not relevant?)
 - Presidentskapet
 - Regjering
-- Spørsmål
+- ~~Spørsmål~~
 - Enkeltspørsmål
 - Saksganger
 - Saker

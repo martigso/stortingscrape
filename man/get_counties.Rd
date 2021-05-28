@@ -25,12 +25,16 @@ get_counties(historical = TRUE)
 }
 \seealso{
 Other get_mp_data: 
+\code{\link{get_all_parties}()},
 \code{\link{get_mp_pic}()},
 \code{\link{get_mp}()},
 \code{\link{get_parlperiod_mps}()},
 \code{\link{get_parlperiods}()},
 \code{\link{get_parlsessions}()},
-\code{\link{get_session_interpellations}()},
+\code{\link{get_question}()},
+\code{\link{get_session_committees}()},
+\code{\link{get_session_parties}()},
+\code{\link{get_session_questions}()},
 \code{\link{get_topics}()}
 }
 \concept{get_mp_data}

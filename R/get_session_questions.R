@@ -1,10 +1,12 @@
-#' Get list of topics and sub-topics for the Norwegian parliament
+#' Parliamentary questions in a session
 #' 
 #' A function for retrieving topic keys used to label various data from the Norwegian parliament.
 #' 
-#' @usage get_session_interpellations(sessionid = NA, status = NA, good_manners = 0)
+#' @usage get_session_questions(sessionid = NA, q_type = NA, status = NA, good_manners = 0)
 #' 
 #' @param sessionid Character string indicating the id of the session to request interpellations from
+#' @param q_type Character string indicating type of question to retrieve. 
+#' Options are "interpellasjoner" (interpellations), "sporretimesporsmal" (oral questions), or "skriftligesporsmal" (written questions).
 #' @param status Character string question status extraction. Possible values are NA (extract all questions), "til_behandling" (pending questions), 
 #' "trukket" (withdrawn questions), "bortfalt" (lapsed questions), or "alle" (all questions)
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
@@ -14,7 +16,8 @@
 #' @family get_mp_data
 #' 
 #' @examples 
-#' interp <- get_session_interpellations(sessionid = "2013-2014", status = "trukket")
+#' interp <- get_session_questions(sessionid = "2013-2014", 
+#' q_type = "interpellasjoner", status = "trukket")
 #' 
 #' @import rvest
 #' 
@@ -23,11 +26,11 @@
 
 
 
-get_session_interpellations <- function(sessionid = NA, status = NA, good_manners = 0){
+get_session_questions <- function(sessionid = NA, q_type = NA ,status = NA, good_manners = 0){
   
   if(is.na(status) == TRUE){
     
-    url <- paste0("https://data.stortinget.no/eksport/interpellasjoner?sesjonid=", sessionid)  
+    url <- paste0("https://data.stortinget.no/eksport/", q_type, "?sesjonid=", sessionid)  
     
   } else if(status %in% c("til_behandling", "trukket", "bortfalt", "alle") == FALSE){
     
@@ -35,7 +38,7 @@ get_session_interpellations <- function(sessionid = NA, status = NA, good_manner
     
   } else {
     
-    url <- paste0("https://data.stortinget.no/eksport/interpellasjoner?sesjonid=", sessionid, "&status=", status)
+    url <- paste0("https://data.stortinget.no/eksport/", q_type, "?sesjonid=", sessionid, "&status=", status)
     
   }
   
@@ -46,7 +49,7 @@ get_session_interpellations <- function(sessionid = NA, status = NA, good_manner
   tmp2 <- data.frame(
     response_date = tmp %>% html_elements("sporsmal_liste > sporsmal > respons_dato_tid") %>% html_text(),
     version = tmp %>% html_elements("sporsmal_liste > sporsmal > versjon") %>% html_text(),
-    answ_by_id = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_av > fornavn") %>% html_text(),
+    answ_by_id = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_av > id") %>% html_text(),
     answ_by_minister_id = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_av_minister_id") %>% html_text(),
     answ_by_minister_title = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_av_minister_tittel") %>% html_text(),
     answ_date = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_dato") %>% html_text(),
@@ -82,7 +85,7 @@ get_session_interpellations <- function(sessionid = NA, status = NA, good_manner
     tmp3 <- ifelse(identical(character(), tmp3), NA, tmp3)
     tmp3
   })
-
+  
   tmp2 <- tmp2[, c(
     "response_date",
     "version",
