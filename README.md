@@ -5,6 +5,10 @@ Under construction!
 ## Usage example
 
 ```
+devtools::install_github("martigso/stortingscrape")
+
+library(stortingscrape)
+
 sessions <- get_parlsessions()
 qsesh <- get_session_questions(sessions$id[9], q_type = "interpellasjoner")
 
