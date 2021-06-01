@@ -13,6 +13,24 @@
 #' 
 #' @examples 
 #' 
+#' \dontrun{
+#' # An example of a possible workflow
+#' 
+#' ## Retreive sessions
+#' sessions <- get_parlsessions()
+#' 
+#' ## Retreive all interpellations for a particular session
+#' qsesh <- get_session_questions(sessions$id[9], q_type = "interpellasjoner")
+#' 
+#' ## Retreve detailed information on all interpellations in that session
+#' library(pbmcapply) # for progress bar. never use paralell on scraping
+#' int1213 <- pbmclapply(qsesh$id, function(x){
+#'     get_question(x, good_manners = 2)
+#' }, mc.cores = 1)
+#' 
+#' quest1213 <- do.call(rbind, int1213)
+#' }
+#' 
 #' @import rvest
 #' 
 #' @export
@@ -20,7 +38,7 @@
 
 
 
-get_question <- function(questionid = 57381, good_manners = 0){
+get_question <- function(questionid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/enkeltsporsmal?sporsmalid=", questionid)
   
