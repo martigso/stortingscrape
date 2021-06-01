@@ -19,17 +19,38 @@ A function for retrieving single parliamentary questions by id
 }
 \examples{
 
+\dontrun{
+# An example of a possible workflow
+
+## Retreive sessions
+sessions <- get_parlsessions()
+
+## Retreive all interpellations for a particular session
+qsesh <- get_session_questions(sessions$id[9], q_type = "interpellasjoner")
+
+## Retreve detailed information on all interpellations in that session
+library(pbmcapply) # for progress bar. never use paralell on scraping
+int1213 <- pbmclapply(qsesh$id, function(x){
+    get_question(x, good_manners = 2)
+}, mc.cores = 1)
+
+quest1213 <- do.call(rbind, int1213)
+}
+
 }
 \seealso{
 Other get_mp_data: 
+\code{\link{get_all_committees}()},
 \code{\link{get_all_parties}()},
 \code{\link{get_counties}()},
+\code{\link{get_mp_bio}()},
 \code{\link{get_mp_pic}()},
 \code{\link{get_mp}()},
 \code{\link{get_parlperiod_mps}()},
 \code{\link{get_parlperiods}()},
 \code{\link{get_parlsessions}()},
 \code{\link{get_session_committees}()},
+\code{\link{get_session_delegations}()},
 \code{\link{get_session_parties}()},
 \code{\link{get_session_questions}()},
 \code{\link{get_topics}()}

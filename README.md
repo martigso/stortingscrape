@@ -32,11 +32,11 @@ test <- do.call(rbind, int1213)
 - ~~Partier~~
 - ~~Alle partier~~
 - ~~Komiteer~~
-- Alle komiteer
-- Delegasjoner
+- ~~Alle komiteer~~
+- ~~Delegasjoner~~
 - ~~Person~~
 - ~~Personbilde~~
-- Kodet personbiografi
+- ~~Kodet personbiografi~~
 - ~~Representanter~~
 - Dagens representanter (not relevant?)
 - Presidentskapet
