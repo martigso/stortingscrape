@@ -24,11 +24,11 @@ get_parlperiods <- function(){
 
   tmp <- read_html("https://data.stortinget.no/eksport/stortingsperioder")
   
-  tmp <- data.frame(response_date = tmp %>% html_nodes("stortingsperioder_liste > stortingsperiode > respons_dato_tid") %>% html_text(),
-                    version = tmp %>% html_nodes("stortingsperioder_liste > stortingsperiode > versjon") %>% html_text(),
-                    from = tmp %>% html_nodes("stortingsperioder_liste > stortingsperiode > fra") %>% html_text(),
-                    id = tmp %>% html_nodes("stortingsperioder_liste > stortingsperiode > id") %>% html_text(),
-                    to = tmp %>% html_nodes("stortingsperioder_liste > stortingsperiode > til") %>% html_text())
+  tmp <- data.frame(response_date = tmp %>% html_elements("stortingsperioder_liste > stortingsperiode > respons_dato_tid") %>% html_text(),
+                    version = tmp %>% html_elements("stortingsperioder_liste > stortingsperiode > versjon") %>% html_text(),
+                    from = tmp %>% html_elements("stortingsperioder_liste > stortingsperiode > fra") %>% html_text(),
+                    id = tmp %>% html_elements("stortingsperioder_liste > stortingsperiode > id") %>% html_text(),
+                    to = tmp %>% html_elements("stortingsperioder_liste > stortingsperiode > til") %>% html_text())
   
   return(tmp)
   

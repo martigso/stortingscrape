@@ -50,6 +50,8 @@ Other get_mp_data:
 \code{\link{get_parlperiod_presidency}()},
 \code{\link{get_parlperiods}()},
 \code{\link{get_parlsessions}()},
+\code{\link{get_proceedings}()},
+\code{\link{get_session_cases}()},
 \code{\link{get_session_committees}()},
 \code{\link{get_session_delegations}()},
 \code{\link{get_session_parties}()},

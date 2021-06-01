@@ -41,11 +41,11 @@ get_counties <- function(historical = FALSE){
   }
   
   
-  tmp <- data.frame(response_date = tmp %>% html_nodes("fylker_liste > fylke > respons_dato_tid") %>% html_text(),
-                    version = tmp %>% html_nodes("fylker_liste > fylke > versjon") %>% html_text(),
-                    historical_county = tmp %>% html_nodes("fylker_liste > fylke > historisk_fylke") %>% html_text(),
-                    id = tmp %>% html_nodes("fylker_liste > fylke > id") %>% html_text(),
-                    name = tmp %>% html_nodes("fylker_liste > fylke > navn") %>% html_text())
+  tmp <- data.frame(response_date = tmp %>% html_elements("fylker_liste > fylke > respons_dato_tid") %>% html_text(),
+                    version = tmp %>% html_elements("fylker_liste > fylke > versjon") %>% html_text(),
+                    historical_county = tmp %>% html_elements("fylker_liste > fylke > historisk_fylke") %>% html_text(),
+                    id = tmp %>% html_elements("fylker_liste > fylke > id") %>% html_text(),
+                    name = tmp %>% html_elements("fylker_liste > fylke > navn") %>% html_text())
   
   return(tmp)
   

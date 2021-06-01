@@ -39,11 +39,11 @@ test <- do.call(rbind, int1213)
 - ~~Kodet personbiografi~~
 - ~~Representanter~~
 - Dagens representanter (not relevant?)
-- Presidentskapet
+- ~~Presidentskapet~~
 - Regjering
 - ~~Spørsmål~~
 - ~~Enkeltspørsmål~~
-- Saksganger
+- ~~Saksganger~~
 - Saker
 - Ventede saker
 - Sak
