@@ -33,17 +33,17 @@
 get_mp <- function(id = NA, good_manners = 0){
   
   tmp <- read_html(paste0("https://data.stortinget.no/eksport/person?personid=", id))
-    
+  
   tmp <- data.frame(response_date = tmp %>% html_nodes("respons_dato_tid") %>% html_text(),
                     version = tmp %>% html_nodes("versjon") %>% html_text(),
                     death = tmp %>% html_nodes("doedsdato") %>% html_text(),
-                    lastname = tmp %>% html_nodes("etternavn") %>% html_text(),
+                    last_name = tmp %>% html_nodes("etternavn") %>% html_text(),
                     birth = tmp %>% html_nodes("foedselsdato") %>% html_text(),
-                    firstname = tmp %>% html_nodes("fornavn") %>% html_text(),
+                    first_name = tmp %>% html_nodes("fornavn") %>% html_text(),
                     id = tmp %>% html_nodes("id") %>% html_text(),
                     gender = tmp %>% html_nodes("kjoenn") %>% html_text())
   
-  message(paste0(id, " (", tmp$firstname, " ", tmp$lastname, ") done."))
+  message(paste0(id, " (", tmp$first_name, " ", tmp$last_name, ") done."))
   
   Sys.sleep(good_manners)
   
