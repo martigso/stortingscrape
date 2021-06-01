@@ -42,7 +42,7 @@ test <- do.call(rbind, int1213)
 - Presidentskapet
 - Regjering
 - ~~Spørsmål~~
-- Enkeltspørsmål
+- ~~Enkeltspørsmål~~
 - Saksganger
 - Saker
 - Ventede saker
