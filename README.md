@@ -46,7 +46,7 @@ test <- do.call(rbind, int1213)
 - ~~Saksganger~~
 - ~~Saker~~
 - Ventede saker
-- Sak
+- ~~Sak~~
 - Voteringer
 - Voteringsforslag
 - Voteringsvedtak
