@@ -15,9 +15,9 @@ qsesh <- get_session_questions(sessions$id[9], q_type = "interpellasjoner")
 library(pbmcapply) # for progress bar. never use paralell on scraping
 
 int1213 <- pbmclapply(qsesh$id, function(x){
-  
+
   get_question(x, good_manners = 2)
-  
+
 }, mc.cores = 1)
 
 test <- do.call(rbind, int1213)
@@ -44,7 +44,7 @@ test <- do.call(rbind, int1213)
 - ~~Spørsmål~~
 - ~~Enkeltspørsmål~~
 - ~~Saksganger~~
-- Saker
+- ~~Saker~~
 - Ventede saker
 - Sak
 - Voteringer
