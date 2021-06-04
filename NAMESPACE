@@ -2,6 +2,7 @@
 
 export(get_all_committees)
 export(get_all_parties)
+export(get_case)
 export(get_counties)
 export(get_mp)
 export(get_mp_bio)

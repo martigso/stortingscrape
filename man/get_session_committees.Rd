@@ -28,6 +28,7 @@ A function for retrieving Norwegian parliamentary committees for a specified par
 Other get_mp_data: 
 \code{\link{get_all_committees}()},
 \code{\link{get_all_parties}()},
+\code{\link{get_case}()},
 \code{\link{get_counties}()},
 \code{\link{get_mp_bio}()},
 \code{\link{get_mp_pic}()},

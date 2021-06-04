@@ -27,6 +27,7 @@ get_counties(historical = TRUE)
 Other get_mp_data: 
 \code{\link{get_all_committees}()},
 \code{\link{get_all_parties}()},
+\code{\link{get_case}()},
 \code{\link{get_mp_bio}()},
 \code{\link{get_mp_pic}()},
 \code{\link{get_mp}()},
