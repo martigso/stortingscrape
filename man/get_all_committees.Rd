@@ -21,6 +21,7 @@ Other get_mp_data:
 \code{\link{get_all_parties}()},
 \code{\link{get_case}()},
 \code{\link{get_counties}()},
+\code{\link{get_decision_votes}()},
 \code{\link{get_mp_bio}()},
 \code{\link{get_mp_pic}()},
 \code{\link{get_mp}()},
@@ -29,12 +30,15 @@ Other get_mp_data:
 \code{\link{get_parlperiods}()},
 \code{\link{get_parlsessions}()},
 \code{\link{get_proceedings}()},
+\code{\link{get_proposal_votes}()},
 \code{\link{get_question}()},
+\code{\link{get_result_vote}()},
 \code{\link{get_session_cases}()},
 \code{\link{get_session_committees}()},
 \code{\link{get_session_delegations}()},
 \code{\link{get_session_parties}()},
 \code{\link{get_session_questions}()},
-\code{\link{get_topics}()}
+\code{\link{get_topics}()},
+\code{\link{get_vote}()}
 }
 \concept{get_mp_data}

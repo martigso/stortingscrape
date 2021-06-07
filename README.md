@@ -25,6 +25,7 @@ test <- do.call(rbind, int1213)
 
 ## To do
 
+- Stress test all functions
 - ~~Stortingsperioder~~
 - ~~Sesjoner~~
 - ~~Fylker~~
@@ -47,10 +48,10 @@ test <- do.call(rbind, int1213)
 - ~~Saker~~
 - Ventede saker
 - ~~Sak~~
-- Voteringer
-- Voteringsforslag
-- Voteringsvedtak
-- Voteringsresultat
+- ~~Voteringer~~
+- ~~Voteringsforslag~~
+- ~~Voteringsvedtak~~
+- ~~Voteringsresultat~~
 - Vedtak
 - Møter
 - Dagsorden

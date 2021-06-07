@@ -50,7 +50,7 @@ get_session_cases <- function(sessionid = NA, good_manners = 0, cores = 1){
                                  type = tmp %>% html_elements("saker_oversikt > saker_liste > sak > type") %>% html_text(),
                                  session_id = tmp %>% html_elements("saker_oversikt > sesjon_id") %>% html_text()))
   
-
+  
   # Case topics
   tmp2$topics <- mclapply((tmp %>% html_elements("saker_oversikt > saker_liste > sak > emne_liste")), function(x){
     data.frame(is_main_topic = x %>% html_elements("emne > er_hovedemne") %>% html_text(),
@@ -64,12 +64,22 @@ get_session_cases <- function(sessionid = NA, good_manners = 0, cores = 1){
   # Case proposer
   tmp2$proposers <- mclapply((tmp %>% html_elements("saker_oversikt > saker_liste > sak > forslagstiller_liste")), function(x){
     
-    data.frame(rep_id = x %>% html_elements("representant > id") %>% html_text(),
-               county_id = x %>% html_elements("representant > fylke > id") %>% html_text(),
-               party_id = x %>% html_elements("representant > parti > id") %>% html_text(),
-               rep_sub = x %>% html_elements("representant > vara_representant") %>% html_text())
-  
-    }, mc.cores = cores)
+    if(identical(x %>% html_elements("representant > id") %>% html_text(), character()) == TRUE){
+      data.frame(rep_id = NA,
+                 county_id = NA,
+                 party_id = NA,
+                 rep_sub = NA)
+      
+    } else {
+      
+      data.frame(rep_id = x %>% html_elements("representant > id") %>% html_text(),
+                 county_id = ifelse(identical(x %>% html_elements("representant > fylke > id") %>% html_text(), character()), NA,
+                                    x %>% html_elements("representant > fylke > id") %>% html_text()),
+                 party_id = ifelse(identical(x %>% html_elements("representant > parti > id") %>% html_text(), character()), NA,
+                                   x %>% html_elements("representant > parti > id") %>% html_text()),
+                 rep_sub = x %>% html_elements("representant > vara_representant") %>% html_text())
+    }
+  }, mc.cores = cores)
   
   names(tmp2$proposers) <- tmp2$root$id
   
@@ -81,7 +91,7 @@ get_session_cases <- function(sessionid = NA, good_manners = 0, cores = 1){
     tmp3 <- ifelse(identical(tmp3, character()), NA, tmp3)
     
     return(tmp3)
-
+    
   }, mc.cores = cores)
   
   tmp2$root$committee_id <- unlist(committee)
