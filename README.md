@@ -52,12 +52,12 @@ test <- do.call(rbind, int1213)
 - ~~Voteringsforslag~~
 - ~~Voteringsvedtak~~
 - ~~Voteringsresultat~~
-- Vedtak
-- Møter
-- Dagsorden
-- Spørretimen
-- Høringer
-- Skriftlige innspill til høringer
+- ~~Vedtak~~
+- ~~Møter~~
+- ~~Dagsorden~~
+- ~~Spørretimen~~
+- ~~Høringer~~
+- ~~Skriftlige innspill til høringer~~
 - Høringsprogram
 - Høringsinnspill
 - Talerliste
