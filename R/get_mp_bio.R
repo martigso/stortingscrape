@@ -98,7 +98,7 @@ get_mp_bio <- function(id = NA, good_manners = 0){
                                             type = tmp %>% html_elements("person_biografi_verv_kodet > type") %>% html_text(),
                                             position = tmp %>% html_elements("person_biografi_verv_kodet > verv") %>% html_text()))
   
-
+  
   Sys.sleep(good_manners)
   
   return(tmp2)
