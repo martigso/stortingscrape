@@ -42,7 +42,8 @@ get_meeting_agenda <- function(meetingid = NA, good_manners = 0){
                      committee_id = tmp %>% html_elements("dagsordensak > komite_id") %>% html_text(),
                      loose_proposals = tmp %>% html_elements("dagsordensak > loseforslag") %>% html_text(),
                      case_id = tmp %>% html_elements("dagsordensak > sak_id") %>% html_text(),
-                     question_hour_type = tmp %>% html_elements("dagsordensak > sporretime_type") %>% html_text())
+                     question_hour_type = tmp %>% html_elements("dagsordensak > sporretime_type") %>% html_text(),
+                     question_id = tmp %>% html_elements("dagsordensak > sporsmal_id") %>% html_text())
   
   
   Sys.sleep(good_manners)

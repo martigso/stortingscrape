@@ -55,6 +55,7 @@ Other get_mp_data:
 \code{\link{get_session_delegations}()},
 \code{\link{get_session_hearings}()},
 \code{\link{get_session_meetings}()},
+\code{\link{get_session_mp_speech_activity}()},
 \code{\link{get_session_parties}()},
 \code{\link{get_session_questions}()},
 \code{\link{get_topics}()},

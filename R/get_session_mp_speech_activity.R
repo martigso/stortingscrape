@@ -24,7 +24,7 @@
 
 
 
-get_session_mp_speech_activity(sessionid = NA, mp_id = NA, good_manners = 0){
+get_session_mp_speech_activity <- function(sessionid = NA, mp_id = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/representanttaleaktiviteter?personid=", mp_id, "&sesjonid=", sessionid)
   
