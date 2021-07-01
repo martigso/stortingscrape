@@ -32,10 +32,10 @@ get_parlperiod_mps <- function(periodid = NA, substitute = FALSE, good_manners =
   
   if(substitute == FALSE){
     
-    tmp <- read_html(paste0("https://data.stortinget.no/eksport/representanter?stortingsperiode=", periodid))
+    tmp <- read_html(paste0("https://data.stortinget.no/eksport/representanter?stortingsperiodeid=", periodid))
     
   } else if(substitute == TRUE){
-    tmp <- read_html(paste0("https://data.stortinget.no/eksport/representanter?stortingsperiode=", periodid, "&vararepresentanter=true"))
+    tmp <- read_html(paste0("https://data.stortinget.no/eksport/representanter?stortingsperiodeid=", periodid, "&vararepresentanter=true"))
     
   }
   
