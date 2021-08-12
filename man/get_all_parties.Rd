@@ -7,51 +7,28 @@
 get_all_parties()
 }
 \value{
-A data.frame with response date, version ...
+A data.frame of all parties, with the variables:\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{id} \tab Id of the party \cr
+   \strong{name} \tab Name of the party \cr
+   \strong{represented_party} \tab Whether the party is represented at the time of download \cr
+   \strong{sessionid} \tab Id of session (empty) \cr
+   \strong{period_id} \tab Id of parliamentary period (empty) \cr
+}
 }
 \description{
-A function for retrieving all Norwegian parliamentary parties after WWII
+A function for retrieving all Norwegian parliamentary parties in the
+data.stortinget.no API.
 }
 \examples{
-
-
-
-
+\dontrun{
+parties <- get_all_parties()
+head(parties)
+}
 
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_all_committees}()},
-\code{\link{get_case}()},
-\code{\link{get_counties}()},
-\code{\link{get_decision_votes}()},
-\code{\link{get_hearing_input}()},
-\code{\link{get_hearing_program}()},
-\code{\link{get_meeting_agenda}()},
-\code{\link{get_mp_bio}()},
-\code{\link{get_mp_pic}()},
-\code{\link{get_mp}()},
-\code{\link{get_parlperiod_mps}()},
-\code{\link{get_parlperiod_presidency}()},
-\code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()},
-\code{\link{get_proceedings}()},
-\code{\link{get_proposal_votes}()},
-\code{\link{get_question_hour}()},
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\code{\link[=get_session_parties]{get_session_parties()}}
 }
-\concept{get_mp_data}

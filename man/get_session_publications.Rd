@@ -9,9 +9,9 @@ get_session_publications(sessionid = NA, type = "referat", good_manners = 0)
 \arguments{
 \item{sessionid}{Character string indicating the id of the hearing to retrieve.}
 
-\item{type}{Character specifying type of publication to download. Available types are "referat" (minutes), 
+\item{type}{Character specifying type of publication to download. Available types are "referat" (minutes),
 "innstilling" (proposition), "innberetning" (report), "lovvedtak" (law decision), "lovanmerkning" (law note),
-"dok8" (MP proposal) "dok12" (Constitutional proposal), and "dokumentserie" (document series). 
+"dok8" (MP proposal) "dok12" (Constitutional proposal), and "dokumentserie" (document series).
 Defaults to "referat".}
 
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
@@ -29,9 +29,6 @@ A function for retrieving one of several publication types within a parliamentar
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_all_committees}()},
-\code{\link{get_all_parties}()},
-\code{\link{get_case}()},
 \code{\link{get_counties}()},
 \code{\link{get_decision_votes}()},
 \code{\link{get_hearing_input}()},

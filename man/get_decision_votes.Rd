@@ -23,9 +23,6 @@ A function for retrieving vote decisions from a specific vote. Vote data are onl
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_all_committees}()},
-\code{\link{get_all_parties}()},
-\code{\link{get_case}()},
 \code{\link{get_counties}()},
 \code{\link{get_hearing_input}()},
 \code{\link{get_hearing_program}()},

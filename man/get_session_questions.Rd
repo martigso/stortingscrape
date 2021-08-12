@@ -9,10 +9,10 @@ get_session_questions(sessionid = NA, q_type = NA, status = NA, good_manners = 0
 \arguments{
 \item{sessionid}{Character string indicating the id of the session to request interpellations from}
 
-\item{q_type}{Character string indicating type of question to retrieve. 
+\item{q_type}{Character string indicating type of question to retrieve.
 Options are "interpellasjoner" (interpellations), "sporretimesporsmal" (oral questions), or "skriftligesporsmal" (written questions).}
 
-\item{status}{Character string question status extraction. Possible values are NA (extract all questions), "til_behandling" (pending questions), 
+\item{status}{Character string question status extraction. Possible values are NA (extract all questions), "til_behandling" (pending questions),
 "trukket" (withdrawn questions), "bortfalt" (lapsed questions), or "alle" (all questions)}
 
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
@@ -30,9 +30,6 @@ q_type = "interpellasjoner", status = "trukket")
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_all_committees}()},
-\code{\link{get_all_parties}()},
-\code{\link{get_case}()},
 \code{\link{get_counties}()},
 \code{\link{get_decision_votes}()},
 \code{\link{get_hearing_input}()},

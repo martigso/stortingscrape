@@ -11,7 +11,7 @@ get_session_cases(sessionid = NA, good_manners = 0, cores = 1)
 
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 
-\item{cores}{Integer. Number of cores (1 by default) to use in structuring the data. 
+\item{cores}{Integer. Number of cores (1 by default) to use in structuring the data.
 More than 1 will not work on windows}
 }
 \value{
@@ -32,9 +32,6 @@ head(s0506)
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_all_committees}()},
-\code{\link{get_all_parties}()},
-\code{\link{get_case}()},
 \code{\link{get_counties}()},
 \code{\link{get_decision_votes}()},
 \code{\link{get_hearing_input}()},

@@ -26,9 +26,6 @@ A function for retrieving delegations for a specified parliamentary session
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_all_committees}()},
-\code{\link{get_all_parties}()},
-\code{\link{get_case}()},
 \code{\link{get_counties}()},
 \code{\link{get_decision_votes}()},
 \code{\link{get_hearing_input}()},

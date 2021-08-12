@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_case.R
 \name{get_case}
 \alias{get_case}
-\title{Retreive parliamentary case}
+\title{Retreive a parliamentary case}
 \usage{
 get_case(caseid = NA, good_manners = 0)
 }
@@ -12,50 +12,103 @@ get_case(caseid = NA, good_manners = 0)
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with response date, version ...
+A list with seven data frame elements:
+\enumerate{
+\item \strong{$root} (main data on the case)\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{document_group} \tab Case document group type \cr
+   \strong{finalized} \tab Whether the case finalized \cr
+   \strong{reference} \tab Relevant publication references \cr
+   \strong{id} \tab Case id \cr
+   \strong{req_text} \tab Recommendation (proposal) text \cr
+   \strong{committee_id} \tab Id of committee handling the case \cr
+   \strong{title_short} \tab Case short title \cr
+   \strong{decision_short} \tab Case decision_short \cr
+   \strong{parenthesis_text} \tab Case parenthesis text \cr
+   \strong{case_number} \tab Case number \cr
+   \strong{session_id} \tab Session id \cr
+   \strong{proceedings_id} \tab Type of proceeding id \cr
+   \strong{proceedings_name} \tab Type of proceeding name \cr
+   \strong{status} \tab Status for case \cr
+   \strong{title} \tab Case title (long) \cr
+   \strong{type} \tab Case type \cr
+   \strong{decision_text} \tab Decision text \cr
+}
+
+\item \strong{$topic} (the topics related to the case)\tabular{ll}{
+    \tab  \cr
+   \strong{is_main_topic} \tab Is this (row) the main topic? \cr
+   \strong{main_topic_id} \tab Id for main topic \cr
+   \strong{id} \tab Topic id \cr
+   \strong{navn} \tab Topic name \cr
+}
+
+\item \strong{$publication_references} (references for publications on the case)\tabular{ll}{
+    \tab  \cr
+   \strong{export_id} \tab Id for export of publication (used in ?get_publication) \cr
+   \strong{link_text} \tab Publication title \cr
+   \strong{link_url} \tab URL to publication \cr
+   \strong{type} \tab Publication type \cr
+   \strong{subtype} \tab Publication subtype (chamber) \cr
+}
+
+\item \strong{$proposers} (MPs behind case proposal, when relevant)\tabular{ll}{
+    \tab  \cr
+   \strong{mp_id} \tab MPs id \cr
+   \strong{party_id} \tab Party id of MPs \cr
+   \strong{sub_mp} \tab Whether MPs are substitutes \cr
+}
+
+\item \strong{$proceeding_steps} (case proceeding steps)\tabular{ll}{
+    \tab  \cr
+   \strong{step_name} \tab Name of steps \cr
+   \strong{step_number} \tab Step order for case \cr
+   \strong{outdated} \tab Whether the step type is outdated \cr
+}
+
+\item \strong{$spokespersons} (all MPs that are spokespersons for the case)\tabular{ll}{
+    \tab  \cr
+   \strong{mp_id} \tab MPs id \cr
+   \strong{party_id} \tab Party id of MPs \cr
+   \strong{sub_mp} \tab Whether MPs are substitutes \cr
+}
+
+\item \strong{$keywords} (all keywords associated with the case)\tabular{ll}{
+    \tab  \cr
+   \strong{keyword} \tab Keywords for the case \cr
+}
+
+}
 }
 \description{
-A function for retrieving single parliamentary case by id
+A function for retrieving single parliamentary case by id.
 }
 \examples{
 
 \dontrun{
-# An example of a possible workflow
+
+# Get one case
+case <- get_case("30233")
+case
+
+# Get multiple cases
+cases <- lapply(c("30233", "30362", "30234", "30236"), get_case, good_manners = 2)
+cases_root <- lapply(cases, function(x) x$root)
+cases_root <- do.call(rbind, cases_root)
+cases_root
+
+cases_keywords <- lapply(1:nrow(cases_root), function(x){
+  tmp <- cases[[x]]$keywords
+  tmp$case_id <- cases_root$id[x]
+  return(tmp)
+})
+cases_keywords <- do.call(rbind, cases_keywords)
+cases_keywords
+
 }
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_all_committees}()},
-\code{\link{get_all_parties}()},
-\code{\link{get_counties}()},
-\code{\link{get_decision_votes}()},
-\code{\link{get_hearing_input}()},
-\code{\link{get_hearing_program}()},
-\code{\link{get_meeting_agenda}()},
-\code{\link{get_mp_bio}()},
-\code{\link{get_mp_pic}()},
-\code{\link{get_mp}()},
-\code{\link{get_parlperiod_mps}()},
-\code{\link{get_parlperiod_presidency}()},
-\code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()},
-\code{\link{get_proceedings}()},
-\code{\link{get_proposal_votes}()},
-\code{\link{get_question_hour}()},
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_session_cases}
 }
-\concept{get_mp_data}

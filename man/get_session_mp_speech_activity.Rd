@@ -17,7 +17,7 @@ get_session_mp_speech_activity(sessionid = NA, mp_id = NA, good_manners = 0)
 A data.frame with response date, version ...
 }
 \description{
-A function for retrieving all speech activity from an MP during a specific parliamentary session. 
+A function for retrieving all speech activity from an MP during a specific parliamentary session.
 Only available from the 2011-2012 session and onwards.
 }
 \examples{
@@ -27,9 +27,6 @@ Only available from the 2011-2012 session and onwards.
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_all_committees}()},
-\code{\link{get_all_parties}()},
-\code{\link{get_case}()},
 \code{\link{get_counties}()},
 \code{\link{get_decision_votes}()},
 \code{\link{get_hearing_input}()},
