@@ -17,7 +17,7 @@
 #' 
 #' @md
 #' 
-#' @seealso [get_session_committees()]
+#' @seealso [get_session_committees]
 #'
 #'
 #' @examples
@@ -26,14 +26,23 @@
 #' head(coms)
 #' }
 #'
-#' @import rvest
+#' @import httr rvest
 #' @export
 get_all_committees <- function(){
 
   url <- "https://data.stortinget.no/eksport/allekomiteer"
 
-  tmp <- read_html(url)
-
+  base <- GET(url)
+  
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
+  
+  
   tmp <- data.frame(response_date = tmp %>% html_elements("komiteer_liste > komite > respons_dato_tid") %>% html_text(),
                     version = tmp %>% html_elements("komiteer_liste > komite > versjon") %>% html_text(),
                     id = tmp %>% html_elements("komiteer_liste > komite > id") %>% html_text(),

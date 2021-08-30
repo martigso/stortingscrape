@@ -13,3 +13,9 @@
 *.xml
 .Rproj.user
 *.tex
+
+# Unpushed Scripts
+other_scripts/*
+
+# Other files
+functions.html

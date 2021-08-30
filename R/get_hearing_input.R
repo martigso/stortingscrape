@@ -9,7 +9,7 @@
 #' 
 #' @return A data.frame with response date, version ...
 #' 
-#' @family get_mp_data
+#' @seealso [get_session_hearings] [get_hearing_program] [get_written_hearing_input]
 #' 
 #' 
 #' @examples 
@@ -26,38 +26,42 @@ get_hearing_input <- function(hearingid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/horingsinnspill?horingid=", hearingid)
   
-  # tmp <- try(read_html(url), silent = TRUE)
-  tmp <- read_html(url)
-  # if(class(tmp)[1] == "try-error"){
-  #   
-  #   tmp2 <- data.frame(response_date = NA,
-  #                      version = NA,
-  #                      hearing_id = hearingid,
-  #                      hearing_type = NA,
-  #                      committee_id = NA,
-  #                      date = NA,
-  #                      id = NA,
-  #                      organization = NA,
-  #                      text = NA,
-  #                      title = NA)
-  #   
-  # } else {
-  #   
-  tmp2 <- data.frame(response_date = tmp %>% html_elements("horingsinnspill_oversikt > respons_dato_tid") %>% html_text(),
-                     version = tmp %>% html_elements("horingsinnspill_oversikt > versjon") %>% html_text(),
-                     hearing_id = tmp %>% html_elements("horingsinnspill_oversikt > horing_id") %>% html_text(),
-                     hearing_type = tmp %>% html_elements("horingsinnspill_oversikt > horing_type") %>% html_text(),
-                     committee_id = tmp %>% html_elements("komite > id") %>% html_text(),
-                     hearing_input_date = ifelse(identical(tmp %>% html_elements("horingsinnspill > dato") %>% html_text(), character()),
-                                                 NA, tmp %>% html_elements("horingsinnspill > dato") %>% html_text()),
-                     hearing_input_id = ifelse(identical(tmp %>% html_elements("horingsinnspill > id") %>% html_text(), character()),
-                                               NA, tmp %>% html_elements("horingsinnspill > id") %>% html_text()),
-                     hearing_input_organization = ifelse(identical(tmp %>% html_elements("horingsinnspill > organisasjon") %>% html_text(), character()),
-                                                         NA, tmp %>% html_elements("horingsinnspill > organisasjon") %>% html_text()),
-                     hearing_input_text = ifelse(identical(tmp %>% html_elements("horingsinnspill > tekst") %>% html_text(), character()),
-                                                 NA, tmp %>% html_elements("horingsinnspill > tekst") %>% html_text()),
-                     hearing_input_title = ifelse(identical(tmp %>% html_elements("horingsinnspill > tittel") %>% html_text(), character()),
-                                                  NA, tmp %>% html_elements("horingsinnspill > tittel") %>% html_text()))
+  base <- GET(url)
+  
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
+  
+  
+  if(html_text(html_elements(tmp, "horingsinnspill_liste")) == ""){
+    tmp2 <- data.frame(response_date = tmp %>% html_elements("horingsinnspill_oversikt > respons_dato_tid") %>% html_text(),
+                       version = tmp %>% html_elements("horingsinnspill_oversikt > versjon") %>% html_text(),
+                       hearing_id = tmp %>% html_elements("horingsinnspill_oversikt > horing_id") %>% html_text(),
+                       hearing_type = tmp %>% html_elements("horingsinnspill_oversikt > horing_type") %>% html_text(),
+                       committee_id = tmp %>% html_elements("komite > id") %>% html_text(),
+                       hearing_input_date = NA,
+                       hearing_input_id = NA,
+                       hearing_input_organization = NA,
+                       hearing_input_text = NA,
+                       hearing_input_title = NA)
+    
+  } else {
+    
+    tmp2 <- data.frame(response_date = tmp %>% html_elements("horingsinnspill_oversikt > respons_dato_tid") %>% html_text(),
+                       version = tmp %>% html_elements("horingsinnspill_oversikt > versjon") %>% html_text(),
+                       hearing_id = tmp %>% html_elements("horingsinnspill_oversikt > horing_id") %>% html_text(),
+                       hearing_type = tmp %>% html_elements("horingsinnspill_oversikt > horing_type") %>% html_text(),
+                       committee_id = tmp %>% html_elements("komite > id") %>% html_text(),
+                       hearing_input_date = tmp %>% html_elements("horingsinnspill > dato") %>% html_text(),
+                       hearing_input_id = tmp %>% html_elements("horingsinnspill > id") %>% html_text(),
+                       hearing_input_organization = tmp %>% html_elements("horingsinnspill > organisasjon") %>% html_text(),
+                       hearing_input_text = tmp %>% html_elements("horingsinnspill > tekst") %>% html_text(),
+                       hearing_input_title = tmp %>% html_elements("horingsinnspill > tittel") %>% html_text())
+  }
   
   
   

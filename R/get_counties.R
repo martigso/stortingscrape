@@ -6,40 +6,60 @@
 #' 
 #' @param historical Logical. Whether or not to include historical counties.
 #' 
-#' @return A data.frame with response date, version, county id, county name, and indication on whether county is historical.
-#' 
-#' @family get_mp_data
+#' @return A data frame with the following variables:
 #' 
 #' 
-#' @examples 
+#'    |                       |                                                     |
+#'    |:----------------------|:----------------------------------------------------|
+#'    | **response_date**     | Date of data retrieval                              |
+#'    | **version**           | Data version from the API                           |
+#'    | **historical_county** | Whether the county is historical (no longer exists) |
+#'    | **id**                | Id of the county                                    |
+#'    | **name**              | Name of the county                                  |
+#' 
+#' @md
+#' 
+#' @family 
+#' 
+#' 
+#' @examples
+#' \dontrun{ 
 #' # Request one MP by id
 #' get_counties()
 #' 
 #' # With historical counties
 #' get_counties(historical = TRUE)
+#' }
 #' 
-#' @import rvest
+#' @import rvest httr
 #' 
 #' @export
 #' 
-
-
-
 get_counties <- function(historical = FALSE){
   
   
   if(historical == FALSE){
     
-    tmp <- read_html("https://data.stortinget.no/eksport/fylker")
+    url <- "https://data.stortinget.no/eksport/fylker"
+    
     
   } 
   
   if(historical == TRUE){
     
-    tmp <- read_html("https://data.stortinget.no/eksport/fylker/?historiskefylker=true")
+    url <- "https://data.stortinget.no/eksport/fylker/?historiskefylker=true"
     
   }
   
+  base <- GET(url)
+  
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
   
   tmp <- data.frame(response_date = tmp %>% html_elements("fylker_liste > fylke > respons_dato_tid") %>% html_text(),
                     version = tmp %>% html_elements("fylker_liste > fylke > versjon") %>% html_text(),
@@ -48,6 +68,5 @@ get_counties <- function(historical = FALSE){
                     name = tmp %>% html_elements("fylker_liste > fylke > navn") %>% html_text())
   
   return(tmp)
-  
   
 }

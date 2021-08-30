@@ -7,25 +7,46 @@
 #' @param voteid Character string indicating the id of the vote to request all votes from
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
 #' 
-#' @return A data.frame with response date, version ...
+#' @return A data.frame with the following variables:
 #' 
-#' @family get_mp_data
+#'    |                        |                            |
+#'    |:-----------------------|:---------------------------|
+#'    | **response_date**      | Date of data retrieval     |
+#'    | **version**            | Data version from the API  |
+#'    | **vote_id**            | Id of the vote             |
+#'    | **decision_code**      | General code for decision  |
+#'    | **decision_comment**   | Comments for the decision  |
+#'    | **decision_number**    | Decision number            |
+#'    | **decision_reference** | Reference for the decision |
+#'    | **decision_text**      | Full text of the decision  |
+#'    
+#' @md
+#' 
+#' @seealso [get_session_decisions] [get_proposal_votes] [get_vote] [get_result_vote]
 #' 
 #' @examples 
-#' 
+#' \dontrun{
+#' decision <- get_decision_votes(123)
+#' decision
+#' }
 #'  
-#' @import rvest
+#' @import httr rvest
 #' 
 #' @export
 #' 
-
-
-
 get_decision_votes <- function(voteid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/voteringsvedtak?voteringid=", voteid)
   
-  tmp <- read_html(url)
+  base <- GET(url)
+  
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
   
   if(identical(html_elements(tmp, "voteringsvedtak_liste > voteringsvedtak") %>% html_text(), character()) == TRUE){
     tmp2 <- data.frame(response_date = tmp %>% html_elements("voteringsvedtak_oversikt > respons_dato_tid") %>% html_text(),

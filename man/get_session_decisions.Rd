@@ -23,9 +23,6 @@ A function for retrieving all decisions from a specific parliamentary session.
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_counties}()},
-\code{\link{get_decision_votes}()},
-\code{\link{get_hearing_input}()},
 \code{\link{get_hearing_program}()},
 \code{\link{get_meeting_agenda}()},
 \code{\link{get_mp_bio}()},

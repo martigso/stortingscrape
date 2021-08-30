@@ -30,5 +30,5 @@ head(parties)
 
 }
 \seealso{
-\code{\link[=get_session_parties]{get_session_parties()}}
+\link{get_session_parties}
 }

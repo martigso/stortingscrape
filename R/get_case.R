@@ -109,14 +109,22 @@
 #' cases_keywords
 #' 
 #' }
-#' @import rvest
+#' @import httr rvest
 #' 
 #' @export
 get_case <- function(caseid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/sak?sakid=", caseid)
   
-  tmp <- read_html(url)
+  base <- GET(url)
+  
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
   
   tmp2 <- list(root = data.frame(response_date = tmp %>% html_elements("detaljert_sak > respons_dato_tid") %>% html_text(),
                                  version = tmp %>% html_elements("detaljert_sak > versjon") %>% html_text(),

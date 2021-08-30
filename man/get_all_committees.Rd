@@ -27,5 +27,5 @@ head(coms)
 
 }
 \seealso{
-\code{\link[=get_session_committees]{get_session_committees()}}
+\link{get_session_committees}
 }

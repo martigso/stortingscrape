@@ -19,7 +19,7 @@
 #' 
 #' @md
 #' 
-#' @seealso [get_session_parties()]
+#' @seealso [get_session_parties]
 #' 
 #' 
 #' @examples 
@@ -28,13 +28,22 @@
 #' head(parties)
 #' }
 #' 
-#' @import rvest
+#' @import httr rvest
 #' @export
 get_all_parties <- function(){
   
   url <- "https://data.stortinget.no/eksport/allepartier"
+
+  base <- GET(url)
   
-  tmp <- read_html(url)
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
+  
   
   tmp <- data.frame(response_date = tmp %>% html_elements("partier_liste > parti > respons_dato_tid") %>% html_text(),
                     version = tmp %>% html_elements("partier_liste > parti > versjon") %>% html_text(),

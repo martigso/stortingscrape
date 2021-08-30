@@ -10,49 +10,26 @@ get_counties(historical = FALSE)
 \item{historical}{Logical. Whether or not to include historical counties.}
 }
 \value{
-A data.frame with response date, version, county id, county name, and indication on whether county is historical.
+A data frame with the following variables:\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{historical_county} \tab Whether the county is historical (no longer exists) \cr
+   \strong{id} \tab Id of the county \cr
+   \strong{name} \tab Name of the county \cr
+}
 }
 \description{
 A function for retrieving Norwegian MPs for a given parliamentary period from the parliament API
 }
 \examples{
+\dontrun{ 
 # Request one MP by id
 get_counties()
 
 # With historical counties
 get_counties(historical = TRUE)
+}
 
 }
-\seealso{
-Other get_mp_data: 
-\code{\link{get_decision_votes}()},
-\code{\link{get_hearing_input}()},
-\code{\link{get_hearing_program}()},
-\code{\link{get_meeting_agenda}()},
-\code{\link{get_mp_bio}()},
-\code{\link{get_mp_pic}()},
-\code{\link{get_mp}()},
-\code{\link{get_parlperiod_mps}()},
-\code{\link{get_parlperiod_presidency}()},
-\code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()},
-\code{\link{get_proceedings}()},
-\code{\link{get_proposal_votes}()},
-\code{\link{get_question_hour}()},
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
-}
-\concept{get_mp_data}
+\concept{}
