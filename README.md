@@ -70,7 +70,7 @@ The data is described in detail in the [API of Stortinget](https://data.storting
 
 ## List of functions currently implemented 
 
-(Show list of all functions in the package here.)[https://martigso.github.io/stortingscrape/functions.html]
+[Show list of all functions in the package here.](https://martigso.github.io/stortingscrape/functions.html)
 
 
 ## In development
