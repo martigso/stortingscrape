@@ -24,7 +24,7 @@ Rd_contents <- tools:::Rd_contents
 Rd_get_example_code <- tools:::.Rd_get_example_code
 Rd_get_section <- tools:::.Rd_get_section
 Rd_get_text <- tools:::.Rd_get_text
-
+tools:::.Rd_get_value
 # Extracts the text of the named section from the rd_doc
 Rd_get_section_text <- function(rd_doc, section) {
   Rd_get_section(rd_doc, section) %>% 

@@ -15,7 +15,7 @@
 *.tex
 
 # Unpushed Scripts
-other_scripts/*
+other_scripts
 
 # Other files
-functions.html
+
