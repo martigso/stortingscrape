@@ -7,14 +7,31 @@
 #' @param hearingid Character string indicating the id of the hearing to retrieve.
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
 #' 
-#' @return A data.frame with response date, version ...
+#' @return A data.frame the following variables:
+#' 
+#'    |                                |                                             |
+#'    |:-------------------------------|:--------------------------------------------|
+#'    | **response_date**              | Date of data retrieval                      |
+#'    | **version**                    | Data version from the API                   |
+#'    | **hearing_id**                 | Id of the hearing                           |
+#'    | **hearing_type**               | Type of hearing                             |
+#'    | **committee_id**               | Id of committee responsible for the hearing |
+#'    | **hearing_input_date**         | Date of receiving input                     |
+#'    | **hearing_input_id**           | Hearing input id                            |
+#'    | **hearing_input_organization** | Organization giving input                   |
+#'    | **hearing_input_text**         | Full text of the hearing input              |
+#'    | **hearing_input_title**        | Title of the hearing input                  |
+#'    
+#' @md
 #' 
 #' @seealso [get_session_hearings] [get_hearing_program] [get_written_hearing_input]
 #' 
 #' 
 #' @examples 
 #' 
-#' 
+#' \dontrun{
+#' get_hearing_input(hearingid = 10004166)
+#' }
 #' 
 #' @import rvest parallel
 #' @export

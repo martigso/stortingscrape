@@ -20,6 +20,7 @@ A data.frame with response date, version, date of death/birth, first and last na
 A function for retrieving Norwegian MPs for a given parliamentary period from the parliament API
 }
 \examples{
+\dontrun{
 # Request one MP by id
 get_parlperiod_mps("2005-2009")
 
@@ -27,7 +28,7 @@ get_parlperiod_mps("2005-2009")
 ids <- c("1961-65", "1997-01", "2009-2013")
 mps <- lapply(ids, get_parlperiod_mps, good_manners = 2)
 mps <- do.call(rbind, mps)
-
+}
 }
 \seealso{
 Other get_mp_data: 

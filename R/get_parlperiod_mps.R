@@ -14,6 +14,7 @@
 #' 
 #' 
 #' @examples 
+#' \dontrun{
 #' # Request one MP by id
 #' get_parlperiod_mps("2005-2009")
 #' 
@@ -21,7 +22,7 @@
 #' ids <- c("1961-65", "1997-01", "2009-2013")
 #' mps <- lapply(ids, get_parlperiod_mps, good_manners = 2)
 #' mps <- do.call(rbind, mps)
-#' 
+#' }
 #' @import rvest
 #' @export
 #' 
