@@ -70,41 +70,8 @@ The data is described in detail in the [API of Stortinget](https://data.storting
 
 ## List of functions currently implemented 
 
-| **Function name**              | **Function usage**                                                                       |
-|:-------------------------------|:-----------------------------------------------------------------------------------------|
-| get_all_committees             | function ()                                                                              |
-| get_all_parties                | function ()                                                                              |
-| get_case                       | function (caseid = NA, good_manners = 0)                                                 |
-| get_counties                   | function (historical = FALSE)                                                            |
-| get_decision_votes             | function (voteid = NA, good_manners = 0)                                                 |
-| get_hearing_input              | function (hearingid = NA, good_manners = 0)                                              |
-| get_hearing_program            | function (hearingid = NA, good_manners = 0)                                              |
-| get_meeting_agenda             | function (meetingid = NA, good_manners = 0)                                              |
-| get_mp                         | function (id = NA, good_manners = 0)                                                     |
-| get_mp_bio                     | function (id = NA, good_manners = 0)                                                     |
-| get_mp_pic                     | function (id = NA, size = "middels", destfile = NA, show_plot = FALSE, good_manners = 0) |
-| get_parlperiod_mps             | function (periodid = NA, substitute = FALSE, good_manners = 0)                           |
-| get_parlperiod_presidency      | function (periodid = NA, good_manners = 0)                                               |
-| get_parlperiods                | function ()                                                                              |
-| get_parlsessions               | function ()                                                                              |
-| get_proceedings                | function ()                                                                              |
-| get_proposal_votes             | function (voteid = NA, good_manners = 0)                                                 |
-| get_question                   | function (questionid = NA, good_manners = 0)                                             |
-| get_question_hour              | function (meetingid = NA, good_manners = 0)                                              |
-| get_result_vote                | function (voteid = NA, good_manners = 0)                                                 |
-| get_session_cases              | function (sessionid = NA, good_manners = 0, cores = 1)                                   |
-| get_session_committees         | function (sessionid = NA, good_manners = 0)                                              |
-| get_session_decisions          | function (sessionid = NA, good_manners = 0)                                              |
-| get_session_delegations        | function (sessionid = NA, good_manners = 0)                                              |
-| get_session_hearings           | function (sessionid = NA, good_manners = 0, cores = 1)                                   |
-| get_session_meetings           | function (sessionid = NA, good_manners = 0)                                              |
-| get_session_mp_speech_activity | function (sessionid = NA, mp_id = NA, good_manners = 0)                                  |
-| get_session_parties            | function (sessionid = NA, good_manners = 0)                                              |
-| get_session_publications       | function (sessionid = NA, type = "referat", good_manners = 0)                            |
-| get_session_questions          | function (sessionid = NA, q_type = NA, status = NA, good_manners = 0)                    |
-| get_topics                     | function (keep_sub_topics = TRUE)                                                        |
-| get_vote                       | function (caseid = NA, good_manners = 0)                                                 |
-| get_written_hearing_input      | function (hearingid = NA, good_manners = 0)                                              |
+(Show list of all functions in the package here.)[https://martigso.github.io/stortingscrape/functions.html]
+
 
 ## In development
 
