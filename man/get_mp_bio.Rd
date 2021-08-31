@@ -4,7 +4,7 @@
 \alias{get_mp_bio}
 \title{Extract biography of specific MPs}
 \usage{
-get_mp_bio(id = NA, good_manners = 0)
+get_mp_bio(mpid = NA, good_manners = 0)
 }
 \arguments{
 \item{mpid}{Character string indicating the id of the MP to retrieve.}
@@ -26,7 +26,7 @@ A list with ten data frames:
    \strong{year} \tab Year of entry publication \cr
    \strong{description} \tab Description of the publication \cr
    \strong{last_name} \tab MP's last name \cr
-   \strong{more_years} \tab <Not described in the API> \cr
+   \strong{more_years} \tab \strong{Not described in the API} \cr
    \strong{publisher} \tab Publisher \cr
    \strong{first_name} \tab First name of the MP \cr
    \strong{place} \tab Place of publication \cr
@@ -88,7 +88,7 @@ A list with ten data frames:
    \strong{committee_id} \tab Id of the position (in committee, cabinet, delegation, etc) \cr
    \strong{committee_name} \tab Position name \cr
    \strong{committee_type} \tab Position type \cr
-   \strong{sorting} \tab <Not described in the API> \cr
+   \strong{sorting} \tab \strong{Not described in the API} \cr
    \strong{parl_period_id} \tab Parliamentary period the position was held (cabinet data missing) \cr
    \strong{to_year} \tab Year MP held position to \cr
    \strong{to_date} \tab Date MP held position to \cr
@@ -110,12 +110,12 @@ A list with ten data frames:
     \tab  \cr
    \strong{several_periods_text} \tab Text description if the vocation was held for several periods \cr
    \strong{from_year} \tab Year MP held vocation from \cr
-   \strong{from_year_sorting} \tab <Not described in API> \cr
+   \strong{from_year_sorting} \tab \strong{Not described in API} \cr
    \strong{from_year_unknown} \tab Logical indication for whether the start year is unknown \cr
    \strong{max_to_year} \tab The last possible time the MP held the position \cr
    \strong{note} \tab Note for position \cr
    \strong{min_to_year} \tab The earliest possible time the MP held the position \cr
-   \strong{level} \tab <Not described in API> \cr
+   \strong{level} \tab \strong{Not described in API} \cr
    \strong{organization} \tab Organization holding the position \cr
    \strong{place} \tab Place of the position \cr
    \strong{to_year} \tab Year MP held position to \cr

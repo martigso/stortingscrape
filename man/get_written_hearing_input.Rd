@@ -24,8 +24,6 @@ A function for retrieving written input for a specified hearing
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_mp_pic}()},
-\code{\link{get_mp}()},
 \code{\link{get_parlperiod_mps}()},
 \code{\link{get_parlperiod_presidency}()},
 \code{\link{get_parlperiods}()},

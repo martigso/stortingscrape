@@ -4,10 +4,12 @@
 \alias{get_mp_pic}
 \title{Retrieve picture of specific MPs}
 \usage{
-get_mp_pic(id = NA, size = "middels", destfile = NA, show_plot = FALSE, good_manners = 0)
+get_mp_pic(mpid = NA, size = "middels", 
+           destfile = NA, show_plot = FALSE, 
+           good_manners = 0)
 }
 \arguments{
-\item{id}{Character string indicating the id of the MP to retrieve.}
+\item{mpid}{Character string indicating the id of the MP to retrieve.}
 
 \item{size}{Character string size of the picture. Accepts values "lite" (small), "middels" (medium -- default), and "stort" (big).}
 
@@ -24,40 +26,18 @@ Picture of the requested MP in the preferred size.
 A function for retrieving Norwegian MP pictures by id.
 }
 \examples{
+\dontrun{
 # Request one MP by id
-get_mp_pic(id = "AAMH", destfile = "~/Pictures/AAMH.jpeg", show_plot = TRUE, size = "stort")
+get_mp_pic(mpid = "AAMH", destfile = "~/Pictures/AAMH.jpeg", show_plot = TRUE, size = "stort")
 
 # With good manners for multiple calls
 lapply(c("AAMH", "CIH", "TKF"), function(x){
-  get_mp_pic(id = x, destfile = paste0("~/Pictures/", x), 
+  get_mp_pic(mpid = x, destfile = paste0("~/Pictures/", x), 
   show_plot = TRUE, size = "stort", good_manners = 2)
-})
+  })
+}
 
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_mp}()},
-\code{\link{get_parlperiod_mps}()},
-\code{\link{get_parlperiod_presidency}()},
-\code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()},
-\code{\link{get_proceedings}()},
-\code{\link{get_proposal_votes}()},
-\code{\link{get_question_hour}()},
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_mp} \link{get_parlperiod_mps} \link{get_mp_bio}
 }
-\concept{get_mp_data}

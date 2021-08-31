@@ -4,20 +4,31 @@
 \alias{get_mp}
 \title{Extract information on specific MPs}
 \usage{
-get_mp(id = NA, good_manners = 0)
+get_mp(mpid = NA, good_manners = 0)
 }
 \arguments{
-\item{id}{Character string indicating the id of the MP to retrieve.}
+\item{mpid}{Character string indicating the id of the MP to retrieve.}
 
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with response date, version, date of death/birth, first and last name, id, and gender of the requested MP.
+A data.frame with the following variables:\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{death} \tab MP date of death, if applicable \cr
+   \strong{last_name} \tab MP last name \cr
+   \strong{birth} \tab MP date of birth \cr
+   \strong{first_name} \tab MP first name \cr
+   \strong{id} \tab MP id \cr
+   \strong{gender} \tab MP gender \cr
+}
 }
 \description{
 A function for retrieving information on Norwegian MPs from the parliament API
 }
 \examples{
+\dontrun{
 # Request one MP by id
 get_mp("AAMH")
 
@@ -27,32 +38,9 @@ ids <- c("AAMH", "AMSK", "MAAA")
 mps <- lapply(ids, get_mp, good_manners = 2)
 
 mps <- do.call(rbind, mps)
+}
 
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_mp_pic}()},
-\code{\link{get_parlperiod_mps}()},
-\code{\link{get_parlperiod_presidency}()},
-\code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()},
-\code{\link{get_proceedings}()},
-\code{\link{get_proposal_votes}()},
-\code{\link{get_question_hour}()},
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_mp_bio} \link{get_parlperiod_mps} \link{get_mp_pic} \link{get_session_mp_speech_activity}
 }
-\concept{get_mp_data}

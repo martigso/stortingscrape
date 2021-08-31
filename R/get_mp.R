@@ -1,19 +1,33 @@
 #' Extract information on specific MPs
 #' 
-#' A function for retrieving information on Norwegian MPs from the parliament API
+#' @description A function for retrieving information on Norwegian MPs from the parliament API
 #' 
-#' @usage get_mp(id = NA, good_manners = 0)
+#' @usage get_mp(mpid = NA, good_manners = 0)
 #' 
-#' @param id Character string indicating the id of the MP to retrieve.
+#' @param mpid Character string indicating the id of the MP to retrieve.
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
 #' 
 #'
-#' @return A data.frame with response date, version, date of death/birth, first and last name, id, and gender of the requested MP.
+#' @return A data.frame with the following variables:
 #' 
-#' @family get_mp_data
+#'    |                   |                                               |
+#'    |:------------------|:----------------------------------------------|
+#'    | **response_date** | Date of data retrieval                        |
+#'    | **version**       | Data version from the API                     |
+#'    | **death**         | MP date of death, if applicable               |
+#'    | **last_name**     | MP last name                                  |
+#'    | **birth**         | MP date of birth                              |
+#'    | **first_name**    | MP first name                                 |
+#'    | **id**            | MP id                                         |
+#'    | **gender**        | MP gender                                     |
+#'    
+#' @md
+#' 
+#' @seealso [get_mp_bio] [get_parlperiod_mps] [get_mp_pic] [get_session_mp_speech_activity]
 #' 
 #' 
 #' @examples 
+#' \dontrun{
 #' # Request one MP by id
 #' get_mp("AAMH")
 #' 
@@ -23,16 +37,25 @@
 #' mps <- lapply(ids, get_mp, good_manners = 2)
 #' 
 #' mps <- do.call(rbind, mps)
+#' }
 #' 
-#' @import rvest
+#' @import rvest httr
 #' @export
 #' 
-
-
-
-get_mp <- function(id = NA, good_manners = 0){
+get_mp <- function(mpid = NA, good_manners = 0){
   
-  tmp <- read_html(paste0("https://data.stortinget.no/eksport/person?personid=", id))
+  url <- paste0("https://data.stortinget.no/eksport/person?personid=", mpid)
+  
+  base <- GET(url)
+  
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
+  
   
   tmp <- data.frame(response_date = tmp %>% html_elements("respons_dato_tid") %>% html_text(),
                     version = tmp %>% html_elements("versjon") %>% html_text(),
@@ -43,7 +66,7 @@ get_mp <- function(id = NA, good_manners = 0){
                     id = tmp %>% html_elements("id") %>% html_text(),
                     gender = tmp %>% html_elements("kjoenn") %>% html_text())
   
-  message(paste0(id, " (", tmp$first_name, " ", tmp$last_name, ") done."))
+  message(paste0(mpid, " (", tmp$first_name, " ", tmp$last_name, ") done."))
   
   Sys.sleep(good_manners)
   

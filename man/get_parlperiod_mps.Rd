@@ -32,8 +32,6 @@ mps <- do.call(rbind, mps)
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_mp_pic}()},
-\code{\link{get_mp}()},
 \code{\link{get_parlperiod_presidency}()},
 \code{\link{get_parlperiods}()},
 \code{\link{get_parlsessions}()},

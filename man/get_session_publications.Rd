@@ -29,8 +29,6 @@ A function for retrieving one of several publication types within a parliamentar
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_mp_pic}()},
-\code{\link{get_mp}()},
 \code{\link{get_parlperiod_mps}()},
 \code{\link{get_parlperiod_presidency}()},
 \code{\link{get_parlperiods}()},

@@ -2,11 +2,10 @@
 #' 
 #' @description A function for retrieving biography of Norwegian MPs from the parliament API
 #' 
-#' @usage get_mp_bio(id = NA, good_manners = 0)
+#' @usage get_mp_bio(mpid = NA, good_manners = 0)
 #' 
 #' @param mpid Character string indicating the id of the MP to retrieve.
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
-#' 
 #'
 #' @return A list with ten data frames:
 #' 
@@ -25,7 +24,7 @@
 #'    | **year**          | Year of entry publication             |
 #'    | **description**   | Description of the publication        |
 #'    | **last_name**     | MP's last name                        |
-#'    | **more_years**    | <Not described in the API>            |
+#'    | **more_years**    | __Not described in the API__          |
 #'    | **publisher**     | Publisher                             |
 #'    | **first_name**    | First name of the MP                  |
 #'    | **place**         | Place of publication                  |
@@ -93,7 +92,7 @@
 #'    | **committee_id**   | Id of the position (in committee, cabinet, delegation, etc)       |
 #'    | **committee_name** | Position name                                                     |
 #'    | **committee_type** | Position type                                                     |
-#'    | **sorting**        | <Not described in the API>                                        |
+#'    | **sorting**        | __Not described in the API__                                      |
 #'    | **parl_period_id** | Parliamentary period the position was held (cabinet data missing) |
 #'    | **to_year**        | Year MP held position to                                          |
 #'    | **to_date**        | Date MP held position to                                          |
@@ -117,12 +116,12 @@
 #'    |:-------------------------|---------------------------------------------------------------|
 #'    | **several_periods_text** | Text description if the vocation was held for several periods |
 #'    | **from_year**            | Year MP held vocation from                                    |
-#'    | **from_year_sorting**    | <Not described in API>                                        |
+#'    | **from_year_sorting**    | __Not described in API__                                      |
 #'    | **from_year_unknown**    | Logical indication for whether the start year is unknown      |
 #'    | **max_to_year**          | The last possible time the MP held the position               |
 #'    | **note**                 | Note for position                                             |
 #'    | **min_to_year**          | The earliest possible time the MP held the position           |
-#'    | **level**                | <Not described in API>                                        |
+#'    | **level**                | __Not described in API__                                      |
 #'    | **organization**         | Organization holding the position                             |
 #'    | **place**                | Place of the position                                         |
 #'    | **to_year**              | Year MP held position to                                      |
@@ -132,7 +131,7 @@
 #' 
 #' @md
 #' 
-#' @seealso  [get_mp] [get_parlperiod_mps] [get_mp_pic] [get_session_mp_speech_activity]
+#' @seealso [get_mp] [get_parlperiod_mps] [get_mp_pic] [get_session_mp_speech_activity]
 #' 
 #' 
 #' @examples 
@@ -143,7 +142,7 @@
 #' 
 #' }
 #' 
-#' @import rvest
+#' @import rvest httr
 #' @export
 #' 
 get_mp_bio <- function(mpid = NA, good_manners = 0){

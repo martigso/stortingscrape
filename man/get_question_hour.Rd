@@ -23,8 +23,6 @@ A function for retrieving detailed overview of the question hour for a specific 
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_mp_pic}()},
-\code{\link{get_mp}()},
 \code{\link{get_parlperiod_mps}()},
 \code{\link{get_parlperiod_presidency}()},
 \code{\link{get_parlperiods}()},
