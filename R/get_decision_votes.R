@@ -1,6 +1,7 @@
 #' Retreive vote decision for a specified vote
 #' 
-#' A function for retrieving vote decisions from a specific vote. Vote data are only available from the 2011-2012 session
+#' @description A function for retrieving vote decisions from a specific vote. 
+#' Vote data are only available from the 2011-2012 session
 #' 
 #' @usage get_decision_votes(voteid = NA, good_manners = 0)
 #' 

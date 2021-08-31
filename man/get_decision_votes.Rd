@@ -25,7 +25,8 @@ A data.frame with the following variables:\tabular{ll}{
 }
 }
 \description{
-A function for retrieving vote decisions from a specific vote. Vote data are only available from the 2011-2012 session
+A function for retrieving vote decisions from a specific vote.
+Vote data are only available from the 2011-2012 session
 }
 \examples{
 \dontrun{

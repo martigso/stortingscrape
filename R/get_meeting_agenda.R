@@ -1,31 +1,64 @@
 #' Retreive agenda for a specified meeting
 #' 
-#' A function for retrieving the agenda for a specific meeting
+#' @description A function for retrieving the agenda for a specific meeting.
 #' 
 #' @usage get_meeting_agenda(meetingid = NA, good_manners = 0)
 #' 
 #' @param meetingid Character string indicating the id of the meeting to request all votes from
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
 #' 
-#' @return A data.frame with response date, version ...
+#' @return A data.frame with the following variables:
 #' 
-#' @family get_mp_data
+#'    |                           |                                               |
+#'    |:--------------------------|:----------------------------------------------|
+#'    | **response_date**         | Date of data retrieval                        |
+#'    | **version**               | Data version from the API                     |
+#'    | **agenda_number**         | The agenda number for the session             |
+#'    | **meeting_date**          | Date of the meeting                           |
+#'    | **meeting_id**            | Meeting id                                    |
+#'    | **meeting_place**         | Where the meeting was held                    |
+#'    | **agenda_case_reference** | Reference for the case on the agenda          |
+#'    | **agenda_case_number**    | Case number                                   |
+#'    | **agenda_case_text**      | Case description                              |
+#'    | **agenda_case_type**      | Case type                                     |
+#'    | **footnote**              | Footnote for the case                         |
+#'    | **proposition_id**        | If relevant, belonging proposition id         |
+#'    | **committee_id**          | If relevant, id of the responsible committee  |
+#'    | **loose_proposals**       | Whether there are loose proposals to the case |
+#'    | **case_id**               | Id of the case                                |
+#'    | **question_hour_type**    | If relevant, type of question hour            |
+#'    | **question_id**           | If relevant, question id                      |
+#' 
+#' @md
+#' 
+#' @seealso [get_session_meetings] [get_case] [get_question] [get_question_hour]
 #' 
 #' @examples 
 #' 
+#' \dontrun{
+#' 
+#' meetings0910 <- get_session_meetings("2009-2010")
+#' meeting_agenda <- get_meeting_agenda(meetings0910$meeting_id[161])
+#' meeting_agenda
+#' }
 #'  
-#' @import rvest
+#' @import httr rvest
 #' 
 #' @export
 #' 
-
-
-
 get_meeting_agenda <- function(meetingid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/dagsorden?moteid=", meetingid)
   
-  tmp <- read_html(url)
+  base <- GET(url)
+  
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
   
   tmp2 <- data.frame(response_date = tmp %>% html_elements("mote_dagsorden_oversikt > respons_dato_tid") %>% html_text(),
                      version = tmp %>% html_elements("mote_dagsorden_oversikt > versjon") %>% html_text(),
@@ -44,7 +77,6 @@ get_meeting_agenda <- function(meetingid = NA, good_manners = 0){
                      case_id = tmp %>% html_elements("dagsordensak > sak_id") %>% html_text(),
                      question_hour_type = tmp %>% html_elements("dagsordensak > sporretime_type") %>% html_text(),
                      question_id = tmp %>% html_elements("dagsordensak > sporsmal_id") %>% html_text())
-  
   
   Sys.sleep(good_manners)
   

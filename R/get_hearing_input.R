@@ -1,6 +1,6 @@
 #' Retrieve the hearing input for a specified hearing
 #' 
-#' A function for retrieving the hearing input for a specified hearing
+#' @description A function for retrieving the hearing input for a specified hearing.
 #' 
 #' @usage get_hearing_input(hearingid = NA, good_manners = 0)
 #' 

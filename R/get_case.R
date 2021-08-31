@@ -1,6 +1,6 @@
 #' Retreive a parliamentary case
 #' 
-#' A function for retrieving single parliamentary case by id.
+#' @description A function for retrieving single parliamentary case by id.
 #' 
 #' @usage get_case(caseid = NA, good_manners = 0)
 #' 

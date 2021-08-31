@@ -20,7 +20,8 @@ A data frame with the following variables:\tabular{ll}{
 }
 }
 \description{
-A function for retrieving Norwegian MPs for a given parliamentary period from the parliament API
+A function for retrieving Norwegian MPs for a given parliamentary
+period from the parliament API.
 }
 \examples{
 \dontrun{ 
@@ -32,4 +33,3 @@ get_counties(historical = TRUE)
 }
 
 }
-\concept{}

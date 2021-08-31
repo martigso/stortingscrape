@@ -27,7 +27,7 @@ A data.frame the following variables:\tabular{ll}{
 }
 }
 \description{
-A function for retrieving the hearing input for a specified hearing
+A function for retrieving the hearing input for a specified hearing.
 }
 \examples{
 

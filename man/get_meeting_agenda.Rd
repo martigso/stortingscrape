@@ -12,42 +12,40 @@ get_meeting_agenda(meetingid = NA, good_manners = 0)
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with response date, version ...
+A data.frame with the following variables:\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{agenda_number} \tab The agenda number for the session \cr
+   \strong{meeting_date} \tab Date of the meeting \cr
+   \strong{meeting_id} \tab Meeting id \cr
+   \strong{meeting_place} \tab Where the meeting was held \cr
+   \strong{agenda_case_reference} \tab Reference for the case on the agenda \cr
+   \strong{agenda_case_number} \tab Case number \cr
+   \strong{agenda_case_text} \tab Case description \cr
+   \strong{agenda_case_type} \tab Case type \cr
+   \strong{footnote} \tab Footnote for the case \cr
+   \strong{proposition_id} \tab If relevant, belonging proposition id \cr
+   \strong{committee_id} \tab If relevant, id of the responsible committee \cr
+   \strong{loose_proposals} \tab Whether there are loose proposals to the case \cr
+   \strong{case_id} \tab Id of the case \cr
+   \strong{question_hour_type} \tab If relevant, type of question hour \cr
+   \strong{question_id} \tab If relevant, question id \cr
+}
 }
 \description{
-A function for retrieving the agenda for a specific meeting
+A function for retrieving the agenda for a specific meeting.
 }
 \examples{
 
+\dontrun{
+
+meetings0910 <- get_session_meetings("2009-2010")
+meeting_agenda <- get_meeting_agenda(meetings0910$meeting_id[161])
+meeting_agenda
+}
  
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_hearing_program}()},
-\code{\link{get_mp_bio}()},
-\code{\link{get_mp_pic}()},
-\code{\link{get_mp}()},
-\code{\link{get_parlperiod_mps}()},
-\code{\link{get_parlperiod_presidency}()},
-\code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()},
-\code{\link{get_proceedings}()},
-\code{\link{get_proposal_votes}()},
-\code{\link{get_question_hour}()},
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_session_meetings} \link{get_case} \link{get_question} \link{get_question_hour}
 }
-\concept{get_mp_data}

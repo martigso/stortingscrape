@@ -7,48 +7,137 @@
 get_mp_bio(id = NA, good_manners = 0)
 }
 \arguments{
-\item{id}{Character string indicating the id of the MP to retrieve.}
+\item{mpid}{Character string indicating the id of the MP to retrieve.}
 
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A list with response date, version ...
+A list with ten data frames:
+\enumerate{
+\item \strong{$root} (main data on the MP)\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{id} \tab Id of the MP \cr
+}
+
+\item \strong{$literature} (all literature the MP contributed to)\tabular{ll}{
+    \tab  \cr
+   \strong{year} \tab Year of entry publication \cr
+   \strong{description} \tab Description of the publication \cr
+   \strong{last_name} \tab MP's last name \cr
+   \strong{more_years} \tab <Not described in the API> \cr
+   \strong{publisher} \tab Publisher \cr
+   \strong{first_name} \tab First name of the MP \cr
+   \strong{place} \tab Place of publication \cr
+   \strong{title} \tab Title of the publication \cr
+   \strong{type} \tab MP's role in publication (author etc) \cr
+}
+
+\item \strong{$leave_of_absence} (times the MP was on leave)\tabular{ll}{
+    \tab  \cr
+   \strong{from_date} \tab Start date of leave \cr
+   \strong{reason} \tab Reason for leave \cr
+   \strong{to_date} \tab End of leave \cr
+   \strong{type} \tab Type of leave \cr
+   \strong{sub_last_name} \tab Substitute MP last name (id not recorded) \cr
+   \strong{sub_first_name} \tab Substitute MP first name \cr
+}
+
+\item \strong{$personalia} (the MP's personalia)\tabular{ll}{
+    \tab  \cr
+   \strong{seniority} \tab Number of days in parliament \cr
+   \strong{county_of_birth} \tab Birth county of the MP \cr
+   \strong{municipality_of_birth} \tab Birth municipality of the MP \cr
+   \strong{eulogy_date} \tab Eulogy date of the MP, when applicable \cr
+}
+
+\item \strong{$father} (the MP's father personalia)\tabular{ll}{
+    \tab  \cr
+   \strong{death_year} \tab Father's year of death \cr
+   \strong{last_name} \tab Father's last name \cr
+   \strong{birth_year} \tab Father's year of birth \cr
+   \strong{first_name} \tab Father's first name \cr
+   \strong{profession} \tab Father's profession \cr
+}
+
+\item \strong{$mother} (the MP's mother personalia)\tabular{ll}{
+    \tab  \cr
+   \strong{death_year} \tab Mother's year of death \cr
+   \strong{last_name} \tab Mother's last name \cr
+   \strong{birth_year} \tab Mother's year of birth \cr
+   \strong{first_name} \tab Mother's first name \cr
+   \strong{profession} \tab Mother's profession \cr
+}
+
+\item \strong{$parl_periods} (parliamentary periods the MP has held a seat)\tabular{ll}{
+    \tab  \cr
+   \strong{from_date} \tab Date MP held seat from \cr
+   \strong{county} \tab County the MP represented \cr
+   \strong{party_id} \tab Party id for the MP's party \cr
+   \strong{rep_number} \tab Representative number (within the whol parliament) \cr
+   \strong{parl_period_id} \tab Id of the parliamentary period \cr
+   \strong{to_date} \tab Date MP held a seat to \cr
+   \strong{type} \tab Type of representation \cr
+}
+
+\item \strong{$parl_positions} (parliamentary positions held by the MP)\tabular{ll}{
+    \tab  \cr
+   \strong{from_year} \tab Year MP held position from \cr
+   \strong{from_date} \tab Date MP held position from \cr
+   \strong{committee_id} \tab Id of the position (in committee, cabinet, delegation, etc) \cr
+   \strong{committee_name} \tab Position name \cr
+   \strong{committee_type} \tab Position type \cr
+   \strong{sorting} \tab <Not described in the API> \cr
+   \strong{parl_period_id} \tab Parliamentary period the position was held (cabinet data missing) \cr
+   \strong{to_year} \tab Year MP held position to \cr
+   \strong{to_date} \tab Date MP held position to \cr
+}
+
+\item \strong{$vocation} (vocation and education of the MP outside of parliament)\tabular{ll}{
+    \tab  \cr
+   \strong{several_periods_text} \tab Text description if the vocation was held for several periods \cr
+   \strong{from_year} \tab Year MP held vocation from \cr
+   \strong{from_year_unknown} \tab Logical indication for whether the start year is unknown \cr
+   \strong{note} \tab Note for vocation \cr
+   \strong{name} \tab Name of vocation \cr
+   \strong{to_year} \tab Year MP held vocation to \cr
+   \strong{to_year_unknown} \tab Logical indication for whether the end year is unknown \cr
+   \strong{type} \tab Vocation type (10 = education, 20 = work) \cr
+}
+
+\item \strong{$other_positions} (other positions held outside parliament)\tabular{ll}{
+    \tab  \cr
+   \strong{several_periods_text} \tab Text description if the vocation was held for several periods \cr
+   \strong{from_year} \tab Year MP held vocation from \cr
+   \strong{from_year_sorting} \tab <Not described in API> \cr
+   \strong{from_year_unknown} \tab Logical indication for whether the start year is unknown \cr
+   \strong{max_to_year} \tab The last possible time the MP held the position \cr
+   \strong{note} \tab Note for position \cr
+   \strong{min_to_year} \tab The earliest possible time the MP held the position \cr
+   \strong{level} \tab <Not described in API> \cr
+   \strong{organization} \tab Organization holding the position \cr
+   \strong{place} \tab Place of the position \cr
+   \strong{to_year} \tab Year MP held position to \cr
+   \strong{to_year_unknown} \tab Logical indication for whether the end year is unknown \cr
+   \strong{type} \tab Position type \cr
+   \strong{position} \tab Position name/description \cr
+}
+
+}
 }
 \description{
 A function for retrieving biography of Norwegian MPs from the parliament API
 }
 \examples{
+\dontrun{
+
 # Request one MP by id
 get_mp_bio("AAMH")
 
 }
-\seealso{
-Other get_mp_data: 
-\code{\link{get_hearing_program}()},
-\code{\link{get_meeting_agenda}()},
-\code{\link{get_mp_pic}()},
-\code{\link{get_mp}()},
-\code{\link{get_parlperiod_mps}()},
-\code{\link{get_parlperiod_presidency}()},
-\code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()},
-\code{\link{get_proceedings}()},
-\code{\link{get_proposal_votes}()},
-\code{\link{get_question_hour}()},
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+
 }
-\concept{get_mp_data}
+\seealso{
+\link{get_mp} \link{get_parlperiod_mps} \link{get_mp_pic} \link{get_session_mp_speech_activity}
+}

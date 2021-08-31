@@ -23,9 +23,6 @@ A function for retrieving all votes from a specific vote proposal. Vote data are
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_hearing_program}()},
-\code{\link{get_meeting_agenda}()},
-\code{\link{get_mp_bio}()},
 \code{\link{get_mp_pic}()},
 \code{\link{get_mp}()},
 \code{\link{get_parlperiod_mps}()},

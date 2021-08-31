@@ -36,9 +36,6 @@ lapply(c("AAMH", "CIH", "TKF"), function(x){
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_hearing_program}()},
-\code{\link{get_meeting_agenda}()},
-\code{\link{get_mp_bio}()},
 \code{\link{get_mp}()},
 \code{\link{get_parlperiod_mps}()},
 \code{\link{get_parlperiod_presidency}()},

@@ -29,9 +29,6 @@ tops$topics[which(tops$topics$main_topic_id == 5), ]
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_hearing_program}()},
-\code{\link{get_meeting_agenda}()},
-\code{\link{get_mp_bio}()},
 \code{\link{get_mp_pic}()},
 \code{\link{get_mp}()},
 \code{\link{get_parlperiod_mps}()},

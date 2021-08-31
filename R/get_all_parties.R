@@ -1,6 +1,6 @@
 #' All parliamentary parties
 #' 
-#' A function for retrieving all Norwegian parliamentary parties in the 
+#' @description A function for retrieving all Norwegian parliamentary parties in the 
 #' data.stortinget.no API.
 #' 
 #' @usage get_all_parties()

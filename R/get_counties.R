@@ -1,6 +1,7 @@
 #' Get list of MPs in a given parliamentary period
 #' 
-#' A function for retrieving Norwegian MPs for a given parliamentary period from the parliament API
+#' @description A function for retrieving Norwegian MPs for a given parliamentary 
+#' period from the parliament API.
 #' 
 #' @usage get_counties(historical = FALSE)
 #' 
@@ -19,7 +20,6 @@
 #' 
 #' @md
 #' 
-#' @family 
 #' 
 #' 
 #' @examples
