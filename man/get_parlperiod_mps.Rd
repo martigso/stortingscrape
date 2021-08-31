@@ -14,13 +14,28 @@ get_parlperiod_mps(periodid = NA, substitute = FALSE, good_manners = 0)
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with response date, version, date of death/birth, first and last name, id, and gender... of the requested MP.
+A data.frame with the following variables:
+|                   |                                        |
+|:------------------|:---------------------------------------|
+| \strong{response_date} | Date of data retrieval                 |
+| \strong{version}       | Data version from the API              |
+| \strong{death}         | Date of death                          |
+| \strong{lastname}      | MP last name                           |
+| \strong{birth}         | Date of birth                          |
+| \strong{mp_id}         | MP id                                  |
+| \strong{gender}        | MP gender                              |
+| \strong{county_id}     | Id of county MP represented            |
+| \strong{party_id}      | Id of party MP represented             |
+| \strong{substitute_mp} | Logical for whether MP is a substitute |
+| \strong{period_id}     | Id of period represented in            |
 }
 \description{
 A function for retrieving Norwegian MPs for a given parliamentary period from the parliament API
 }
 \examples{
+
 \dontrun{
+
 # Request one MP by id
 get_parlperiod_mps("2005-2009")
 
@@ -28,30 +43,10 @@ get_parlperiod_mps("2005-2009")
 ids <- c("1961-65", "1997-01", "2009-2013")
 mps <- lapply(ids, get_parlperiod_mps, good_manners = 2)
 mps <- do.call(rbind, mps)
+
 }
+
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_parlperiod_presidency}()},
-\code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()},
-\code{\link{get_proceedings}()},
-\code{\link{get_proposal_votes}()},
-\code{\link{get_question_hour}()},
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_mp_bio} \link{get_mp} \link{get_mp_pic} \link{get_session_mp_speech_activity}
 }
-\concept{get_mp_data}

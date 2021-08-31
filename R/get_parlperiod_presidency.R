@@ -1,31 +1,53 @@
 #' Get list of presidency in a given parliamentary period
 #' 
-#' A function for retrieving the presidency for a given parliamentary period from the parliament API
+#' @description A function for retrieving the presidency for a given parliamentary period from the parliament API.
 #' 
 #' @usage get_parlperiod_presidency(periodid = NA, good_manners = 0)
 #' 
 #' @param periodid Character string indicating the id of the parliamentary period to retrieve.
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
 #' 
-#' @return A data.frame with response date, version ...
+#' @return A data.frame with the following variables:
 #' 
-#' @family get_mp_data
+#'    |                   |                                        |
+#'    |:------------------|:---------------------------------------|
+#'    | **response_date** | Date of data retrieval                 |
+#'    | **version**       | Data version from the API              |
+#'    | **last_name**     | Last name of presidency member         |
+#'    | **first_name**    | First name of presidency member        |
+#'    | **from_date**     | Presidency member from date            |
+#'    | **party_id**      | Party affiliation of presidency member |
+#'    | **person_id**     | Id of the presidency member            |
+#'    | **to_date**       | Presidency member to date              |
+#'    | **position**      | Presidency position                    |
+#' 
+#' @seealso [get_mp] [get_mp_bio]
 #' 
 #' 
-#' @examples 
+#' @examples
+#' \dontrun{
+#'  
 #' # Request one MP by id
 #' get_parlperiod_presidency("2005-2009")
+#' 
+#' }
 #' 
 #' @import rvest
 #' @export
 #' 
-
-
-
 get_parlperiod_presidency <- function(periodid = NA, good_manners = 0){
   
-    
-  tmp <- read_html(paste0("https://data.stortinget.no/eksport/presidentskapet?stortingsperiodeid=", periodid))
+  url <- paste0("https://data.stortinget.no/eksport/presidentskapet?stortingsperiodeid=", periodid)
+  
+  base <- GET(url)
+  
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
   
   tmp <- data.frame(response_date = tmp %>% html_elements("presidentskapet_oversikt > respons_dato_tid") %>% html_text(),
                     version = tmp %>% html_elements("presidentskapet_oversikt > versjon") %>% html_text(),

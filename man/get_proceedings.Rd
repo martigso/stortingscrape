@@ -21,8 +21,6 @@ get_proceedings()
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_parlperiod_mps}()},
-\code{\link{get_parlperiod_presidency}()},
 \code{\link{get_parlperiods}()},
 \code{\link{get_parlsessions}()},
 \code{\link{get_proposal_votes}()},
