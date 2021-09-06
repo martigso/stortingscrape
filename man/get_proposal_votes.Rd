@@ -12,35 +12,38 @@ get_proposal_votes(voteid = NA, good_manners = 0)
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with response date, version ...
+A list with two elements:
+\enumerate{
+\item \strong{$proposal_vote} (main data on the vote proposal)\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{vote_id} \tab Id of the vote \cr
+}
+
+\item \strong{$proposal_by_parties${proposal_id}} (what parties (id) stood behind proposal(s))
+}
 }
 \description{
 A function for retrieving all votes from a specific vote proposal. Vote data are only available from the 2011-2012 session
 }
 \examples{
 
- 
+\dontrun{
+
+prop <- get_proposal_votes(7523)
+prop
+
+for(i in 1:length(prop$proposal_by_parties)){
+    prop$proposal_vote$parties[i] <- paste0(prop$proposal_by_parties[[i]], 
+                                            collapse = ", ")
+
+}
+
+}
+
+
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()},
-\code{\link{get_proceedings}()},
-\code{\link{get_question_hour}()},
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_vote} \link{get_decision_votes} \link{get_result_vote}
 }
-\concept{get_mp_data}

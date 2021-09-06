@@ -1,4 +1,4 @@
-#' Retreive question hour details for a specified meeting
+#' Retrieve question hour details for a specified meeting
 #' 
 #' A function for retrieving detailed overview of the question hour for a specific meeting
 #' 
@@ -7,29 +7,99 @@
 #' @param meetingid Character string indicating the id of the meeting to request all votes from
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
 #' 
-#' @return A list with response date, version ...
+#' @return A list with ten data frames:
 #' 
-#' @family get_mp_data
+#' 1. **$root** (download meta data)
+#' 
+#'    |                      |                           |
+#'    |:---------------------|:--------------------------|
+#'    | **response_date**    | Date of data retrieval    |
+#'    | **version**          | Data version from the API |
+#'    | **meetingid**        | The called meeting id     |
+#'        
+#' 2. **$question_hour_ministers** (id of ministers in parliament during question hour/time)
+#' 
+#'    |           |                           |
+#'    |:----------|:--------------------------|
+#'    | **id**    | Id of ministers attending |
+#'    
+#'    
+#' 3. **$question_time**
+#' 
+#'    |                                    |                                                            |
+#'    |:-----------------------------------|:-----------------------------------------------------------|
+#'    | question_justification             | Justification for question                                 |
+#'    | answer_by_id                       | Id for answering minister                                  |
+#'    | answer_by_minister_id              | Id for department of answering minister                    |
+#'    | answer_by_minister_title           | Title for department of answering minister                 |
+#'    | answer_date                        | Date of receiving answer                                   |
+#'    | answer_on_behalf_of_id             | Id of minister answered on behalf of, when relevant        |
+#'    | answer_on_behalf_of_minister_id    | Id of department answered on behalf of, when relevant      |
+#'    | answer_on_behalf_of_minister_title | Title of department answered on behalf of, when relevant   |
+#'    | agenda_case_number                 | Case number on agenda                                      |
+#'    | date                               | Date question hour was held                                |
+#'    | moved_to                           | Date moved to                                              |
+#'    | asked_by_other_id                  | Id for minister asking on behalf of another, when relevant |
+#'    | question_id                        | Question id                                                |
+#'    | correct_person                     | Not documented in API                                      |
+#'    | correct_person_minister_id         | Not documented in API                                      |
+#'    | correct_person_minister_title      | Not documented in API                                      |
+#'    | sent_date                          | Date question was sent                                     |
+#'    | session_id                         | Session id                                                 |
+#'    | question_text                      | Full question text                                         |
+#'    | question_from_id                   | Id of MP asking the question                               |
+#'    | question_number                    | Question number                                            |
+#'    | question_to_id                     | Id of minister the question was asked to                   |
+#'    | question_to_minister_id            | Department id of minister the question was asked to        |
+#'    | question_to_minister_title         | Department title of minister the question was asked to     |
+#'    | status                             | Question status                                            |
+#'    | answer                             | Answer text (often empty)                                  |
+#'    | title                              | Question title                                             |
+#'    | type                               | Question type                                              |
+#'    
+#' 4. **$publication_reference**
+#' 
+#'    |               |                                                    |
+#'    |:--------------|:---------------------------------------------------|
+#'    | **export_id** | Export id for publication (see get_publication())  |
+#'    | **link_text** | Description text for publication                   |
+#'    | **link_url**  | URL for publication                                |
+#'    | **type**      | Type of publication                                |
+#'    | **sub_type**  | Subtype for publication (location)                 |
+#'
+#' @md
+#' 
+#' @seealso [get_question] [get_session_questions] [get_publication]
 #' 
 #' @examples 
 #' 
+#' \dontrun{
+#' get_question_hour(10232)
+#' }
+#' 
 #'  
-#' @import rvest
+#' @import rvest httr
 #' 
 #' @export
 #' 
-
-
-
 get_question_hour <- function(meetingid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/sporretime?moteid=", meetingid)
   
-  tmp <- read_html(url)
+  base <- GET(url)
+  
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
   
   tmp2 <- list(root = data.frame(
     response_date = tmp %>% html_elements("sporretime_oversikt > respons_dato_tid") %>% html_text(),
-    version = tmp %>% html_elements("sporretime_oversikt > versjon") %>% html_text()
+    version = tmp %>% html_elements("sporretime_oversikt > versjon") %>% html_text(),
+    meetingid = meetingid
   ),
   question_hour_ministers = data.frame(
     id = tmp %>% html_elements("muntlig_sporretime > statsraader > person > id") %>% html_text()

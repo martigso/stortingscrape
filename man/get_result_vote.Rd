@@ -23,11 +23,6 @@ A function for retrieving vote results from a specific vote on MP level. Vote da
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()},
-\code{\link{get_proceedings}()},
-\code{\link{get_proposal_votes}()},
-\code{\link{get_question_hour}()},
 \code{\link{get_question}()},
 \code{\link{get_session_cases}()},
 \code{\link{get_session_committees}()},

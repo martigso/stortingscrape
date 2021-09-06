@@ -7,25 +7,55 @@
 #' @param voteid Character string indicating the id of the vote to request all votes from
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
 #' 
-#' @return A data.frame with response date, version ...
+#' @return A list with two elements:
 #' 
-#' @family get_mp_data
+#' 1. **$proposal_vote** (main data on the vote proposal)
+#' 
+#'    |                      |                           |
+#'    |:---------------------|:--------------------------|
+#'    | **response_date**    | Date of data retrieval    |
+#'    | **version**          | Data version from the API |
+#'    | **vote_id**          | Id of the vote            |
+#'    
+#' 2. **$proposal_by_parties${proposal_id}** (what parties (id) stood behind proposal(s))
+#'    
+#' @md
+#' 
+#' @seealso [get_vote] [get_decision_votes] [get_result_vote]
 #' 
 #' @examples 
 #' 
-#'  
-#' @import rvest
+#' \dontrun{
+#' 
+#' prop <- get_proposal_votes(7523)
+#' prop
+#' 
+#' for(i in 1:length(prop$proposal_by_parties)){
+#'     prop$proposal_vote$parties[i] <- paste0(prop$proposal_by_parties[[i]], 
+#'                                             collapse = ", ")
+#'
+#' }
+#' 
+#' }
+#' 
+#' 
+#' @import rvest httr
 #' 
 #' @export
 #' 
-
-
-
 get_proposal_votes <- function(voteid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/voteringsforslag?voteringid=", voteid)
   
-  tmp <- read_html(url)
+  base <- GET(url)
+  
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
   
   if(identical(tmp %>% html_elements("voteringsforslag > forslag_id") %>% html_text(), character())){
     tmp2 <- list(

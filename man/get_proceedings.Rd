@@ -7,38 +7,39 @@
 get_proceedings()
 }
 \value{
-A data.frame with response date, version ...
+A list with three dataframes:
+\enumerate{
+\item \strong{$root} (only download meta data)\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+}
+
+\item $proceedings (description of main proceeding categories)\tabular{ll}{
+    \tab  \cr
+   \strong{id} \tab Id of proceeding \cr
+   \strong{name} \tab Name of proceeding \cr
+}
+
+\item $poceedings_steps (description of proceeding steps within each main category)\tabular{ll}{
+    \tab  \cr
+   \strong{id} \tab Id of proceeding step \cr
+   \strong{name} \tab Name of proceeding step \cr
+   \strong{step_number} \tab Order of proceeding steps \cr
+   \strong{outdated} \tab Whether the step is outdated \cr
+   \strong{main_id} \tab Id for proceeding type the step belongs to \cr
+}
+
+}
 }
 \description{
 A function for retrieving all proceedings in Stortinget, both current and historical.
 }
 \examples{
-
+\dontrun{
 
 get_proceedings()
 
+}
 
 }
-\seealso{
-Other get_mp_data: 
-\code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()},
-\code{\link{get_proposal_votes}()},
-\code{\link{get_question_hour}()},
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
-}
-\concept{get_mp_data}

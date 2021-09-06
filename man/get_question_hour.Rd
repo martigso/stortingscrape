@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_question_hour.R
 \name{get_question_hour}
 \alias{get_question_hour}
-\title{Retreive question hour details for a specified meeting}
+\title{Retrieve question hour details for a specified meeting}
 \usage{
 get_question_hour(meetingid = NA, good_manners = 0)
 }
@@ -12,35 +12,74 @@ get_question_hour(meetingid = NA, good_manners = 0)
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A list with response date, version ...
+A list with ten data frames:
+\enumerate{
+\item \strong{$root} (download meta data)\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{meetingid} \tab The called meeting id \cr
+}
+
+\item \strong{$question_hour_ministers} (id of ministers in parliament during question hour/time)\tabular{ll}{
+    \tab  \cr
+   \strong{id} \tab Id of ministers attending \cr
+}
+
+\item \strong{$question_time}\tabular{ll}{
+    \tab  \cr
+   question_justification \tab Justification for question \cr
+   answer_by_id \tab Id for answering minister \cr
+   answer_by_minister_id \tab Id for department of answering minister \cr
+   answer_by_minister_title \tab Title for department of answering minister \cr
+   answer_date \tab Date of receiving answer \cr
+   answer_on_behalf_of_id \tab Id of minister answered on behalf of, when relevant \cr
+   answer_on_behalf_of_minister_id \tab Id of department answered on behalf of, when relevant \cr
+   answer_on_behalf_of_minister_title \tab Title of department answered on behalf of, when relevant \cr
+   agenda_case_number \tab Case number on agenda \cr
+   date \tab Date question hour was held \cr
+   moved_to \tab Date moved to \cr
+   asked_by_other_id \tab Id for minister asking on behalf of another, when relevant \cr
+   question_id \tab Question id \cr
+   correct_person \tab Not documented in API \cr
+   correct_person_minister_id \tab Not documented in API \cr
+   correct_person_minister_title \tab Not documented in API \cr
+   sent_date \tab Date question was sent \cr
+   session_id \tab Session id \cr
+   question_text \tab Full question text \cr
+   question_from_id \tab Id of MP asking the question \cr
+   question_number \tab Question number \cr
+   question_to_id \tab Id of minister the question was asked to \cr
+   question_to_minister_id \tab Department id of minister the question was asked to \cr
+   question_to_minister_title \tab Department title of minister the question was asked to \cr
+   status \tab Question status \cr
+   answer \tab Answer text (often empty) \cr
+   title \tab Question title \cr
+   type \tab Question type \cr
+}
+
+\item \strong{$publication_reference}\tabular{ll}{
+    \tab  \cr
+   \strong{export_id} \tab Export id for publication (see get_publication()) \cr
+   \strong{link_text} \tab Description text for publication \cr
+   \strong{link_url} \tab URL for publication \cr
+   \strong{type} \tab Type of publication \cr
+   \strong{sub_type} \tab Subtype for publication (location) \cr
+}
+
+}
 }
 \description{
 A function for retrieving detailed overview of the question hour for a specific meeting
 }
 \examples{
 
+\dontrun{
+get_question_hour(10232)
+}
+
  
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()},
-\code{\link{get_proceedings}()},
-\code{\link{get_proposal_votes}()},
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_question} \link{get_session_questions} \link{get_publication}
 }
-\concept{get_mp_data}

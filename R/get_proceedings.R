@@ -4,16 +4,40 @@
 #' 
 #' @usage get_proceedings()
 #'  
-#' @return A data.frame with response date, version ...
+#' @return A list with three dataframes:
 #' 
-#' @family get_mp_data
+#' 1. **$root** (only download meta data)
 #' 
+#'    |                   |                                               |
+#'    |:------------------|:----------------------------------------------|
+#'    | **response_date** | Date of data retrieval                        |
+#'    | **version**       | Data version from the API                     |
+#'  
+#' 2. $proceedings (description of main proceeding categories)
+#' 
+#'    |          |                    |
+#'    |:---------|:-------------------|
+#'    | **id**   | Id of proceeding   |
+#'    | **name** | Name of proceeding |
+#'    
+#' 2. $poceedings_steps (description of proceeding steps within each main category)
+#' 
+#'    |                 |                                            |
+#'    |:----------------|:-------------------------------------------|
+#'    | **id**          | Id of proceeding step                      |
+#'    | **name**        | Name of proceeding step                    |
+#'    | **step_number** | Order of proceeding steps                  |
+#'    | **outdated**    | Whether the step is outdated               |
+#'    | **main_id**     | Id for proceeding type the step belongs to |
+#'    
+#' @md
 #' 
 #' @examples 
-#' 
+#' \dontrun{
 #' 
 #' get_proceedings()
 #' 
+#' }
 #' 
 #' @import rvest
 #' @export
@@ -25,7 +49,15 @@ get_proceedings <- function(){
   
   url <- "https://data.stortinget.no/eksport/saksganger"
   
-  tmp <- read_html(url)
+  base <- GET(url)
+  
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
   
   tmp2 <- list(root = data.frame(response_date = tmp %>% html_elements("saksgang_oversikt > respons_dato_tid") %>% html_text(),
                                  version = tmp %>% html_elements("saksgang_oversikt > versjon") %>% html_text()),

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_session_meetings.R
 \name{get_session_meetings}
 \alias{get_session_meetings}
-\title{Retreive all meetings for a specified vote proposal}
+\title{Retreive all meetings for a specified parliamentary session}
 \usage{
 get_session_meetings(sessionid = NA, good_manners = 0)
 }
@@ -23,11 +23,6 @@ A function for retrieving meetings from a specific parliamentary session
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()},
-\code{\link{get_proceedings}()},
-\code{\link{get_proposal_votes}()},
-\code{\link{get_question_hour}()},
 \code{\link{get_question}()},
 \code{\link{get_result_vote}()},
 \code{\link{get_session_cases}()},

@@ -1,4 +1,4 @@
-#' Retreive all meetings for a specified vote proposal
+#' Retreive all meetings for a specified parliamentary session
 #' 
 #' A function for retrieving meetings from a specific parliamentary session
 #' 

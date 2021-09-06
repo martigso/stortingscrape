@@ -40,11 +40,6 @@ quest1213 <- do.call(rbind, int1213)
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()},
-\code{\link{get_proceedings}()},
-\code{\link{get_proposal_votes}()},
-\code{\link{get_question_hour}()},
 \code{\link{get_result_vote}()},
 \code{\link{get_session_cases}()},
 \code{\link{get_session_committees}()},

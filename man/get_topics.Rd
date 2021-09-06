@@ -29,11 +29,6 @@ tops$topics[which(tops$topics$main_topic_id == 5), ]
 }
 \seealso{
 Other get_mp_data: 
-\code{\link{get_parlperiods}()},
-\code{\link{get_parlsessions}()},
-\code{\link{get_proceedings}()},
-\code{\link{get_proposal_votes}()},
-\code{\link{get_question_hour}()},
 \code{\link{get_question}()},
 \code{\link{get_result_vote}()},
 \code{\link{get_session_cases}()},
