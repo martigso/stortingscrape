@@ -1,6 +1,6 @@
 #' Retrieve publications of a type in a parliamentary session
 #' 
-#' A function for retrieving one of several publication types within a parliamentary session
+#' A function for retrieving one of several publication types within a parliamentary session.
 #' 
 #' @usage get_session_publications(sessionid = NA, type = "referat", good_manners = 0)
 #' 
@@ -11,26 +11,51 @@
 #' Defaults to "referat".
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
 #' 
-#' @return A data.frame with response date, version ...
+#' @return A data.frame with the following variables:
 #' 
-#' @family get_mp_data
+#'    |                                |                                         |
+#'    |:-------------------------------|:----------------------------------------|
+#'    | **response_date**              | Date of data retrieval                  |
+#'    | **version**                    | Data version from the API               |
+#'    | **session_id**                 | Session id                              |
+#'    | **publication_date**           | Date of publication                     |
+#'    | **publication_id**             | Id of publication                       |
+#'    | **publication_format**         | Publication format (XML)                |
+#'    | **publication_available_date** | When the publication was made available |
+#'    | **publication_title**          | Publication title                       |
+#'    | **publication_type**           | Publication type                        |
+#'    
+#' @md
+#' 
+#' @seealso [get_publication]
 #' 
 #' 
 #' @examples 
 #' 
+#' \dontrun{
+#' 
+#' pub <- get_session_publications("1998-99")
+#' head(pub)
+#' 
+#' }
 #' 
 #' 
-#' @import rvest 
+#' @import rvest httr
 #' @export
 #' 
-
-
-
 get_session_publications <- function(sessionid = NA, type = "referat", good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/publikasjoner?publikasjontype=", type, "&sesjonid=", sessionid)
   
-  tmp <- read_html(url)
+  base <- GET(url)
+  
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
   
   if(identical(tmp %>% html_elements("publikasjon > id") %>% html_text(), character())){
     message(paste0("No '", type, "' in ", sessionid, ". Returning NA data frame"))

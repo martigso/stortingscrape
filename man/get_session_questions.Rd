@@ -18,31 +18,43 @@ Options are "interpellasjoner" (interpellations), "sporretimesporsmal" (oral que
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with response date, version ...
+A data.frame with the following variables:\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{answ_by_id} \tab Id of minister answering question \cr
+   \strong{answ_by_minister_id} \tab Department id of answering minister \cr
+   \strong{answ_by_minister_title} \tab Department title of answering minister \cr
+   \strong{answ_date} \tab Date answer was given \cr
+   \strong{answ_on_belhalf_of} \tab Answer given on behalf of \cr
+   \strong{answ_on_belhalf_of_minister_id} \tab Department id of minister given answer on behalf of \cr
+   \strong{answ_on_belhalf_of_minister_title} \tab Department title of minister given answer on behalf of \cr
+   \strong{topic_ids} \tab Id of relevant topics for question \cr
+   \strong{moved_to} \tab Question moved to \cr
+   \strong{asked_by_other_id} \tab MP id, if question was not asked by the questioning MP \cr
+   \strong{id} \tab Question id \cr
+   \strong{correct_person} \tab Not documented in API \cr
+   \strong{correct_person_minister_id} \tab Not documented in API \cr
+   \strong{correct_person_minister_title} \tab Not documented in API \cr
+   \strong{sendt_date} \tab Date the question was sent \cr
+   \strong{session_id} \tab Session id \cr
+   \strong{question_from_id} \tab Question from MP id \cr
+   \strong{qustion_number} \tab Question number within session \cr
+   \strong{qustion_to_id} \tab Question directed to minister id \cr
+   \strong{qustion_to_minister_id} \tab Question directed to minister department id \cr
+   \strong{qustion_to_minister_title} \tab Question directed to minister department title \cr
+   \strong{status} \tab Question status \cr
+}
 }
 \description{
-A function for retrieving topic keys used to label various data from the Norwegian parliament.
+A function for retrieving all questions within a parliamentary session.
 }
 \examples{
 interp <- get_session_questions(sessionid = "2013-2014", 
-q_type = "interpellasjoner", status = "trukket")
+                                q_type = "interpellasjoner", 
+                                status = "trukket")
 
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_question_hour} \link{get_question}
 }
-\concept{get_mp_data}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_result_vote.R
 \name{get_result_vote}
 \alias{get_result_vote}
-\title{Retreive vote results on MP level for a specified vote}
+\title{Retrieve vote results on MP level for a specified vote}
 \usage{
 get_result_vote(voteid = NA, good_manners = 0)
 }
@@ -12,30 +12,36 @@ get_result_vote(voteid = NA, good_manners = 0)
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with response date, version ...
+A data.frame with the following variables:\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{vote_id} \tab Id of vote \cr
+   \strong{mp_id} \tab MP id \cr
+   \strong{vote} \tab Vote: for, mot (against), ikke_tilstede (absent) \cr
+   \strong{permanent_sub_for} \tab Id of the MP originally holding the seat, if the substitute is permanent \cr
+   \strong{sub_for} \tab Id of the MP originally holding the seat \cr
+}
 }
 \description{
-A function for retrieving vote results from a specific vote on MP level. Vote data are only available from the 2011-2012 session
+A function for retrieving vote results from a specific vote on MP level. Vote data are only available from the 2011-2012 session.
+Needs some preprocessing for use with rollcall packages, such as \link[oc]{oc} and \link[pscl]{ideal}.
 }
 \examples{
 
+\dontrun{
+
+v <- get_result_vote(12345)
+table(v$vote)
+
+p <- get_proposal_votes(12345)
+p$proposal_vote$proposal_text \%>\% gsub("\\\\<(.*)\\\\>")
+stringr::str_replace_all(p$proposal_vote$proposal_text, 
+                         "\\\\<(.*)\\\\>|\\\\r\\\\n", "")  \%>\% 
+  stringr::str_trim()
+}
  
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_question}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_decision_votes} \link{get_proposal_votes} \link{get_vote} \link{get_mp_bio}
 }
-\concept{get_mp_data}

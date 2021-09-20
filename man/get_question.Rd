@@ -12,10 +12,40 @@ get_question(questionid = NA, good_manners = 0)
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with response date, version ...
+A data.frame with the following variables:\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{justification} \tab Justification for question \cr
+   \strong{answ_by_id} \tab Id for answering minister \cr
+   \strong{answ_by_minister_id} \tab Id for department of answering minister \cr
+   \strong{answ_by_minister_title} \tab Title for department of answering minister \cr
+   \strong{answ_date} \tab Date question was asked \cr
+   \strong{answ_on_belhalf_of} \tab Id of minister answered on behalf of, when relevant \cr
+   \strong{answ_on_belhalf_of_minister_id} \tab Id of department answered on behalf of, when relevant \cr
+   \strong{answ_on_belhalf_of_minister_title} \tab Title of department answered on behalf of, when relevant \cr
+   \strong{agenda_number} \tab Agenda number in meeting \cr
+   \strong{moved_to} \tab Date moved to \cr
+   \strong{id} \tab Question id \cr
+   \strong{correct_person_id} \tab Not documented in API \cr
+   \strong{correct_person_minister_id} \tab Not documented in API \cr
+   \strong{correct_person_minister_title} \tab Not documented in API \cr
+   \strong{sendt_date} \tab Date question was sent \cr
+   \strong{session_id} \tab Session id \cr
+   \strong{question_text} \tab Full question text \cr
+   \strong{question_from_id} \tab Id of MP asking the question \cr
+   \strong{qustion_number} \tab Question number \cr
+   \strong{qustion_to_id} \tab Id of minister the question was asked to \cr
+   \strong{qustion_to_minister_id} \tab Department id of minister the question was asked to \cr
+   \strong{qustion_to_minister_title} \tab Department title of minister the question was asked to \cr
+   \strong{answer_text} \tab Answer text (often empty) \cr
+   \strong{title} \tab Question title \cr
+   \strong{type} \tab Question type \cr
+}
 }
 \description{
-A function for retrieving single parliamentary questions by id
+A function for retrieving single parliamentary questions by id. For retrieving the whole debate
+over a question, the \link{get_publication} function has to be used
 }
 \examples{
 
@@ -39,20 +69,5 @@ quest1213 <- do.call(rbind, int1213)
 
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_question_hour} \link{get_publication}
 }
-\concept{get_mp_data}

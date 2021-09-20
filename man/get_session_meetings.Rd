@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_session_meetings.R
 \name{get_session_meetings}
 \alias{get_session_meetings}
-\title{Retreive all meetings for a specified parliamentary session}
+\title{Retrieve all meetings for a specified parliamentary session}
 \usage{
 get_session_meetings(sessionid = NA, good_manners = 0)
 }
@@ -12,30 +12,37 @@ get_session_meetings(sessionid = NA, good_manners = 0)
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with response date, version ...
+A data.frame with the following variables:\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{session_id} \tab Session id \cr
+   \strong{agenda_number} \tab Agenda number within the session \cr
+   \strong{footnote} \tab Footnotes for the meeting \cr
+   \strong{meeting_id} \tab Meeting id \cr
+   \strong{no_meeting_text} \tab Description of why there was no meeting, if relevant \cr
+   \strong{evening_meeting} \tab Whether the meeting was an evening meeting or not \cr
+   \strong{note} \tab Note for the meeting \cr
+   \strong{meeting_date} \tab Date the meeting took place \cr
+   \strong{meeting_order} \tab Indicator for meeting order \cr
+   \strong{meeting_place} \tab Where the meeting took place \cr
+   \strong{transcript_id} \tab Id for transcript (usually empty) \cr
+   \strong{additional_agenda} \tab Logical indicator for whether there was additional agenda to the meeting \cr
+}
 }
 \description{
 A function for retrieving meetings from a specific parliamentary session
 }
 \examples{
 
+\dontrun{
+
+meet <- get_session_meetings("2013-2014")
+head(meet)
+
+}
  
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_meeting_agenda} \link{get_question_hour}
 }
-\concept{get_mp_data}

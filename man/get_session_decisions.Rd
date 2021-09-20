@@ -12,30 +12,35 @@ get_session_decisions(sessionid = NA, good_manners = 0)
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with response date, version ...
+A data.frame with the following variables:\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{session_id} \tab Session id \cr
+   \strong{decision_id} \tab Decision id \cr
+   \strong{case_id} \tab Case id \cr
+   \strong{case_link_url} \tab URL for case to front end web page \cr
+   \strong{decision_date} \tab Decision date \cr
+   \strong{decision_link_url} \tab URL for decision to front end web page \cr
+   \strong{decision_number} \tab Decision number within session \cr
+   \strong{decision_text} \tab Decision text \cr
+   \strong{decision_title} \tab Decision title \cr
+   \strong{decision_type_id} \tab Decision type id \cr
+   \strong{decision_type_name} \tab Decision type name \cr
+}
 }
 \description{
 A function for retrieving all decisions from a specific parliamentary session.
 }
 \examples{
 
+\dontrun{
+
+desci <- get_session_decisions("2004-2005")
+head(desci)
+}
  
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_decision_votes}
 }
-\concept{get_mp_data}

@@ -13,14 +13,17 @@
 #' 
 #' @examples 
 #' 
+#' \dontrun{
+#' 
+#' 
+#' 
+#' }
+#' 
 #'  
-#' @import rvest
+#' @import rvest httr
 #' 
 #' @export
 #' 
-
-
-
 get_vote <- function(caseid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/voteringer?sakid=", caseid)

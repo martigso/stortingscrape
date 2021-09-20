@@ -15,10 +15,56 @@ get_session_cases(sessionid = NA, good_manners = 0, cores = 1)
 More than 1 will not work on windows}
 }
 \value{
-A data.frame with response date, version ...
+A data.frame with the following variables:
+\enumerate{
+\item \strong{$root} (main data on the MP)\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{treated_session_id} \tab Session the case was treated in \cr
+   \strong{document_group} \tab Document group the case belongs to \cr
+   \strong{reference} \tab Document reference \cr
+   \strong{id} \tab Case id \cr
+   \strong{com_req_id} \tab Committee recommendation id \cr
+   \strong{com_req_code} \tab Committee recommendation code \cr
+   \strong{title_short} \tab Short title of case \cr
+   \strong{case_filed_id} \tab Id of filed case \cr
+   \strong{last_update_date} \tab Date of last update on case \cr
+   \strong{status} \tab Status of the case \cr
+   \strong{title} \tab Full title of the case \cr
+   \strong{type} \tab Type of case \cr
+   \strong{session_id} \tab Session id of the case \cr
+   \strong{committee_id} \tab Responsible committee id \cr
+}
+
+\item \strong{$topics} (named list by case id)\tabular{ll}{
+    \tab  \cr
+   \strong{is_main_topic} \tab Logical indication whether the topic is the main topic \cr
+   \strong{main_topic_id} \tab Id of the main topic for the case \cr
+   \strong{id} \tab Topic id \cr
+   \strong{name} \tab Topic name \cr
+}
+
+\item \strong{$proposers} (named list by case id)\tabular{ll}{
+    \tab  \cr
+   \strong{rep_id} \tab Proposing MP id \cr
+   \strong{county_id} \tab County id of proposing MP \cr
+   \strong{party_id} \tab Party id of proposing MP \cr
+   \strong{rep_sub} \tab Logical indicator for whether MP is a substitute \cr
+}
+
+\item \strong{$spokespersons} (named list by case id)\tabular{ll}{
+    \tab  \cr
+   \strong{rep_id} \tab Spokesperson MP id \cr
+   \strong{county_id} \tab County id of spokesperson MP \cr
+   \strong{party_id} \tab Party id of spokesperson MP \cr
+   \strong{rep_sub} \tab Logical indicator for whether MP is a substitute \cr
+}
+
+}
 }
 \description{
-A function for retrieving all cases treated in a specified parliamentary session
+A function for retrieving all cases treated in a specified parliamentary session.
 }
 \examples{
 
@@ -27,24 +73,7 @@ s0506 <- get_session_cases("2005-2006")
 head(s0506)
 }
 
-
-
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_case} \link{get_vote}
 }
-\concept{get_mp_data}

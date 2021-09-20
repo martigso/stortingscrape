@@ -14,7 +14,17 @@ get_session_mp_speech_activity(sessionid = NA, mp_id = NA, good_manners = 0)
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with response date, version ...
+A data.frame with the following variables:\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{session_id} \tab Session id \cr
+   \strong{agenda_case_number} \tab Number indicating the agenda number for the case \cr
+   \strong{meeting_id} \tab Meeting id \cr
+   \strong{speech_start_time} \tab Start time of speech \cr
+   \strong{speech_type} \tab Type of speech \cr
+   \strong{speech_length_secs} \tab Lenght of speech in seconds \cr
+}
 }
 \description{
 A function for retrieving all speech activity from an MP during a specific parliamentary session.
@@ -22,24 +32,14 @@ Only available from the 2011-2012 session and onwards.
 }
 \examples{
 
+\dontrun{
+
+activ <- get_session_mp_speech_activity("2012-2013", "ALYS")
+head(activ)
+}
 
 
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_mp} \link{get_mp_bio} \link{get_publication}
 }
-\concept{get_mp_data}

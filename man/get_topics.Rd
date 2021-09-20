@@ -7,10 +7,29 @@
 get_topics(keep_sub_topics = TRUE)
 }
 \arguments{
-\item{keep_sub_topics}{Logical. Whether to keep sub-topics (default) for all main topics or not.}
+\item{keep_sub_topics}{Logical. Whether to keep sub-topics (default) for all main topics or not.
+\enumerate{
+\item \strong{$topics} (All topics)\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{is_main_topic} \tab Logical indicator for whether the topic is a main topic \cr
+   \strong{main_topic_id} \tab Id of main topic \cr
+   \strong{id} \tab Id of topic \cr
+   \strong{name} \tab Name of topic \cr
 }
-\value{
-A data.frame with response date, version, topic id, main topic id, and name.
+
+\item \strong{$main_topics} (exclusively main topics, if keep_sub_topics = TRUE)\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{is_main_topic} \tab Logical indicator for whether the topic is a main topic \cr
+   \strong{main_topic_id} \tab Id of main topic \cr
+   \strong{id} \tab Id of topic \cr
+   \strong{name} \tab Name of topic \cr
+}
+
+}}
 }
 \description{
 A function for retrieving topic keys used to label various data from the Norwegian parliament.
@@ -27,21 +46,3 @@ tops$main_topics[1, ]
 tops$topics[which(tops$topics$main_topic_id == 5), ]
 
 }
-\seealso{
-Other get_mp_data: 
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
-}
-\concept{get_mp_data}

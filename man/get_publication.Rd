@@ -4,7 +4,7 @@
 \alias{get_publication}
 \title{Retrieve a specific publication}
 \usage{
-get_question_hour(publicationid = NA, good_manners = 0)
+get_publication(publicationid = NA, good_manners = 0)
 }
 \arguments{
 \item{publicationid}{Character string indicating the id of the publication to request all votes from}

@@ -6,9 +6,28 @@
 #' 
 #' @param keep_sub_topics Logical. Whether to keep sub-topics (default) for all main topics or not.
 #' 
-#' @return A data.frame with response date, version, topic id, main topic id, and name.
+#' 1. **$topics** (All topics)
 #' 
-#' @family get_mp_data
+#'    |                   |                                                         |
+#'    |:------------------|:--------------------------------------------------------|
+#'    | **response_date** | Date of data retrieval                                  |
+#'    | **version**       | Data version from the API                               |
+#'    | **is_main_topic** | Logical indicator for whether the topic is a main topic |
+#'    | **main_topic_id** | Id of main topic                                        |
+#'    | **id**            | Id of topic                                             |
+#'    | **name**          | Name of topic                                           |
+#'    
+#' 2. **$main_topics** (exclusively main topics, if keep_sub_topics = TRUE)
+#' 
+#'    |                   |                                                         |
+#'    |:------------------|:--------------------------------------------------------|
+#'    | **response_date** | Date of data retrieval                                  |
+#'    | **version**       | Data version from the API                               |
+#'    | **is_main_topic** | Logical indicator for whether the topic is a main topic |
+#'    | **main_topic_id** | Id of main topic                                        |
+#'    | **id**            | Id of topic                                             |
+#'    | **name**          | Name of topic                                           |
+#' 
 #' 
 #' @examples 
 #' 
@@ -21,7 +40,7 @@
 #' # Extract all sub-topics for the first main topic
 #' tops$topics[which(tops$topics$main_topic_id == 5), ]
 #' 
-#' @import rvest
+#' @import rvest httr
 #' 
 #' @export
 #' 
@@ -32,7 +51,15 @@ get_topics <- function(keep_sub_topics = TRUE){
   
   url <- "https://data.stortinget.no/eksport/emner"
   
-  tmp <- read_html(url)
+  base <- GET(url)
+  
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
   
   if(keep_sub_topics == TRUE){
     

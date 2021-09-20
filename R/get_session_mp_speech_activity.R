@@ -9,16 +9,34 @@
 #' @param mp_id Character string for the MP to retreive all speeches of in a given session.
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
 #' 
-#' @return A data.frame with response date, version ...
+#' @return A data.frame with the following variables:
 #' 
-#' @family get_mp_data
+#'    |                        |                                                  |
+#'    |:-----------------------|:-------------------------------------------------|
+#'    | **response_date**      | Date of data retrieval                           |
+#'    | **version**            | Data version from the API                        |
+#'    | **session_id**         | Session id                                       |
+#'    | **agenda_case_number** | Number indicating the agenda number for the case |
+#'    | **meeting_id**         | Meeting id                                       |
+#'    | **speech_start_time**  | Start time of speech                             |
+#'    | **speech_type**        | Type of speech                                   |
+#'    | **speech_length_secs** | Lenght of speech in seconds                      |
+#' 
+#' @md
+#' 
+#' @seealso [get_mp] [get_mp_bio] [get_publication]
 #' 
 #' 
 #' @examples 
 #' 
+#' \dontrun{
+#' 
+#' activ <- get_session_mp_speech_activity("2012-2013", "ALYS")
+#' head(activ)
+#' }
 #' 
 #' 
-#' @import rvest 
+#' @import rvest httr
 #' @export
 #' 
 
@@ -28,7 +46,15 @@ get_session_mp_speech_activity <- function(sessionid = NA, mp_id = NA, good_mann
   
   url <- paste0("https://data.stortinget.no/eksport/representanttaleaktiviteter?personid=", mp_id, "&sesjonid=", sessionid)
   
-  tmp <- read_html(url)
+  base <- GET(url)
+  
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
   
   tmp2 <- data.frame(response_date = tmp %>% html_elements("representant_tale_aktivitet_oversikt > respons_dato_tid") %>% html_text(),
                      version = tmp %>% html_elements("representant_tale_aktivitet_oversikt > versjon") %>% html_text(),

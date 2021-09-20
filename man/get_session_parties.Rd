@@ -12,33 +12,30 @@ get_session_parties(sessionid = NA, good_manners = 0)
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with response date, version ...
+A data.frame with the following variables:\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{id} \tab Party id \cr
+   \strong{name} \tab Party name \cr
+   \strong{represented_party} \tab Logical indication of whether party was represented \cr
+   \strong{session_id} \tab Session id \cr
+   \strong{period_id} \tab Parliamentary period id \cr
+}
 }
 \description{
 A function for retrieving Norwegian parliamentary parties for a specified parliamentary session
 }
 \examples{
 
+\dontrun{
 
+parties <- get_session_parties("2003-2004")
+parties
 
-
-
+}
+ 
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_all_parties}
 }
-\concept{get_mp_data}

@@ -17,31 +17,33 @@ Defaults to "referat".}
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with response date, version ...
+A data.frame with the following variables:\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{session_id} \tab Session id \cr
+   \strong{publication_date} \tab Date of publication \cr
+   \strong{publication_id} \tab Id of publication \cr
+   \strong{publication_format} \tab Publication format (XML) \cr
+   \strong{publication_available_date} \tab When the publication was made available \cr
+   \strong{publication_title} \tab Publication title \cr
+   \strong{publication_type} \tab Publication type \cr
+}
 }
 \description{
-A function for retrieving one of several publication types within a parliamentary session
+A function for retrieving one of several publication types within a parliamentary session.
 }
 \examples{
 
+\dontrun{
+
+pub <- get_session_publications("1998-99")
+head(pub)
+
+}
 
 
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_publication}
 }
-\concept{get_mp_data}

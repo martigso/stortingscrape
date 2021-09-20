@@ -12,33 +12,28 @@ get_session_delegations(sessionid = NA, good_manners = 0)
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with response date, version ...
+A data.frame with the following variables:\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{id} \tab Delegation id \cr
+   \strong{name} \tab Name of delegation \cr
+   \strong{session_id} \tab Session id \cr
+}
 }
 \description{
-A function for retrieving delegations for a specified parliamentary session
+A function for retrieving delegations for a specified parliamentary session.
 }
 \examples{
 
+\dontrun{
 
+deleg <- get_session_delegations("2015-2016")
+deleg
 
-
+}
 
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_hearings}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_session_committees} \link{get_all_committees}
 }
-\concept{get_mp_data}

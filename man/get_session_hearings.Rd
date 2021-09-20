@@ -14,31 +14,62 @@ get_session_hearings(sessionid = NA, good_manners = 0, cores = 1)
 \item{cores}{Integer...}
 }
 \value{
-A data.frame with response date, version ...
+A list with four elements:
+\enumerate{
+\item \strong{$root} (hearing meta data)\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{session_id} \tab Session id \cr
+}
+
+\item \strong{$hearing} (main data on the hearing)\tabular{ll}{
+    \tab  \cr
+   \strong{deadline_date} \tab Deadline date for hearing \cr
+   \strong{status} \tab Data version from the API \cr
+   \strong{hearing_id} \tab Hearing id \cr
+   \strong{input_deadline} \tab Deadline date for input \cr
+   \strong{written} \tab Logical indication of whether the input was written \cr
+   \strong{application_deadline} \tab Deadline date for application to hearing \cr
+   \strong{start_date} \tab Start date for hearing \cr
+   \strong{status_pub} \tab Publication status for hearing \cr
+   \strong{status_info_text} \tab Status information text \cr
+   \strong{type} \tab Type of hearing \cr
+   \strong{committee_id} \tab Committee id for committee responsible for hearing \cr
+}
+
+\item \strong{$hearing_case_info} (named list by hearing id with information on the case(s) belonging to the hearing)\tabular{ll}{
+    \tab  \cr
+   \strong{case_reference} \tab Text reference for case \cr
+   \strong{case_id} \tab Case id \cr
+   \strong{case_short_title} \tab Short title for case \cr
+   \strong{case_publication} \tab URL for front end web-page publication \cr
+   \strong{case_title} \tab Full title for case \cr
+}
+
+\item \strong{$hearing_date} (named list by hearing id with date(s) the hearing was held)\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{session_id} \tab Session id \cr
+}
+
+}
 }
 \description{
-A function for retrieving all hearings in a specified parliamentary session
+A function for retrieving all hearings in a specified parliamentary session.
 }
 \examples{
 
+\dontrun{
+
+hear <- get_session_hearings("2010-2011")
+head(hear$hearing)
+
+}
 
 
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_question}()},
-\code{\link{get_result_vote}()},
-\code{\link{get_session_cases}()},
-\code{\link{get_session_committees}()},
-\code{\link{get_session_decisions}()},
-\code{\link{get_session_delegations}()},
-\code{\link{get_session_meetings}()},
-\code{\link{get_session_mp_speech_activity}()},
-\code{\link{get_session_parties}()},
-\code{\link{get_session_publications}()},
-\code{\link{get_session_questions}()},
-\code{\link{get_topics}()},
-\code{\link{get_vote}()},
-\code{\link{get_written_hearing_input}()}
+\link{get_hearing_input} \link{get_hearing_program} \link{get_written_hearing_input}
 }
-\concept{get_mp_data}

@@ -1,15 +1,48 @@
 #' Parliamentary question
 #' 
-#' A function for retrieving single parliamentary questions by id
+#' A function for retrieving single parliamentary questions by id. For retrieving the whole debate
+#' over a question, the [get_publication] function has to be used
 #' 
 #' @usage get_question(questionid = NA, good_manners = 0)
 #' 
 #' @param questionid Character string indicating the id of the session to request interpellations from
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
 #' 
-#' @return A data.frame with response date, version ...
+#' @return A data.frame with the following variables:
 #' 
-#' @family get_mp_data
+#'    |                                       |                                                          |
+#'    |:--------------------------------------|:---------------------------------------------------------|
+#'    | **response_date**                     | Date of data retrieval                                   |
+#'    | **version**                           | Data version from the API                                |
+#'    | **justification**                     | Justification for question                               |  
+#'    | **answ_by_id**                        | Id for answering minister                                |
+#'    | **answ_by_minister_id**               | Id for department of answering minister                  |
+#'    | **answ_by_minister_title**            | Title for department of answering minister               |
+#'    | **answ_date**                         | Date question was asked                                  |
+#'    | **answ_on_belhalf_of**                | Id of minister answered on behalf of, when relevant      |
+#'    | **answ_on_belhalf_of_minister_id**    | Id of department answered on behalf of, when relevant    |
+#'    | **answ_on_belhalf_of_minister_title** | Title of department answered on behalf of, when relevant |
+#'    | **agenda_number**                     | Agenda number in meeting                                 |
+#'    | **moved_to**                          | Date moved to                                            |
+#'    | **id**                                | Question id                                              |
+#'    | **correct_person_id**                 | Not documented in API                                    |
+#'    | **correct_person_minister_id**        | Not documented in API                                    |
+#'    | **correct_person_minister_title**     | Not documented in API                                    |
+#'    | **sendt_date**                        | Date question was sent                                   |
+#'    | **session_id**                        | Session id                                               |
+#'    | **question_text**                     | Full question text                                       |
+#'    | **question_from_id**                  | Id of MP asking the question                             |
+#'    | **qustion_number**                    | Question number                                          |
+#'    | **qustion_to_id**                     | Id of minister the question was asked to                 |
+#'    | **qustion_to_minister_id**            | Department id of minister the question was asked to      |
+#'    | **qustion_to_minister_title**         | Department title of minister the question was asked to   |
+#'    | **answer_text**                       | Answer text (often empty)                                |
+#'    | **title**                             | Question title                                           |
+#'    | **type**                              | Question type                                            |
+#'    
+#' @md
+#' 
+#' @seealso [get_question_hour] [get_publication]
 #' 
 #' @examples 
 #' 
@@ -31,18 +64,23 @@
 #' quest1213 <- do.call(rbind, int1213)
 #' }
 #' 
-#' @import rvest
+#' @import rvest httr
 #' 
 #' @export
 #' 
-
-
-
 get_question <- function(questionid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/enkeltsporsmal?sporsmalid=", questionid)
   
-  tmp <- read_html(url)
+  base <- GET(url)
+  
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
   
   tmp2 <- data.frame(
     response_date = tmp %>% html_elements("besvart_av > respons_dato_tid") %>% html_text(),

@@ -1,9 +1,9 @@
 #' Retrieve a specific publication
 #' 
 #' A function for retrieving a specific publication. Because these are formated very differently in the API,
-#' the returning object is in a raw html_document format, best manipulated with html packages such as [rvest].
+#' the returning object is in a raw html_document format, best manipulated with html packages such as \link{rvest}.
 #' 
-#' @usage get_question_hour(publicationid = NA, good_manners = 0)
+#' @usage get_publication(publicationid = NA, good_manners = 0)
 #' 
 #' @param publicationid Character string indicating the id of the publication to request all votes from
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function

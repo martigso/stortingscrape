@@ -1,26 +1,47 @@
-#' Retreive vote results on MP level for a specified vote
+#' Retrieve vote results on MP level for a specified vote
 #' 
-#' A function for retrieving vote results from a specific vote on MP level. Vote data are only available from the 2011-2012 session
+#' A function for retrieving vote results from a specific vote on MP level. Vote data are only available from the 2011-2012 session.
+#' Needs some preprocessing for use with rollcall packages, such as \link[oc]{oc} and \link[pscl]{ideal}.
 #' 
 #' @usage get_result_vote(voteid = NA, good_manners = 0)
 #' 
 #' @param voteid Character string indicating the id of the vote to request all votes from
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
 #' 
-#' @return A data.frame with response date, version ...
+#' @return A data.frame with the following variables:
 #' 
-#' @family get_mp_data
+#'    |                       |                                                                          |
+#'    |:----------------------|:-------------------------------------------------------------------------|
+#'    | **response_date**     | Date of data retrieval                                                   |
+#'    | **version**           | Data version from the API                                                |
+#'    | **vote_id**           | Id of vote                                                               |
+#'    | **mp_id**             | MP id                                                                    |
+#'    | **vote**              | Vote: for, mot (against), ikke_tilstede (absent)                         |
+#'    | **permanent_sub_for** | Id of the MP originally holding the seat, if the substitute is permanent |
+#'    | **sub_for**           | Id of the MP originally holding the seat                                 |
+#'    
+#' @md
+#' 
+#' @seealso [get_decision_votes] [get_proposal_votes] [get_vote] [get_mp_bio]
 #' 
 #' @examples 
 #' 
+#' \dontrun{
+#' 
+#' v <- get_result_vote(12345)
+#' table(v$vote)
+#' 
+#' p <- get_proposal_votes(12345)
+#' p$proposal_vote$proposal_text %>% gsub("\\<(.*)\\>")
+#' stringr::str_replace_all(p$proposal_vote$proposal_text, 
+#'                          "\\<(.*)\\>|\\r\\n", "")  %>% 
+#'   stringr::str_trim()
+#' }
 #'  
-#' @import rvest
+#' @import rvest httr
 #' 
 #' @export
 #' 
-
-
-
 get_result_vote <- function(voteid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/voteringsresultat?voteringid=", voteid)
