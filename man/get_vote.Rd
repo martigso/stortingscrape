@@ -12,17 +12,45 @@ get_vote(caseid = NA, good_manners = 0)
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with response date, version ...
+A data.frame with the following variables:\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{case_id} \tab Case id up for vote \cr
+   \strong{alternative_vote} \tab Whether vote is an alternative vote \cr
+   \strong{n_for} \tab Number of votes for \cr
+   \strong{n_absent} \tab Number of MPs absent \cr
+   \strong{n_against} \tab Number of votes against \cr
+   \strong{treatment_order} \tab Order of treated votes \cr
+   \strong{agenda_case_number} \tab Case number on the agenda of the meeting \cr
+   \strong{free_vote} \tab Logical indication of whether the vote is related to the case as a whole \cr
+   \strong{comment} \tab Vote comment \cr
+   \strong{meeting_map_number} \tab Number on the meeting map \cr
+   \strong{personal_vote} \tab Logical indication of whether vote was recorded as roll call or not \cr
+   \strong{president_id} \tab Id of president holding president chair at the time of voting \cr
+   \strong{president_party_id} \tab Party of the sitting president \cr
+   \strong{adopted} \tab Logical indication of whether the proposal voted on was adopted \cr
+   \strong{vote_id} \tab Id of vote \cr
+   \strong{vote_method} \tab Voting method \cr
+   \strong{vote_result_type} \tab Result type (enstemmig_vedtatt = unanimously adopted) \cr
+   \strong{vote_result_type_text} \tab See \strong{vote_result_type} \cr
+   \strong{vote_topic} \tab Description of the proposal voted upon \cr
+   \strong{vote_datetime} \tab Date and time of vote \cr
+}
 }
 \description{
 A function for retrieving all votes from a case. Vote data are only available from the 2011-2012 session
 }
 \examples{
 
+\dontrun{
+
+get_vote(63033)
+
+}
+
  
 }
 \seealso{
-Other get_mp_data: 
-\code{\link{get_written_hearing_input}()}
+\link{get_decision_votes} \link{get_proposal_votes} \link{get_vote} \link{get_session_cases} \link{get_case}
 }
-\concept{get_mp_data}

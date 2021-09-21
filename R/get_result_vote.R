@@ -32,7 +32,7 @@
 #' table(v$vote)
 #' 
 #' p <- get_proposal_votes(12345)
-#' p$proposal_vote$proposal_text %>% gsub("\\<(.*)\\>")
+#' 
 #' stringr::str_replace_all(p$proposal_vote$proposal_text, 
 #'                          "\\<(.*)\\>|\\r\\n", "")  %>% 
 #'   stringr::str_trim()
@@ -46,7 +46,15 @@ get_result_vote <- function(voteid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/voteringsresultat?voteringid=", voteid)
   
-  tmp <- read_html(url)
+  base <- GET(url)
+  
+  resp <- http_type(base)
+  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  
+  status <- http_status(base)
+  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  
+  tmp <- read_html(base)
 
   if(identical(tmp %>% html_elements("representant_voteringsresultat") %>% html_text(), character()) == FALSE){
     
