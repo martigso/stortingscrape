@@ -65,6 +65,32 @@ get_vote <- function(caseid = NA, good_manners = 0){
   
   tmp <- read_html(base)
   
+  if(identical(tmp %>% html_elements("sak_votering > antall_for") %>% html_text(), character())){
+    tmp2 <- data.frame(response_date = tmp %>% html_elements("sak_votering_oversikt > respons_dato_tid") %>% html_text(),
+                       version = tmp %>% html_elements("sak_votering_oversikt > versjon") %>% html_text(),
+                       case_id = tmp %>% html_elements("sak_votering_oversikt > sak_id") %>% html_text(),
+                       alternative_vote = NA,
+                       n_for = NA,
+                       n_absent = NA,
+                       n_against = NA,
+                       treatment_order = NA,
+                       agenda_case_number = NA,
+                       free_vote = NA,
+                       comment = NA,
+                       meeting_map_number = NA,
+                       personal_vote = NA,
+                       president_id = NA,
+                       president_party_id = NA,
+                       adopted = NA,
+                       vote_id = NA,
+                       vote_method = NA,
+                       vote_result_type = NA,
+                       vote_result_type_text = NA,
+                       vote_topic = NA,
+                       vote_datetime = NA)
+    
+  } else {
+    
   tmp2 <- data.frame(response_date = tmp %>% html_elements("sak_votering_oversikt > respons_dato_tid") %>% html_text(),
                      version = tmp %>% html_elements("sak_votering_oversikt > versjon") %>% html_text(),
                      case_id = tmp %>% html_elements("sak_votering_oversikt > sak_id") %>% html_text(),
@@ -87,6 +113,7 @@ get_vote <- function(caseid = NA, good_manners = 0){
                      vote_result_type_text = tmp %>% html_elements("sak_votering > votering_resultat_type_tekst") %>% html_text(),
                      vote_topic = tmp %>% html_elements("sak_votering > votering_tema") %>% html_text(),
                      vote_datetime = tmp %>% html_elements("sak_votering > votering_tid") %>% html_text())
+  }
     
 
   Sys.sleep(good_manners)

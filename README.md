@@ -77,5 +77,3 @@ The data is described in detail in the [API of Stortinget](https://data.storting
 - Documentation of functions
 - Documentation of data and variables
 - Stress testing functions
-
-![](./functions.html)
