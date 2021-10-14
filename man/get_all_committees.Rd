@@ -17,7 +17,8 @@ A data frame of committees, with the variables:\tabular{ll}{
 }
 }
 \description{
-Imports data on all committee names and ids over all sessions in the data.stortinget.no API.
+Imports data on all committee names and ids over all sessions
+in the data.stortinget.no API.
 }
 \examples{
 \dontrun{
