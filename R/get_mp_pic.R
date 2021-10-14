@@ -44,7 +44,7 @@ get_mp_pic <- function(mpid = NA, size = "middels",
   base <- GET(url)
   
   resp <- http_type(base)
-  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  if(resp != "image/jpeg") stop(paste0("Response of ", url, " is not image/jpeg."), call. = FALSE)
   
   status <- http_status(base)
   if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
