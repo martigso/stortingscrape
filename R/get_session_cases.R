@@ -153,10 +153,15 @@ get_session_cases <- function(sessionid = NA, good_manners = 0, cores = 1){
   # Case spokesperson
   tmp2$spokespersons <- mclapply((tmp %>% html_elements("saker_oversikt > saker_liste > sak > saksordfoerer_liste")), function(x){
     
-    data.frame(rep_id = x %>% html_elements("representant > id") %>% html_text(),
-               county_id = x %>% html_elements("representant > fylke > id") %>% html_text(),
-               party_id = x %>% html_elements("representant > parti > id") %>% html_text(),
-               rep_sub = x %>% html_elements("representant > vara_representant") %>% html_text())
+    rep_id <- x %>% html_elements("representant > id") %>% html_text()
+    county_id <- x %>% html_elements("representant > fylke > id") %>% html_text()
+    party_id <- x %>% html_elements("representant > parti > id") %>% html_text()
+    rep_sub <- x %>% html_elements("representant > vara_representant") %>% html_text()
+    
+    data.frame(rep_id = ifelse(identical(rep_id, character()), NA, rep_id),
+               county_id = ifelse(identical(county_id, character()), NA, county_id),
+               party_id = ifelse(identical(party_id, character()), NA, party_id),
+               rep_sub = ifelse(identical(rep_sub, character()), NA, rep_sub))
     
   }, mc.cores = cores)
   
