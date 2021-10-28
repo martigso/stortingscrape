@@ -1,0 +1,16 @@
+citHeader("To cite stortingscrape in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = "stortingscrape: An R package for accessing data from the Norwegian parliament",
+  author   = "Søyland, Martin",
+  journal  = "TBD",
+  year     = 2021,
+  volume   = "TBD",
+  number   = "TDB",
+  pages    = "TBD",
+  url      = "TBD",
+  textVersion = paste(
+"TBD"
+  )
+)
