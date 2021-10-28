@@ -2,7 +2,7 @@
 title: "Introduction to stortingscrape"
 author: "Martin Søyland"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: pdf_document
 vignette: >
   %\VignetteIndexEntry{Introduction to stortingscrape}
   %\VignetteEngine{knitr::rmarkdown}
