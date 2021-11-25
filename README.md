@@ -71,9 +71,3 @@ The data is described in detail in the [API of Stortinget](https://data.storting
 ## List of functions currently implemented 
 
 [You can find a list of all functions here.](https://martigso.github.io/stortingscrape/functions.html)
-
-## In development
-
-- Documentation of functions
-- Documentation of data and variables
-- Stress testing functions

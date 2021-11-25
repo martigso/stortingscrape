@@ -8,8 +8,9 @@ Description: Package for retriving information from the Norwegian Parliament.
 Depends: R (>= 3.1.0)
 Encoding: UTF-8
 Imports: rvest, httr, parallel
-Suggests: imager
+Suggests: imager, rmarkdown
 License: GPL (>= 3)
 LazyData: true
+VignetteBuilder: knitr
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
