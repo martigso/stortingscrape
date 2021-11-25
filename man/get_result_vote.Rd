@@ -18,6 +18,7 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{version} \tab Data version from the API \cr
    \strong{vote_id} \tab Id of vote \cr
    \strong{mp_id} \tab MP id \cr
+   \strong{party_id} \tab Party id \cr
    \strong{vote} \tab Vote: for, mot (against), ikke_tilstede (absent) \cr
    \strong{permanent_sub_for} \tab Id of the MP originally holding the seat, if the substitute is permanent \cr
    \strong{sub_for} \tab Id of the MP originally holding the seat \cr

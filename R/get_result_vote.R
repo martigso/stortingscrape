@@ -16,6 +16,7 @@
 #'    | **version**           | Data version from the API                                                |
 #'    | **vote_id**           | Id of vote                                                               |
 #'    | **mp_id**             | MP id                                                                    |
+#'    | **party_id**          | Party id                                                                 |
 #'    | **vote**              | Vote: for, mot (against), ikke_tilstede (absent)                         |
 #'    | **permanent_sub_for** | Id of the MP originally holding the seat, if the substitute is permanent |
 #'    | **sub_for**           | Id of the MP originally holding the seat                                 |
@@ -55,13 +56,14 @@ get_result_vote <- function(voteid = NA, good_manners = 0){
   if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
   
   tmp <- read_html(base)
-
+  
   if(identical(tmp %>% html_elements("representant_voteringsresultat") %>% html_text(), character()) == FALSE){
     
     tmp2 <- data.frame(response_date = tmp %>% html_elements("voteringsresultat_oversikt > respons_dato_tid") %>% html_text(),
                        version = tmp %>% html_elements("voteringsresultat_oversikt > versjon") %>% html_text(),
                        vote_id = tmp %>% html_elements("voteringsresultat_oversikt > votering_id") %>% html_text(),
                        mp_id = tmp %>% html_elements("representant_voteringsresultat > representant > id") %>% html_text(),
+                       party_id = tmp %>% html_elements("representant_voteringsresultat > representant > parti > id") %>% html_text(),
                        vote = tmp %>% html_elements("representant_voteringsresultat > votering") %>% html_text())
     
     
@@ -82,6 +84,7 @@ get_result_vote <- function(voteid = NA, good_manners = 0){
                        version = tmp %>% html_elements("voteringsresultat_oversikt > versjon") %>% html_text(),
                        vote_id = tmp %>% html_elements("voteringsresultat_oversikt > votering_id") %>% html_text(),
                        mp_id = NA,
+                       party_id = NA,
                        vote = NA,
                        permanent_sub_for = NA,
                        sub_for = NA)
