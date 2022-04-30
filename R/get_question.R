@@ -80,6 +80,8 @@ get_question <- function(questionid = NA, good_manners = 0){
   status <- http_status(base)
   if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
   
+  if(identical(base$content, raw(0))) return(NULL)
+  
   tmp <- read_html(base)
   
   tmp2 <- data.frame(

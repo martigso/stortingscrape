@@ -14,20 +14,20 @@ get_parlperiod_mps(periodid = NA, substitute = FALSE, good_manners = 0)
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
 }
 \value{
-A data.frame with the following variables:
-|                   |                                        |
-|:------------------|:---------------------------------------|
-| \strong{response_date} | Date of data retrieval                 |
-| \strong{version}       | Data version from the API              |
-| \strong{death}         | Date of death                          |
-| \strong{lastname}      | MP last name                           |
-| \strong{birth}         | Date of birth                          |
-| \strong{mp_id}         | MP id                                  |
-| \strong{gender}        | MP gender                              |
-| \strong{county_id}     | Id of county MP represented            |
-| \strong{party_id}      | Id of party MP represented             |
-| \strong{substitute_mp} | Logical for whether MP is a substitute |
-| \strong{period_id}     | Id of period represented in            |
+A data.frame with the following variables:\tabular{ll}{
+    \tab  \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
+   \strong{death} \tab Date of death \cr
+   \strong{lastname} \tab MP last name \cr
+   \strong{birth} \tab Date of birth \cr
+   \strong{mp_id} \tab MP id \cr
+   \strong{gender} \tab MP gender \cr
+   \strong{county_id} \tab Id of county MP represented \cr
+   \strong{party_id} \tab Id of party MP represented \cr
+   \strong{substitute_mp} \tab Logical for whether MP is a substitute \cr
+   \strong{period_id} \tab Id of period represented in \cr
+}
 }
 \description{
 A function for retrieving Norwegian MPs for a given parliamentary period from the parliament API
