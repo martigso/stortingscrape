@@ -45,10 +45,13 @@
 #' @seealso [get_question_hour] [get_question]
 #' 
 #' @examples 
+#' 
+#' \dontrun{
 #' interp <- get_session_questions(sessionid = "2013-2014", 
 #'                                 q_type = "interpellasjoner", 
 #'                                 status = "trukket")
-#' 
+#' interp
+#' }
 #' @import rvest httr
 #' 
 #' @export

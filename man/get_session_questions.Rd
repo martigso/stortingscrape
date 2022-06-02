@@ -50,10 +50,13 @@ A data.frame with the following variables:\tabular{ll}{
 A function for retrieving all questions within a parliamentary session.
 }
 \examples{
+
+\dontrun{
 interp <- get_session_questions(sessionid = "2013-2014", 
                                 q_type = "interpellasjoner", 
                                 status = "trukket")
-
+interp
+}
 }
 \seealso{
 \link{get_question_hour} \link{get_question}
