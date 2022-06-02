@@ -26,7 +26,8 @@ A function reading OBT-tagged files
 }
 \examples{
 
+\dontrun{
 sample_text <- read_obt("./inst/extdata/obt_sample.txt")
 head(sample_text)
-
+}
 }

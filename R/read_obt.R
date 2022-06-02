@@ -6,6 +6,7 @@
 #' 
 #' @param file character. Path to OBT-tagged file
 #' 
+#' 
 #' @return A data frame with the following variables:
 #' 
 #' 
@@ -25,9 +26,11 @@
 #' 
 #' @examples
 #' 
+#' \dontrun{
 #' sample_text <- read_obt("./inst/extdata/obt_sample.txt")
 #' head(sample_text)
-#' 
+#' }
+
 #' @import stringr dplyr
 #' 
 #' @export
@@ -111,8 +114,8 @@ read_obt <- function(file = NA){
   obt_struct$sentence <- lag(obt_struct$sentence, default = 1)
   
   # Making a token index variable for each sentence
-  obt_struct <- obt_struct %>% group_by(sentence) %>% 
-    mutate(index = 1:length(sentence))
+  obt_struct <- obt_struct %>% group_by(.data$sentence) %>% 
+    mutate(index = 1:length(.data$sentence))
   
   # Reordering variables
   obt_struct <- obt_struct[, c("sentence", 

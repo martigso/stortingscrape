@@ -1,7 +1,7 @@
 #' Retrieve vote results on MP level for a specified vote
 #' 
 #' A function for retrieving vote results from a specific vote on MP level. Vote data are only available from the 2011-2012 session.
-#' Needs some preprocessing for use with rollcall packages, such as \link[oc]{oc} and \link[pscl]{ideal}.
+#' Needs some preprocessing for use with rollcall packages, such as \link[pscl]{ideal}.
 #' 
 #' @usage get_result_vote(voteid = NA, good_manners = 0)
 #' 
