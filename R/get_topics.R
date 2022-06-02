@@ -6,6 +6,8 @@
 #' 
 #' @param keep_sub_topics Logical. Whether to keep sub-topics (default) for all main topics or not.
 #' 
+#' @return A list with two elements:
+#' 
 #' 1. **$topics** (All topics)
 #' 
 #'    |                   |                                                         |
@@ -27,6 +29,7 @@
 #'    | **main_topic_id** | Id of main topic                                        |
 #'    | **id**            | Id of topic                                             |
 #'    | **name**          | Name of topic                                           |
+#' 
 #' 
 #' 
 #' @examples 

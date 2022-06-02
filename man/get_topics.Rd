@@ -7,7 +7,10 @@
 get_topics(keep_sub_topics = TRUE)
 }
 \arguments{
-\item{keep_sub_topics}{Logical. Whether to keep sub-topics (default) for all main topics or not.
+\item{keep_sub_topics}{Logical. Whether to keep sub-topics (default) for all main topics or not.}
+}
+\value{
+A list with two elements:
 \enumerate{
 \item \strong{$topics} (All topics)\tabular{ll}{
     \tab  \cr
@@ -29,7 +32,7 @@ get_topics(keep_sub_topics = TRUE)
    \strong{name} \tab Name of topic \cr
 }
 
-}}
+}
 }
 \description{
 A function for retrieving topic keys used to label various data from the Norwegian parliament.
