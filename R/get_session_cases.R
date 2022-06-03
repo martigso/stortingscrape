@@ -50,7 +50,7 @@
 #'    | **party_id**  | Party id of proposing MP                         |
 #'    | **rep_sub**   | Logical indicator for whether MP is a substitute |
 #'    
-#' 3. **$spokespersons** (named list by case id)
+#' 4. **$spokespersons** (named list by case id)
 #' 
 #'    |               |                                                  |
 #'    |:--------------|:-------------------------------------------------|

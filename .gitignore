@@ -19,3 +19,6 @@ other_scripts/*
 
 # Other files
 functions.html
+inst/doc
+/doc/
+/Meta/

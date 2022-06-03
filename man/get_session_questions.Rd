@@ -44,6 +44,8 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{qustion_to_minister_id} \tab Question directed to minister department id \cr
    \strong{qustion_to_minister_title} \tab Question directed to minister department title \cr
    \strong{status} \tab Question status \cr
+   \strong{title} \tab Question title \cr
+   \strong{type} \tab Question type \cr
 }
 }
 \description{

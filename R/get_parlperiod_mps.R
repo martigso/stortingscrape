@@ -16,6 +16,7 @@
 #'    | **death**         | Date of death                          |
 #'    | **lastname**      | MP last name                           |
 #'    | **birth**         | Date of birth                          |
+#'    | **firstname**     | MP first name                          |
 #'    | **mp_id**         | MP id                                  |
 #'    | **gender**        | MP gender                              |
 #'    | **county_id**     | Id of county MP represented            |

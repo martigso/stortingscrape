@@ -39,6 +39,8 @@
 #'    | **qustion_to_minister_id**            | Question directed to minister department id            |
 #'    | **qustion_to_minister_title**         | Question directed to minister department title         |
 #'    | **status**                            | Question status                                        |
+#'    | **title**                             | Question title                                         |
+#'    | **type**                              | Question type                                          |
 #'    
 #' @md
 #' 

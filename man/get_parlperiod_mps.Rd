@@ -21,6 +21,7 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{death} \tab Date of death \cr
    \strong{lastname} \tab MP last name \cr
    \strong{birth} \tab Date of birth \cr
+   \strong{firstname} \tab MP first name \cr
    \strong{mp_id} \tab MP id \cr
    \strong{gender} \tab MP gender \cr
    \strong{county_id} \tab Id of county MP represented \cr
