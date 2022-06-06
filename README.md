@@ -1,17 +1,27 @@
 
-# rvest <img src="man/figures/logo.png" align="right" height="139"/>
+# stortingscrape <img src="man/figures/logo.png" align="right" height="139"/>
 
 <!-- badges: start -->
 
 [![CRAN
-Version](http://www.r-pkg.org/badges/version/stortingscrape)](https://CRAN.R-project.org/package=stortingscrape)
-[![Downloads](http://cranlogs.r-pkg.org/badges/stortingscrape)](http://cran.rstudio.com/web/packages/stortingscrape/index.html)
+Version](http://www.r-pkg.org/badges/version/stortingscrape)](https://cran.r-project.org/package=stortingscrape)
+[![Downloads](http://cranlogs.r-pkg.org/badges/stortingscrape)](https://cran.r-project.org/package=stortingscrape)
 [![Total
-Downloads](http://cranlogs.r-pkg.org/badges/grand-total/stortingscrape?color=orange)](http://cran.rstudio.com/web/packages/stortingscrape/index.html)
+Downloads](http://cranlogs.r-pkg.org/badges/grand-total/stortingscrape?color=orange)](https://cran.r-project.org/package=stortingscrape)
 
-# stortingscrape
+`stortingscrape` is an R package for retrieving data from the Norwegian
+parliament (*Stortinget*) through their easily accessible back-end API.
+The data requested using the package require little to no further
+structuring. The scope of the package ranges from general data on the
+parliament itself (rules, session info, committees, etc) to data on the
+parties, bibliographies of the MPs, questions, hearings, debates, votes,
+and more.
 
-Under construction!
+The main goal of `stortingscrape` is to allow researchers to access any
+data from the Norwegian parliament easily, but also still be able to
+structure the data according to ones need. Most importantly, the package
+is facilitated for weaving together different parts of the
+data.stortinget.no API.
 
 ## Installation
 
