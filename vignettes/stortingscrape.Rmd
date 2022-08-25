@@ -137,8 +137,8 @@ are expected to often be ran repeatedly have a `good_manners` argument.
 This will make R sleep for the set amount of seconds after calling
 the API. It is recommended to set this argument to 2 seconds or higher on multiple
 calls to the API. Generally, the package is built by the recommendations given
-by the `httr` package [@Wickham2020]^[Especially, see
-https://cran.r-project.org/web/packages/httr/vignettes/api-packages.html].
+by the `httr` package [@Wickham2020]^[Especially, see 
+https://cran.r-project.org/package=httr/vignettes/api-packages.html].
 
 Most of the data from Stortinget's API and frontend web page are interconnected
 through ids for the various sources (session id, MP id, case id, question id,
