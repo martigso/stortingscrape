@@ -150,15 +150,14 @@ get_case <- function(caseid = NA, good_manners = 0){
                                   main_topic_id = tmp %>% html_elements("emne > hovedemne_id") %>% html_text(),
                                   id = tmp %>% html_elements("emne > id") %>% html_text(),
                                   navn = tmp %>% html_elements("emne > navn") %>% html_text()),
+               proposers = data.frame(mp_id = tmp %>% html_elements("forslagstiller_liste > representant > id") %>% html_text(),
+                                      party_id = tmp %>% html_elements("forslagstiller_liste > representant > parti > id") %>% html_text(),
+                                      sub_mp = tmp %>% html_elements("forslagstiller_liste > representant > vara_representant") %>% html_text()),
                publication_references = data.frame(export_id = tmp %>% html_elements("publikasjon_referanse > eksport_id") %>% html_text(),
                                                    link_text = tmp %>% html_elements("publikasjon_referanse > lenke_tekst") %>% html_text(),
                                                    link_url = tmp %>% html_elements("publikasjon_referanse > lenke_url") %>% html_text(),
                                                    type = tmp %>% html_elements("publikasjon_referanse > type") %>% html_text(),
                                                    subtype = tmp %>% html_elements("publikasjon_referanse > undertype") %>% html_text()),
-               proposers = data.frame(mp_id = tmp %>% html_elements("forslagstiller_liste > representant > id") %>% html_text(),
-                                      party_id = ifelse(identical(tmp %>% html_elements("forslagstiller_liste > representant > parti > id") %>% html_text(), character()),
-                                                        NA, tmp %>% html_elements("forslagstiller_liste > representant > parti > id") %>% html_text()),
-                                      sub_mp = tmp %>% html_elements("forslagstiller_liste > representant > vara_representant") %>% html_text()),
                proceeding_steps = data.frame(step_name = tmp %>% html_elements("saksgang_steg > navn") %>% html_text(),
                                              step_number = tmp %>% html_elements("saksgang_steg > steg_nummer") %>% html_text(),
                                              outdated = tmp %>% html_elements("saksgang_steg > uaktuell") %>% html_text()),
@@ -166,6 +165,7 @@ get_case <- function(caseid = NA, good_manners = 0){
                                           party_id = tmp %>% html_elements("saksordfoerer_liste > representant > parti > id") %>% html_text(),
                                           sub_mp = tmp %>% html_elements("saksordfoerer_liste > representant > vara_representant") %>% html_text()),
                keywords = data.frame(keyword = tmp %>% html_elements("stikkord_liste > string") %>% html_text()))
+  
   
   Sys.sleep(good_manners)
   
