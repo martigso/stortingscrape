@@ -218,8 +218,7 @@ June 2021. The case in its entirety can be found at
 [here](https://stortinget.no/no/Saker-og-publikasjoner/Saker/Sak/?p=85196). You 
 will see the procedure steps from a government proposal, through work in the
 finance committee, to debate and decision. Lets say a particular proposal under
-the case caught our eye -- for instance, vote number 61 from the Labor Party,
-^[https://stortinget.no/no/Saker-og-publikasjoner/Saker/Sak/Voteringsoversikt/?p=85196&dnid=1]
+the case caught our eye -- for instance, [vote number 61 from the Labor Party](https://stortinget.no/no/Saker-og-publikasjoner/Saker/Sak/Voteringsoversikt/?p=85196&dnid=1)
 asking the government to propose a plan for implementing the International Labor
 Organization's core conventions to the Human Rights Act
 (menneskerettighetsloven).
