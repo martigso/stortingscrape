@@ -46,7 +46,8 @@ A list with ten data frames:
 
 \item \strong{$personalia} (the MP's personalia)\tabular{ll}{
     \tab  \cr
-   \strong{seniority} \tab Number of days in parliament \cr
+   \strong{seniority_aar} \tab Number of years in parliament \cr
+   \strong{seniority_dager} \tab Number of extra days (addition to years) \cr
    \strong{county_of_birth} \tab Birth county of the MP \cr
    \strong{municipality_of_birth} \tab Birth municipality of the MP \cr
    \strong{eulogy_date} \tab Eulogy date of the MP, when applicable \cr
@@ -108,13 +109,13 @@ A list with ten data frames:
 
 \item \strong{$other_positions} (other positions held outside parliament)\tabular{ll}{
     \tab  \cr
-   \strong{several_periods_text} \tab Text description if the vocation was held for several periods \cr
+   \strong{several_periods_text} \tab Text description if the vocation was held for several periods (removed from API) \cr
    \strong{from_year} \tab Year MP held vocation from \cr
-   \strong{from_year_sorting} \tab \strong{Not described in API} \cr
+   \strong{from_year_sorting} \tab \strong{Not described in API} (removed from API) \cr
    \strong{from_year_unknown} \tab Logical indication for whether the start year is unknown \cr
-   \strong{max_to_year} \tab The last possible time the MP held the position \cr
+   \strong{max_to_year} \tab The last possible time the MP held the position (removed from API) \cr
    \strong{note} \tab Note for position \cr
-   \strong{min_to_year} \tab The earliest possible time the MP held the position \cr
+   \strong{min_to_year} \tab The earliest possible time the MP held the position (removed from API) \cr
    \strong{level} \tab \strong{Not described in API} \cr
    \strong{organization} \tab Organization holding the position \cr
    \strong{place} \tab Place of the position \cr

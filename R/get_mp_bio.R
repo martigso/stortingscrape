@@ -46,7 +46,8 @@
 #'  
 #'    |                           |                                           |
 #'    |:--------------------------|:------------------------------------------|
-#'    | **seniority**             | Number of days in parliament              |
+#'    | **seniority_aar**         | Number of years in parliament             |
+#'    | **seniority_dager**       | Number of extra days (addition to years)  |
 #'    | **county_of_birth**       | Birth county of the MP                    |
 #'    | **municipality_of_birth** | Birth municipality of the MP              |
 #'    | **eulogy_date**           | Eulogy date of the MP, when applicable    |
@@ -112,22 +113,22 @@
 #'    
 #' 1. **$other_positions** (other positions held outside parliament)
 #' 
-#'    |                          |                                                               |
-#'    |:-------------------------|---------------------------------------------------------------|
-#'    | **several_periods_text** | Text description if the vocation was held for several periods |
-#'    | **from_year**            | Year MP held vocation from                                    |
-#'    | **from_year_sorting**    | __Not described in API__                                      |
-#'    | **from_year_unknown**    | Logical indication for whether the start year is unknown      |
-#'    | **max_to_year**          | The last possible time the MP held the position               |
-#'    | **note**                 | Note for position                                             |
-#'    | **min_to_year**          | The earliest possible time the MP held the position           |
-#'    | **level**                | __Not described in API__                                      |
-#'    | **organization**         | Organization holding the position                             |
-#'    | **place**                | Place of the position                                         |
-#'    | **to_year**              | Year MP held position to                                      |
-#'    | **to_year_unknown**      | Logical indication for whether the end year is unknown        |
-#'    | **type**                 | Position type                                                 |
-#'    | **position**             | Position name/description                                     |
+#'    |                          |                                                                                  |
+#'    |:-------------------------|----------------------------------------------------------------------------------|
+#'    | **several_periods_text** | Text description if the vocation was held for several periods (removed from API) |
+#'    | **from_year**            | Year MP held vocation from                                                       |
+#'    | **from_year_sorting**    | __Not described in API__ (removed from API)                                      |
+#'    | **from_year_unknown**    | Logical indication for whether the start year is unknown                         |
+#'    | **max_to_year**          | The last possible time the MP held the position (removed from API)               |
+#'    | **note**                 | Note for position                                                                |
+#'    | **min_to_year**          | The earliest possible time the MP held the position (removed from API)           |
+#'    | **level**                | __Not described in API__                                                         |
+#'    | **organization**         | Organization holding the position                                                |
+#'    | **place**                | Place of the position                                                            |
+#'    | **to_year**              | Year MP held position to                                                         |
+#'    | **to_year_unknown**      | Logical indication for whether the end year is unknown                           |
+#'    | **type**                 | Position type                                                                    |
+#'    | **position**             | Position name/description                                                        |
 #' 
 #' @md
 #' 
@@ -177,7 +178,8 @@ get_mp_bio <- function(mpid = NA, good_manners = 0){
                                              type = tmp %>% html_elements("person_biografi_permisjon_kodet > type") %>% html_text(),
                                              sub_last_name = tmp %>% html_elements("person_biografi_permisjon_kodet > vara_etternavn") %>% html_text(),
                                              sub_first_name = tmp %>% html_elements("person_biografi_permisjon_kodet > vara_fornavn") %>% html_text()),
-               personalia =  data.frame(seniority = tmp %>% html_elements("personalia_kodet > ansiennitet") %>% html_text(),
+               personalia =  data.frame(seniority_years = tmp %>% html_elements("personalia_kodet > ansiennitet_aar") %>% html_text(),
+                                        seniority_days = tmp %>% html_elements("personalia_kodet > ansiennitet_dager") %>% html_text(),
                                         county_of_birth = tmp %>% html_elements("personalia_kodet > foede_fylke") %>% html_text(),
                                         municipality_of_birth = tmp %>% html_elements("personalia_kodet > foede_kommune") %>% html_text(),
                                         eulogy_date = tmp %>% html_elements("personalia_kodet > minnetale_dato") %>% html_text()),
@@ -215,13 +217,14 @@ get_mp_bio <- function(mpid = NA, good_manners = 0){
                                      to_year = tmp %>% html_elements("person_biografi_utdanning_yrke_kodet > til_aar") %>% html_text(),
                                      to_year_unknown = tmp %>% html_elements("person_biografi_utdanning_yrke_kodet > til_aar_ukjent") %>% html_text(),
                                      type = tmp %>% html_elements("person_biografi_utdanning_yrke_kodet > type") %>% html_text()),
-               other_positions = data.frame(several_periods_text = tmp %>% html_elements("person_biografi_verv_kodet > flere_perioder_tekst") %>% html_text(),
-                                            from_year = tmp %>% html_elements("person_biografi_verv_kodet > fra_aar") %>% html_text(),
-                                            from_year_sorting = tmp %>% html_elements("person_biografi_verv_kodet > fra_aar_sortering") %>% html_text(),
+               other_positions = data.frame(from_year = tmp %>% html_elements("person_biografi_verv_kodet > fra_aar") %>% html_text(),
+                                            # Some variables seems to have been removed from the API
+                                            # several_periods_text = tmp %>% html_elements("person_biografi_verv_kodet > flere_perioder_tekst") %>% html_text(),
+                                            # from_year_sorting = tmp %>% html_elements("person_biografi_verv_kodet > fra_aar_sortering") %>% html_text(),
                                             from_year_unknown = tmp %>% html_elements("person_biografi_verv_kodet > fra_aar_ukjent") %>% html_text(),
-                                            max_to_year = tmp %>% html_elements("person_biografi_verv_kodet > maksimum_til_aar") %>% html_text(),
+                                            # max_to_year = tmp %>% html_elements("person_biografi_verv_kodet > maksimum_til_aar") %>% html_text(),
                                             note = tmp %>% html_elements("person_biografi_verv_kodet > merknad") %>% html_text(),
-                                            min_start_year = tmp %>% html_elements("person_biografi_verv_kodet > minimum_start_aar") %>% html_text(),
+                                            # min_start_year = tmp %>% html_elements("person_biografi_verv_kodet > minimum_start_aar") %>% html_text(),
                                             level = tmp %>% html_elements("person_biografi_verv_kodet > nivaa") %>% html_text(),
                                             organization = tmp %>% html_elements("person_biografi_verv_kodet > organisasjon") %>% html_text(),
                                             place = tmp %>% html_elements("person_biografi_verv_kodet > sted") %>% html_text(),
