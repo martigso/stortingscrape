@@ -2,7 +2,7 @@
 output: github_document
 ---
 
-# stortingscrape <img src="man/figures/logo.png" align="right" height="139"/>
+# stortingscrape <img src="man/figures/logo.png" align="right" height="100"/>
 
 <!-- badges: start -->
 [![CRAN Version](http://www.r-pkg.org/badges/version/stortingscrape)](https://cran.r-project.org/package=stortingscrape)

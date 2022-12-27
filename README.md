@@ -1,5 +1,5 @@
 
-# stortingscrape <img src="man/figures/logo.png" align="right" height="139"/>
+# stortingscrape <img src="man/figures/logo.png" align="right" height="100"/>
 
 <!-- badges: start -->
 
@@ -10,6 +10,8 @@ Version](https://img.shields.io/github/r-package/v/martigso/stortingscrape?color
 [![Downloads](http://cranlogs.r-pkg.org/badges/stortingscrape)](https://cran.r-project.org/package=stortingscrape)
 [![Total
 Downloads](http://cranlogs.r-pkg.org/badges/grand-total/stortingscrape?color=orange)](https://cran.r-project.org/package=stortingscrape)
+[![R-CMD-check](https://github.com/drmowinckels/stortingscrape/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/drmowinckels/stortingscrape/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
 
 `stortingscrape` is an R package for retrieving data from the Norwegian
 parliament (*Stortinget*) through their easily accessible back-end API.
