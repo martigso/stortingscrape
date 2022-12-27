@@ -39,10 +39,10 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{sendt_date} \tab Date the question was sent \cr
    \strong{session_id} \tab Session id \cr
    \strong{question_from_id} \tab Question from MP id \cr
-   \strong{qustion_number} \tab Question number within session \cr
-   \strong{qustion_to_id} \tab Question directed to minister id \cr
-   \strong{qustion_to_minister_id} \tab Question directed to minister department id \cr
-   \strong{qustion_to_minister_title} \tab Question directed to minister department title \cr
+   \strong{question_number} \tab Question number within session \cr
+   \strong{question_to_id} \tab Question directed to minister id \cr
+   \strong{question_to_minister_id} \tab Question directed to minister department id \cr
+   \strong{question_to_minister_title} \tab Question directed to minister department title \cr
    \strong{status} \tab Question status \cr
    \strong{title} \tab Question title \cr
    \strong{type} \tab Question type \cr

@@ -34,10 +34,10 @@
 #'    | **sendt_date**                        | Date the question was sent                             |
 #'    | **session_id**                        | Session id                                             |
 #'    | **question_from_id**                  | Question from MP id                                    |
-#'    | **qustion_number**                    | Question number within session                         |
-#'    | **qustion_to_id**                     | Question directed to minister id                       |
-#'    | **qustion_to_minister_id**            | Question directed to minister department id            |
-#'    | **qustion_to_minister_title**         | Question directed to minister department title         |
+#'    | **question_number**                   | Question number within session                         |
+#'    | **question_to_id**                    | Question directed to minister id                       |
+#'    | **question_to_minister_id**           | Question directed to minister department id            |
+#'    | **question_to_minister_title**        | Question directed to minister department title         |
 #'    | **status**                            | Question status                                        |
 #'    | **title**                             | Question title                                         |
 #'    | **type**                              | Question type                                          |
@@ -71,7 +71,7 @@ get_session_questions <- function(sessionid = NA, q_type = NA ,status = NA, good
     status <- http_status(base)
     if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
     
-    
+  
   } else if(status %in% c("til_behandling", "trukket", "bortfalt", "alle") == FALSE){
     
     stop('Status needs to be one of "til_behandling", "trukket", "bortfalt", or "alle"')
@@ -110,10 +110,10 @@ get_session_questions <- function(sessionid = NA, q_type = NA ,status = NA, good
     sendt_date = tmp %>% html_elements("sporsmal_liste > sporsmal > sendt_dato") %>% html_text(),
     session_id = tmp %>% html_elements("sporsmal_liste > sporsmal > sesjon_id") %>% html_text(),
     question_from_id = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_fra > id") %>% html_text(), # get more info with get_mp()
-    qustion_number = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_nummer") %>% html_text(),
-    qustion_to_id = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til > id") %>% html_text(),
-    qustion_to_minister_id = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til_minister_id") %>% html_text(),
-    qustion_to_minister_title = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til_minister_tittel") %>% html_text(),
+    question_number = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_nummer") %>% html_text(),
+    question_to_id = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til > id") %>% html_text(),
+    question_to_minister_id = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til_minister_id") %>% html_text(),
+    question_to_minister_title = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til_minister_tittel") %>% html_text(),
     status = tmp %>% html_elements("sporsmal_liste > sporsmal > status") %>% html_text(),
     title = tmp %>% html_elements("sporsmal_liste > sporsmal > tittel") %>% html_text(),
     type = tmp %>% html_elements("sporsmal_liste > sporsmal > type") %>% html_text()
@@ -153,10 +153,10 @@ get_session_questions <- function(sessionid = NA, q_type = NA ,status = NA, good
     "sendt_date",
     "session_id",
     "question_from_id",
-    "qustion_number",
-    "qustion_to_id",
-    "qustion_to_minister_id",
-    "qustion_to_minister_title",
+    "question_number",
+    "question_to_id",
+    "question_to_minister_id",
+    "question_to_minister_title",
     "status",
     "title",
     "type")]
