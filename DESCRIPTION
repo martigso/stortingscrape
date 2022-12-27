@@ -7,7 +7,7 @@ Authors@R: person("Martin", "Søyland", email = "martin.soyland@stv.uio.no",
 Description: Functions for retrieving general and specific data from the Norwegian Parliament,
   through the Norwegian Parliament API at <https://data.stortinget.no>.
 URL: https://github.com/martigso/stortingscrape,
-    https://drmowinckels.github.io/stortingscrape/
+    https://martigso.github.io/stortingscrape/
 BugReports: https://github.com/martigso/stortingscrape/issues
 Depends: R (>= 4.2.0)
 Encoding: UTF-8
