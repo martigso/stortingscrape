@@ -58,33 +58,35 @@ int1213 <- do.call(rbind, int1213)
 Get biographies of all MPs for a given parliamentary period (will take
 \~30min to run):
 
-    parl_periods <- get_parlperiods()
+``` r
+parl_periods <- get_parlperiods()
 
-    mps <- get_parlperiod_mps(parl_periods$id[1], substitute = TRUE)
+mps <- get_parlperiod_mps(parl_periods$id[1], substitute = TRUE)
 
-    mps_bios <- pbmclapply(mps$id, function(x) get_mp_bio(x, good_manners = 2), mc.cores = 1) # do not increase number of cores!
+mps_bios <- pbmclapply(mps$id, function(x) get_mp_bio(x, good_manners = 2), mc.cores = 1) # do not increase number of cores!
 
-    # Expand by all periods the MP has been in parliament
-    mps_periods <- lapply(mps_bios, function(x){
-      
-      data.frame(x$root,
-                 x$parl_periods)
+# Expand by all periods the MP has been in parliament
+mps_periods <- lapply(mps_bios, function(x){
+  
+  data.frame(x$root,
+             x$parl_periods)
 
-    })
+})
 
-    mps_periods <- do.call(rbind, mps_periods)
+mps_periods <- do.call(rbind, mps_periods)
 
-    # Expand by all positions held in parliament
-    mps_positions <- lapply(mps_bios, function(x){
-      
-      if(nrow(x$parl_positions) < 1) return()
-      
-      data.frame(x$root,
-                 x$parl_positions)
-      
-    })
+# Expand by all positions held in parliament
+mps_positions <- lapply(mps_bios, function(x){
+  
+  if(nrow(x$parl_positions) < 1) return()
+  
+  data.frame(x$root,
+             x$parl_positions)
+  
+})
 
-    mps_positions <- do.call(rbind, mps_positions)
+mps_positions <- do.call(rbind, mps_positions)
+```
 
 ## Data description
 

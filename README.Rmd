@@ -56,7 +56,8 @@ int1213 <- do.call(rbind, int1213)
 
 Get biographies of all MPs for a given parliamentary period (will take ~30min to run):
 
-```
+```{r usage_ex2, eval=FALSE}
+
 parl_periods <- get_parlperiods()
 
 mps <- get_parlperiod_mps(parl_periods$id[1], substitute = TRUE)
@@ -86,6 +87,7 @@ mps_positions <- lapply(mps_bios, function(x){
 mps_positions <- do.call(rbind, mps_positions)
 
 ```
+
 ## Data description
 
 The data is described in detail in the [API of Stortinget](https://data.stortinget.no/dokumentasjon-og-hjelp/). The package will implement English translations of this documentation in the future.
