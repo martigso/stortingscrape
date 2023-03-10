@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>stortingscrape: An R package for accessing data from the Norwegian parliament</title>
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">stortingscrape: An R package for accessing data from the Norwegian parliament</h1>
+
+
+
+<div id="sec:intro" class="section level1">
+<h1>Introduction: Retrieval of Storting data in R</h1>
+<p>A wide variety of parliamentary data have been made available to the public in several countries over the last decade. Be it through frontend websites or back-end APIs, researchers on parliaments have never had easier access to large amounts of data than they do now. However, both frontend and API scraped data often come in formats (.html, .xml, .json, etc) that require substantial structuring and pre-processing before they are ready for subsequent analyses.</p>
+<p>In this vignette, I present the <code>stortingscrape</code> package for R. <code>stortingscrape</code> makes retrieving data from the Norwegian parliament (<em>Stortinget</em>) through their easily accessible back-end API. The data requested using the package require little to no further structuring. The scope of the package, discussed further below, ranges from general data on the parliament itself (rules, session info, committees, etc) to data on the parties, bibliographies of the MPs, questions, hearings, debates, votes, and more.</p>
+<p>Although this is the first attempt to make data on <em>Stortinget</em> more easily accessible, <code>stortingscrape</code> does not live in a vacuum. A variety of parliamentary data for different countries are available for researchers to use freely. For parliamentary debates, <span class="citation">Thomas, Pang, and Lee (2006)</span> were one of the first to gather and make available data. Their data cover the proceedings of the 2005 House debates. <span class="citation">Eggers and Spirling (2014)</span> structured the UK Hansard speech data, which spans from 1802 to 2010. <span class="citation">Beelen et al. (2017)</span> provided continuously updated data for the Canadian parliament, <span class="citation">Rauh and Schwalbach (2020)</span> made available a collection of speech data from 9 countries, and <span class="citation">Turner-Zwinkels et al. (2021)</span> developed a day-by-day dataset of MPs in Germany, Switzerland, and the Netherlands, in the period between 1947 and 2017. These examples are, however, different from <code>stortingscrape</code> in that they are finished datasets ready for download and have limited scope.</p>
+<p>The main goal of <code>stortingscrape</code> is to allow researchers to access any data from the Norwegian parliament easily, but also still be able to structure the data according to ones need. Most importantly, the package is facilitated for weaving together different parts of the data.stortinget.no API.</p>
+<p>I will start this vignette by briefly discussing the openly accessible data.stortinget.no API. Next, I will describe the philosophy, scope and general usage of the <code>stortingscrape</code> package. Finally, I will present some minimal examples of possible workflows for working with the package, before I summarize.</p>
+</div>
+<div id="sec:api" class="section level1">
+<h1>Stortinget’s API</h1>
+<p>The Norwegian parliament was comparatively early in granting open access to their data through an API when they launched <a href="https://data.stortinget.no">data.stortinget.no</a> in 2012. The general purpose of the API is to priovide transparency in the form om raw data, mirroring the frontend web-page information from <a href="https://stortinget.no">stortinget.no</a>. The format of the API has been fairly consistent over the time of its existance, but there have been some small style changes over different versions.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> <code>stortingscrape</code> was built under version <span class="math inline">\(1.6\)</span> of the API.</p>
+<p>Except for content that is blocked for the public (e.g. debates behind closed doors), the API contains all recorded data produced in Stortinget. These data include data on individual MPs, transcripts from debates, voting results, hearing input, and much more. For a exhaustive list of all data sources in the API.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> The data available in the API can be accessed through XML of JSON format<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>, both of which are flexible formats for compressing data in nested lists.</p>
+<p>As an exmple, the raw data input for general information about a single MP<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> looks like this:</p>
+<pre><code>#&gt; &lt;person&gt;
+#&gt;   &lt;respons_dato_tid&gt;2021-08-13T14:59:48.2114895+02:00&lt;/respons_dato_tid&gt;
+#&gt;   &lt;versjon&gt;1.6&lt;/versjon&gt;
+#&gt;   &lt;doedsdato&gt;0001-01-01T00:00:00&lt;/doedsdato&gt;
+#&gt;   &lt;etternavn&gt;Aasen&lt;/etternavn&gt;
+#&gt;   &lt;foedselsdato&gt;1967-02-21T00:00:00&lt;/foedselsdato&gt;
+#&gt;   &lt;fornavn&gt;Marianne&lt;/fornavn&gt;
+#&gt;   &lt;id&gt;MAAA&lt;/id&gt;
+#&gt;   &lt;kjoenn&gt;kvinne&lt;/kjoenn&gt;
+#&gt; &lt;/person&gt;</code></pre>
+<p>This is the typical XML structure in the API, although other parts of the data are more complex in that the XML tree can be nested multiple times. This will be discussed further in the next section.</p>
+</div>
+<div id="sec:scope" class="section level1">
+<h1>Package philosophy, scope, and usage</h1>
+<p><code>stortingscrape</code> aims to make Norwegian parliamentary data easily accessible, while also being flexible enough for tailoring the different underlying data sources to ones needs. Indeed, contrary to most open source parliamentary speech data, <code>stortingscrape</code> aims at giving the user as much agency as possible in tailoring data for specific needs. In addition to user agency, the package is built with a core philosophy of simplifying data structures, make seamless workflows between different parts of the <em>Storting</em> API, and limit data duplication between functions.</p>
+<p>Because a lot of analysis tools in R requires 2 dimensional data formats, the <code>stortingscrape</code> package prioritize converting the nested XML format to data frames, when possible. However, some sources of data from the Storting API are nested in a way which makes retaining all data in a 2 dimensional space either impossible or too verbose. For example, the <code>get_mp_bio()</code> function, which extract a specific MP’s biography by id, has data on MP personalia, parliamentary periods the MP had a seat, vocations, literature authored by the MP, and more. In order to make all these data workable, the resulting format from the function call is a list of data frames for each part of the data. The different list elements are, however, easily combined for different applications of the data.</p>
+<p>One of the core thoughts behind the workflow of the package is to make it easy to combine different parts of the API and to extract the data you actually need. To facilitate this, most functions within <code>stortingscrape</code> are built to work seemlessly with the <code>apply()</code> family or control flow constructs in R. Because we do not want to call the API repeatedly, functions that are expected to often be ran repeatedly have a <code>good_manners</code> argument. This will make R sleep for the set amount of seconds after calling the API. It is recommended to set this argument to 2 seconds or higher on multiple calls to the API. Generally, the package is built by the recommendations given by the <code>httr</code> package <span class="citation">(Wickham 2020)</span><a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>.</p>
+<p>Most of the data from Stortinget’s API and frontend web page are interconnected through ids for the various sources (session id, MP id, case id, question id, vote id, etc.). <code>stortingscrape</code> core extraction methods are based around these. One of the major benefits of this is that whether you want to extract, for instance, a single question found on the frontend web page, or all questions for a parliamentary session, the package is flexible enough to suit both needs (see the <a href="#workflow">workflow</a> section). It will also enable users to quickly retreive data from the frontend web-page.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a></p>
+<p>Because of the interconnectedness of the API’s data, there are some overlapping sources of data. For instance, both retreival of MP general information (<code>get_mp()</code>), biography (<code>get_mp_bio()</code>), and all MPs for a session (<code>get_parlperiod_mps()</code>) have the name of the MP in the API, but only <code>get_mp()</code> will return MP names in <code>stortingscrape</code>, because these two data sources are easily merged by the MP’s id (see the <a href="#workflow">workflow</a> section).</p>
+<p>The scope of <code>stortingscrape</code> is almost the entire API of Stortinget, with some notable shortcomings. First, there are no functions for dynamically updated data sources, such as current speaker lists (<a href="https://data.stortinget.no/dokumentasjon-og-hjelp/talerliste/" class="uri">https://data.stortinget.no/dokumentasjon-og-hjelp/talerliste/</a>). Second, as mentioned above, duplicated data i avoided whenever possible. Third, certain unstandardized image sources – such as publication attachment figures – are not supported in the package. And finally, publications from the <code>get_publication()</code> function can be retrieved, but are returned in a parsed XML data format from the <code>rvest</code> package because these data are not standardized across different publications.</p>
+<!-- % The various sources touched by the various functions in `stortingscrape` can -->
+<!-- % best be summarized as a network of interconnected nodes, as shown in figure -->
+<!-- % \ref{fig:flowchart} -->
+<!-- % -->
+<!-- % \input{./flowchart.tex} -->
+<!-- % -->
+<!-- % As is shown in figure [fixme: figure ref], -->
+<p>There are three overarching sources of data in <code>stortingscrape</code>: 1) Parliamentary structure data, 2) MP data, and 3) Parliamentary activity data. These are, in some/most cases, linked by various forms of ID tags. For example, retrieving all MPs for a given session (<code>get_parlperiod_mps()</code>) will give access to MP IDs (<code>mp_id</code>) for that session, which can be used to extract biographies, pictures, speech activity, and more for those MPs. Next, I will showcase some examples of how a typical workflow for using <code>stortingscrape</code> could look like.</p>
+</div>
+<div id="sec:workflow" class="section level1">
+<h1>Workflow</h1>
+<p>In the following section, I will discuss some examples of data extraction with <code>stortingscrape</code>. I start by showing basic extraction of voting data based on vote IDs from the frontend web-page – <a href="https://stortinget.no">stortinget.no</a>. Next, I exemplify the large set of period and session specific data by retrieving all MPs for a specific parliamentary period and all interpellations for a specified parliamentary session. Finally, I show how the different functions of the <code>stortingscrape</code> package works together – merging data on cases with their belonging vote results. Note that the vignette is built using the examples in the data folder of the package.<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">data_files &lt;-<span class="st"> </span><span class="kw">data</span>(<span class="dt">package =</span> <span class="st">&quot;stortingscrape&quot;</span>)<span class="op">$</span>results[,<span class="st">&quot;Item&quot;</span>]</a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw">data</span>(<span class="dt">list =</span> data_files)</a></code></pre></div>
+<div id="basic-extraction" class="section level2">
+<h2>Basic extraction</h2>
+<p>The basic extraction of specific data from Stortinget’s API revolves around various forms of ID tags. For example, all MPs have a unique ID, all cases have unique IDs, all votes have unique IDs, and so on. For the following example, I will highlight going from a case on economic measures for the Covid pandemic to party distribution on a specific vote in this case. First, the case was relatively rapidly proposed and treated in the Storting during the early days of June 2021. The case in its entirety can be found at <a href="https://stortinget.no/no/Saker-og-publikasjoner/Saker/Sak/?p=85196">here</a>. You will see the procedure steps from a government proposal, through work in the finance committee, to debate and decision. Lets say a particular proposal under the case caught our eye – for instance, <a href="https://stortinget.no/no/Saker-og-publikasjoner/Saker/Sak/Voteringsoversikt/?p=85196&amp;dnid=1">vote number 61 from the Labor Party</a> asking the government to propose a plan for implementing the International Labor Organization’s core conventions to the Human Rights Act (menneskerettighetsloven).</p>
+<p>As can be seen from the link to the case itself, we have an ID within the URL: “85196”. This is the case ID. We can use the <code>get_case()</code> function from <code>stortingscrape</code> to extract all votes on this case:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co">## covid_relief &lt;- get_vote(&quot;85196&quot;)</span></a></code></pre></div>
+<p>We now have a data frame with 71 votes over 22 variables. The data structure for some selected variables, looks like this:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">head</span>(covid_relief[, <span class="kw">c</span>(<span class="st">&quot;case_id&quot;</span>, <span class="st">&quot;vote_id&quot;</span>, <span class="st">&quot;n_for&quot;</span>, <span class="st">&quot;n_against&quot;</span>, <span class="st">&quot;adopted&quot;</span>)])</a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="co">#&gt;   case_id vote_id n_for n_against adopted</span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; 1   85196   17631     1        87   false</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt; 2   85196   17632     6        81   false</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; 3   85196   17633    14        74   false</span></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; 4   85196   17634    42        46   false</span></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt; 5   85196   17635    40        48   false</span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt; 6   85196   17636    15        73   false</span></a></code></pre></div>
+<p>As we are interested in the result of proposal 217 from the Labor Party, we can extract the ID of this particular vote from our data:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"></a>
+<a class="sourceLine" id="cb5-2" title="2">covid_relief<span class="op">$</span>vote_id[<span class="kw">which</span>(<span class="kw">grepl</span>(<span class="st">&quot;217&quot;</span>, covid_relief<span class="op">$</span>vote_topic))]</a></code></pre></div>
+<p>To get the personal MP vote results for this particular vote, we can use the <code>get_result_vote()</code> function:<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co">## covid_relief_result &lt;- get_result_vote(&quot;17689&quot;)</span></a>
+<a class="sourceLine" id="cb6-2" title="2"></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="kw">head</span>(covid_relief_result[, <span class="kw">c</span>(<span class="st">&quot;vote_id&quot;</span>, <span class="st">&quot;mp_id&quot;</span>, <span class="st">&quot;party_id&quot;</span>, <span class="st">&quot;vote&quot;</span>)])</a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt;   vote_id mp_id party_id          vote</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt; 1   17689   SSA        H           mot</span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt; 2   17689   EAG        H ikke_tilstede</span></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt; 3   17689   PTA      FrP           mot</span></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt; 4   17689   DTA        A ikke_tilstede</span></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt; 5   17689  KAAN       SV           for</span></a>
+<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt; 6   17689  KAND       Sp           for</span></a></code></pre></div>
+<p>From looking only at the first six rows of the data, the readers who know the Norwegian political system will suspect that this vote was an opposition versus government vote, but we can also easily get the distribution of votes by party:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"></a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="kw">table</span>(covid_relief_result<span class="op">$</span>party_id, </a>
+<a class="sourceLine" id="cb7-3" title="3">      covid_relief_result<span class="op">$</span>vote) <span class="op">|</span><span class="er">&gt;</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="st">  </span><span class="kw">addmargins</span>()</a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt;      </span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt;       for ikke_tilstede mot Sum</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt;   A    27            21   0  48</span></a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="co">#&gt;   FrP   0            12  14  26</span></a>
+<a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt;   H     0            22  23  45</span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt;   KrF   0             5   3   8</span></a>
+<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt;   MDG   1             0   0   1</span></a>
+<a class="sourceLine" id="cb7-12" title="12"><span class="co">#&gt;   R     1             0   0   1</span></a>
+<a class="sourceLine" id="cb7-13" title="13"><span class="co">#&gt;   SV    5             6   0  11</span></a>
+<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt;   Sp    8            12   0  20</span></a>
+<a class="sourceLine" id="cb7-15" title="15"><span class="co">#&gt;   Uav   0             0   1   1</span></a>
+<a class="sourceLine" id="cb7-16" title="16"><span class="co">#&gt;   V     0             5   3   8</span></a>
+<a class="sourceLine" id="cb7-17" title="17"><span class="co">#&gt;   Sum  42            83  44 169</span></a></code></pre></div>
+<p>As suspected, the vote was divided between the opposition (A, MDG, R, SP, and SV) and government parties (H, KrF, V, and FrP), and was not adopted by a thin margin of 2 votes. Of course, this is a minimal example, but I will highlight more methods for extracting multiple votes below.</p>
+</div>
+<div id="sequences-of-data-extraction" class="section level2">
+<h2>Sequences of data extraction</h2>
+<p>Below, I show two examples of sequentially extracting data of interest.</p>
+<div id="example-1-from-periods-to-interpellations" class="section level3">
+<h3>Example 1: From periods to interpellations</h3>
+<p>Most of the mentioned IDs for Stortinget’s data are not only extractable from the frontend web-page, but also from the back-end API. These data can be retrieved by various forms of parliamentary period or session specific functions in <code>stortingscrape</code>. In this section, I will show how to get all MPs for a specific parliamentary period and all interpellations for a parliamentary session.</p>
+<p>First, however, I note that IDs for periods and sessions are accessed through two core functions in the package:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="co">## parl_periods &lt;- get_parlperiods()</span></a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="co">## parl_sessions &lt;- get_parlsessions()</span></a>
+<a class="sourceLine" id="cb8-3" title="3"></a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="kw">tail</span>(parl_periods[,<span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;years&quot;</span>)])</a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="co">#&gt;         id     years</span></a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="co">#&gt; 15 1965-69 1965-1969</span></a>
+<a class="sourceLine" id="cb8-7" title="7"><span class="co">#&gt; 16 1961-65 1961-1965</span></a>
+<a class="sourceLine" id="cb8-8" title="8"><span class="co">#&gt; 17 1958-61 1958-1961</span></a>
+<a class="sourceLine" id="cb8-9" title="9"><span class="co">#&gt; 18 1954-57 1954-1958</span></a>
+<a class="sourceLine" id="cb8-10" title="10"><span class="co">#&gt; 19 1950-53 1950-1954</span></a>
+<a class="sourceLine" id="cb8-11" title="11"><span class="co">#&gt; 20 1945-49 1945-1950</span></a>
+<a class="sourceLine" id="cb8-12" title="12"><span class="kw">tail</span>(parl_sessions[,<span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;years&quot;</span>)])</a>
+<a class="sourceLine" id="cb8-13" title="13"><span class="co">#&gt;         id     years</span></a>
+<a class="sourceLine" id="cb8-14" title="14"><span class="co">#&gt; 31 1991-92 1991-1992</span></a>
+<a class="sourceLine" id="cb8-15" title="15"><span class="co">#&gt; 32 1990-91 1990-1991</span></a>
+<a class="sourceLine" id="cb8-16" title="16"><span class="co">#&gt; 33 1989-90 1989-1990</span></a>
+<a class="sourceLine" id="cb8-17" title="17"><span class="co">#&gt; 34 1988-89 1988-1989</span></a>
+<a class="sourceLine" id="cb8-18" title="18"><span class="co">#&gt; 35 1987-88 1987-1988</span></a>
+<a class="sourceLine" id="cb8-19" title="19"><span class="co">#&gt; 36 1986-87 1986-1987</span></a></code></pre></div>
+<p>The parliamentary period IDs is mainly used for MP data; Norwegian MPs are elected for 4 year terms, with no constitutional arrangement for snap elections. The MP data also stretch way further back in time than most of the other data in the API:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"></a>
+<a class="sourceLine" id="cb9-2" title="2">parl_periods<span class="op">$</span>id[<span class="kw">nrow</span>(parl_periods)]</a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="co">#&gt; [1] &quot;1945-49&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="co">## mps4549 &lt;- get_parlperiod_mps(&quot;1945-49&quot;)</span></a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="kw">head</span>(mps4549[, <span class="kw">c</span>(<span class="st">&quot;mp_id&quot;</span>, <span class="st">&quot;county_id&quot;</span>, <span class="st">&quot;party_id&quot;</span>, <span class="st">&quot;period_id&quot;</span>)])</a>
+<a class="sourceLine" id="cb10-3" title="3"><span class="co">#&gt;   mp_id county_id party_id period_id</span></a>
+<a class="sourceLine" id="cb10-4" title="4"><span class="co">#&gt; 1  AAKU        VA        A   1945-49</span></a>
+<a class="sourceLine" id="cb10-5" title="5"><span class="co">#&gt; 2  AARY        AA        A   1945-49</span></a>
+<a class="sourceLine" id="cb10-6" title="6"><span class="co">#&gt; 3  ALKJ        He        H   1945-49</span></a>
+<a class="sourceLine" id="cb10-7" title="7"><span class="co">#&gt; 4  ALVÅ        Fi      NKP   1945-49</span></a>
+<a class="sourceLine" id="cb10-8" title="8"><span class="co">#&gt; 5  AMSK        ST        A   1945-49</span></a>
+<a class="sourceLine" id="cb10-9" title="9"><span class="co">#&gt; 6  ANBØ        SF        V   1945-49</span></a></code></pre></div>
+<p>From these data, the way is short to extracting more rich data on individual MPs, as will be demonstrated below.</p>
+<p>Content data, however, use parliamentary session IDs rather than period IDs. These functions are standardized to function names as <code>get_session_*()</code>. For example, we can access all interpellations from the 2002-2003 session with the <code>get_session_questions()</code> function:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="co">## interp0203 &lt;- get_session_questions(&quot;2002-2003&quot;, q_type = &quot;interpellasjoner&quot;)</span></a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="kw">dim</span>(interp0203)</a>
+<a class="sourceLine" id="cb11-3" title="3"><span class="co">#&gt; [1] 22 26</span></a></code></pre></div>
+<p>Here, we have 22 interpellations over 26 different variables. Unfortunately, the API only gives the question and not the answer for the different types of question requests. Retrieval of question answers is a daunting task, because it is only accessible through the unstandardized <code>get_publication()</code> function.</p>
+</div>
+</div>
+<div id="example-2-from-cases-to-mp-vote-results" class="section level2">
+<h2>Example 2: From cases to MP vote results</h2>
+<p>Next, I showcase how to get go from cases in a section, through extracting a case of interest and vote results, to vote matrices for that case.</p>
+<p>First, I extract all cases in the 2019-2020 session:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="co">## cases &lt;- get_session_cases(&quot;2019-2020&quot;)</span></a></code></pre></div>
+<p>The <code>cases</code> object will here contain all cases treated in the 2019-2020 parliamentary session. Do note that <code>cases</code> is a list of 4 elements (<code>$root</code>, <code>$topics</code>, <code>$proposers</code>, and <code>$spokespersons</code>). In the following, I use the case ID in <code>$root</code> to access vote information for a case – in this example the 48th row in the data:<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"></a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="co"># The case titles are, unfortunately, not translated</span></a>
+<a class="sourceLine" id="cb13-3" title="3">cases<span class="op">$</span>root<span class="op">$</span>title_short[<span class="dv">48</span>]</a>
+<a class="sourceLine" id="cb13-4" title="4"><span class="co">#&gt; [1] &quot;Representantforslag om å reversere avgiftsøkninger på alkoholfrie drikkevarer og bevare arbeidsplasser i norsk næringsmiddelindustri og varehandel&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="co">## vote &lt;- get_vote(cases$root$id[48])</span></a>
+<a class="sourceLine" id="cb14-2" title="2"></a>
+<a class="sourceLine" id="cb14-3" title="3">vote[, <span class="kw">c</span>(<span class="st">&quot;case_id&quot;</span>, <span class="st">&quot;vote_id&quot;</span>, </a>
+<a class="sourceLine" id="cb14-4" title="4">         <span class="st">&quot;alternative_vote&quot;</span>, </a>
+<a class="sourceLine" id="cb14-5" title="5">         <span class="st">&quot;n_for&quot;</span>, <span class="st">&quot;n_absent&quot;</span>, <span class="st">&quot;n_against&quot;</span>)]</a>
+<a class="sourceLine" id="cb14-6" title="6"><span class="co">#&gt;   case_id vote_id alternative_vote n_for n_absent n_against</span></a>
+<a class="sourceLine" id="cb14-7" title="7"><span class="co">#&gt; 1   78686   15404               -1     1       82        86</span></a>
+<a class="sourceLine" id="cb14-8" title="8"><span class="co">#&gt; 2   78686   15405            15406    46       82        41</span></a>
+<a class="sourceLine" id="cb14-9" title="9"><span class="co">#&gt; 3   78686   15406            15405    41       82        46</span></a></code></pre></div>
+<p>The output gives us a data frame of three votes over 22 variables, whereof one is the vote ID for each of the votes. We can use this variable to retrieve rollcall data, using the <code>get_result_vote</code> function:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="co">## vote_result &lt;- lapply(vote$vote_id, get_result_vote, good_manners = 5)</span></a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="kw">names</span>(vote_result) &lt;-<span class="st"> </span>vote<span class="op">$</span>vote_id</a>
+<a class="sourceLine" id="cb15-3" title="3"></a>
+<a class="sourceLine" id="cb15-4" title="4">vote_result &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, vote_result)</a>
+<a class="sourceLine" id="cb15-5" title="5"><span class="kw">head</span>(vote_result[, <span class="dv">3</span><span class="op">:</span><span class="kw">ncol</span>(vote_result)])</a>
+<a class="sourceLine" id="cb15-6" title="6"><span class="co">#&gt;         vote_id mp_id party_id          vote permanent_sub_for sub_for</span></a>
+<a class="sourceLine" id="cb15-7" title="7"><span class="co">#&gt; 15404.1   15404   SSA        H           mot              &lt;NA&gt;    &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb15-8" title="8"><span class="co">#&gt; 15404.2   15404   EAG        H           mot              &lt;NA&gt;    &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb15-9" title="9"><span class="co">#&gt; 15404.3   15404   PTA      FrP           mot              &lt;NA&gt;    &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb15-10" title="10"><span class="co">#&gt; 15404.4   15404   DTA        A           mot              &lt;NA&gt;    &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb15-11" title="11"><span class="co">#&gt; 15404.5   15404  KAAN       SV           mot              &lt;NA&gt;    &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb15-12" title="12"><span class="co">#&gt; 15404.6   15404   MAA       Sp ikke_tilstede              &lt;NA&gt;    &lt;NA&gt;</span></a></code></pre></div>
+<p>And make an overall proportion table over party distribution for the three votes:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">table</span>(vote_result<span class="op">$</span>vote, vote_result<span class="op">$</span>party_id,</a>
+<a class="sourceLine" id="cb16-2" title="2">      <span class="dt">dnn =</span> <span class="kw">c</span>(<span class="st">&quot;Vote result&quot;</span>, <span class="st">&quot;Vote ID&quot;</span>)) <span class="op">|</span><span class="er">&gt;</span></a>
+<a class="sourceLine" id="cb16-3" title="3"><span class="st">  </span><span class="kw">prop.table</span>(<span class="dt">margin =</span> <span class="dv">2</span>) <span class="op">|</span><span class="er">&gt;</span></a>
+<a class="sourceLine" id="cb16-4" title="4"><span class="st">  </span><span class="kw">round</span>(<span class="dt">digits =</span> <span class="dv">2</span>)</a></code></pre></div>
+</div>
+</div>
+<div id="sec:summary" class="section level1">
+<h1>Summary</h1>
+<p>In this vignette, I have presented the philosophy, scope, usage, and workflow of the <code>stortingscrape</code> package for R. In sum, <code>stortingscrape</code> makes retrieving data from the Norwegian parliament (<em>Stortinget</em>) more accessible through the back-end API (<a href="https://data.stortinget.no">data.stortinget.no</a>). One core philosophy of the package is to let the user tailor the data to ones needs, while at the same time extracting minimal overlapping data. The scope of the package ranges from general data on the parliament itself (rules, session info, committees, etc) to data on the parties, bibliographies of the MPs, questions, hearings, debates, votes, and more.</p>
+<!-- # Computational details -->
+</div>
+<div id="app:functions" class="section level1">
+<h1>List of functions</h1>
+<p>A list of all functions and their description can be found in the package documentation within R or from <a href="https://martigso.github.io/stortingscrape/functions.html">github</a>.</p>
+</div>
+<div id="bibliography" class="section level1">
+<h1>Bibliography</h1>
+<font size="3">
+<div id="refs">
+<div id="ref-Bee:Thi:Alb:17">
+<p>Beelen, Kaspar, Timothy Alberdingk Thijm, Christopher Cochrane, Kees Halvemaan, Graeme Hirst, Michael Kimmins, Sander Lijbrink, et al. 2017. “Digitization of the Canadian Parliamentary Debates.” <em>Canadian Journal of Political Science/Revue Canadienne de Science Politique</em>, 1–16.</p>
+</div>
+<div id="ref-Eggers2014">
+<p>Eggers, Andrew C., and Arthur Spirling. 2014. “Electoral Security as a Determinant of Legislator Activity, 1832–1918: New Data and Methods for Analyzing British Political Development.” <em>Legislative Studies Quarterly</em> 39 (4): 593–620.</p>
+</div>
+<div id="ref-Rauh2020">
+<p>Rauh, Christian, and Jan Schwalbach. 2020. “The ParlSpeech V2 data set: Full-text corpora of 6.3 million parliamentary speeches in the key legislative chambers of nine representative democracies.” Harvard Dataverse. <a href="https://doi.org/10.7910/DVN/L4OAKN">https://doi.org/10.7910/DVN/L4OAKN</a>.</p>
+</div>
+<div id="ref-Mat:Pan:Lee:06">
+<p>Thomas, Matt, Bo Pang, and Lillian Lee. 2006. “Get Out the Vote: Determining Support or Opposition from Congressional Floor-Debate Transcripts.” In <em>Proceedings of the 2006 Conference on Empirical Methods in Natural Language Processing</em>, 327–35. Association for Computational Linguistics.</p>
+</div>
+<div id="ref-Turner-Zwinkels2021">
+<p>Turner-Zwinkels, Tomas, Oliver Huwyler, Elena Frech, Philip Manow, Stefanie Bailer, Niels D. Goet, and Simon Hug. 2021. “Parliaments Day-by-Day: A New Open Source Database to Answer the Question of Who Was in What Parliament, Party, and Party-Group, and When.” <em>Legislative Studies Quarterly</em>.</p>
+</div>
+<div id="ref-Wickham2020">
+<p>Wickham, Hadley. 2020. <em>Httr: Tools for Working with Urls and Http</em>. <a href="https://CRAN.R-project.org/package=httr">https://CRAN.R-project.org/package=httr</a>.</p>
+</div>
+</div>
+<p></font></p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>See <code>stortingscrape::get_publication()</code> for instance<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>See <a href="https://martigso.github.io/stortingscrape/functions.html" class="uri">https://martigso.github.io/stortingscrape/functions.html</a><a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p><code>stortingscrape</code> exclusively works with XML.<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p><code>stortingscrape::get_mp(&quot;MAAA&quot;)</code><a href="#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn5"><p>Especially, see <a href="https://cran.r-project.org/package=httr/vignettes/api-packages.html" class="uri">https://cran.r-project.org/package=httr/vignettes/api-packages.html</a><a href="#fnref5" class="footnote-back">↩</a></p></li>
+<li id="fn6"><p><a href="https://stortinget.no">stortinget.no</a> as the ids are embedded in the urls.<a href="#fnref6" class="footnote-back">↩</a></p></li>
+<li id="fn7"><p>This is done in order to not call the API each time the vignette is built.<a href="#fnref7" class="footnote-back">↩</a></p></li>
+<li id="fn8"><p>I have not decided if data values should be translated or not. In this case, “for” is “for”, “mot” is “against”, and “ikke_tilstede” is “absent”.}<a href="#fnref8" class="footnote-back">↩</a></p></li>
+<li id="fn9"><p>I will note that it is possible to extract vote information on all cases by either using the <code>apply()</code> family or control flow constructs available in R. However, in this case, calling the API 616 (<code>nrow(cases[[&quot;root&quot;]])</code>) times, will require to pause between calls (with the {<code>good_manners</code> argument). This will increase running time substantially.<a href="#fnref9" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,430 @@
+---
+title: "stortingscrape: An R package for accessing data from the Norwegian parliament"
+output: rmarkdown::html_vignette
+bibliography: refs.bib
+vignette: >
+  %\VignetteIndexEntry{stortingscrape: An R package for accessing data from the Norwegian parliament}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(stortingscrape)
+```
+
+
+
+# Introduction: Retrieval of Storting data in R {#sec:intro}
+
+A wide variety of parliamentary data have been made available to the public in
+several countries over the last decade. Be it through frontend websites or
+back-end APIs, researchers on parliaments have never had easier access to large
+amounts of data than they do now. However, both frontend and API scraped data
+often come in formats (.html, .xml, .json, etc) that require substantial
+structuring and pre-processing before they are ready for subsequent analyses.
+
+In this vignette, I present the `stortingscrape` package for R.
+`stortingscrape` makes retrieving data from the Norwegian parliament
+(*Stortinget*) through their easily accessible back-end API. The data
+requested using the package require little to no further structuring. The scope
+of the package, discussed further below, ranges from general data on the
+parliament itself (rules, session info, committees, etc) to data on the parties,
+bibliographies of the MPs, questions, hearings, debates, votes, and more.
+
+Although this is the first attempt to make data on *Stortinget* more easily
+accessible, `stortingscrape` does not live in a vacuum. A variety of
+parliamentary data for different countries are available for researchers to use
+freely. For parliamentary debates, @Mat:Pan:Lee:06 were one of the first
+to gather and make available data. Their data cover the proceedings of the 2005
+House debates. @Eggers2014 structured the UK Hansard speech data, which
+spans from 1802 to 2010. @Bee:Thi:Alb:17 provided continuously updated data
+for the Canadian parliament, @Rauh2020 made available a collection of
+speech data from 9 countries, and @Turner-Zwinkels2021 developed a
+day-by-day dataset of MPs in Germany, Switzerland, and the Netherlands, in the
+period between 1947 and 2017. These examples are, however, different from
+`stortingscrape` in that they are finished datasets ready for download and
+have limited scope.
+
+The main goal of `stortingscrape` is to allow researchers to access any data
+from the Norwegian parliament easily, but also still be able to structure the
+data according to ones need. Most importantly, the package is facilitated for
+weaving together different parts of the data.stortinget.no API.
+
+I will start this vignette by briefly discussing the openly accessible
+data.stortinget.no API. Next, I will describe the philosophy, scope and general
+usage of the `stortingscrape` package. Finally, I will present some minimal
+examples of possible workflows for working with the package, before I summarize.
+
+
+# Stortinget's API {#sec:api}
+
+The Norwegian parliament was comparatively early in granting open access to
+their data through an API when they launched [data.stortinget.no](https://data.stortinget.no) in 2012.
+The general purpose of the API is to priovide transparency in the form om raw
+data, mirroring the frontend web-page information from [stortinget.no](https://stortinget.no). The
+format of the API has been fairly consistent over the time of its existance, but
+there have been some small style changes over different versions.^[See
+`stortingscrape::get_publication()` for instance] `stortingscrape` was
+built under version $1.6$ of the API.
+
+Except for content that is blocked for the public (e.g. debates behind closed
+doors), the API contains all recorded data produced in Stortinget. These data
+include data on individual MPs, transcripts from debates, voting results,
+hearing input, and much more. For a exhaustive list of all data sources in the
+API.^[See https://martigso.github.io/stortingscrape/functions.html] The data
+available in the API can be accessed through XML of JSON
+format^[`stortingscrape` exclusively works with XML.], both of which
+are flexible formats for compressing data in nested lists.
+
+As an exmple, the raw data input for general information about a single
+MP^[`stortingscrape::get_mp("MAAA")`] looks like this:
+
+
+```{r, echo=FALSE}
+cat(
+  "<person>
+  <respons_dato_tid>2021-08-13T14:59:48.2114895+02:00</respons_dato_tid>
+  <versjon>1.6</versjon>
+  <doedsdato>0001-01-01T00:00:00</doedsdato>
+  <etternavn>Aasen</etternavn>
+  <foedselsdato>1967-02-21T00:00:00</foedselsdato>
+  <fornavn>Marianne</fornavn>
+  <id>MAAA</id>
+  <kjoenn>kvinne</kjoenn>
+</person>
+"  )
+```
+
+This is the typical XML structure in the API, although other parts of the data
+are more complex in that the XML tree can be nested multiple times. This will be
+discussed further in the next section.
+
+
+# Package philosophy, scope, and usage {#sec:scope}
+
+`stortingscrape` aims to make Norwegian parliamentary data easily
+accessible, while also being flexible enough for tailoring the different
+underlying data sources to ones needs. Indeed, contrary to most open source
+parliamentary speech data, `stortingscrape` aims at giving the user as much
+agency as possible in tailoring data for specific needs. In addition to user
+agency, the package is built with a core philosophy of simplifying data
+structures, make seamless workflows between different parts of the
+*Storting* API, and limit data duplication between functions.
+
+Because a lot of analysis tools in R requires 2 dimensional data
+formats, the `stortingscrape` package prioritize converting the nested XML
+format to data frames, when possible. However, some sources of data from the
+Storting API are nested in a way which makes retaining all data in a 2
+dimensional space either impossible or too verbose. For example, the
+`get_mp_bio()` function, which extract a specific MP's biography by id, has
+data on MP personalia, parliamentary periods the MP had a seat, vocations,
+literature authored by the MP, and more. In order to make all these data
+workable, the resulting format from the function call is a list of data frames
+for each part of the data. The different list elements are, however, easily
+combined for different applications of the data.
+
+One of the core thoughts behind the workflow of the package is to make it easy
+to combine different parts of the API and to extract the data you actually need.
+To facilitate this, most functions within `stortingscrape` are built to work
+seemlessly with the `apply()` family or control flow constructs in
+R. Because we do not want to call the API repeatedly, functions that
+are expected to often be ran repeatedly have a `good_manners` argument.
+This will make R sleep for the set amount of seconds after calling
+the API. It is recommended to set this argument to 2 seconds or higher on multiple
+calls to the API. Generally, the package is built by the recommendations given
+by the `httr` package [@Wickham2020]^[Especially, see 
+https://cran.r-project.org/package=httr/vignettes/api-packages.html].
+
+Most of the data from Stortinget's API and frontend web page are interconnected
+through ids for the various sources (session id, MP id, case id, question id,
+vote id, etc.). `stortingscrape` core extraction methods are based around
+these. One of the major benefits of this is that whether you want to extract,
+for instance, a single question found on the frontend web page, or all
+questions for a parliamentary session, the package is flexible enough to suit
+both needs (see the [workflow](#workflow) section). It will also enable users to
+quickly retreive data from the frontend
+web-page.^[[stortinget.no](https://stortinget.no) as the ids are embedded in the
+urls.]
+
+Because of the interconnectedness of the API's data, there are some overlapping
+sources of data. For instance, both retreival of MP general information
+(`get_mp()`), biography (`get_mp_bio()`), and all MPs for a session
+(`get_parlperiod_mps()`) have the name of the MP in the API, but only
+`get_mp()` will return MP names in `stortingscrape`, because these two
+data sources are easily merged by the MP's id (see the [workflow](#workflow) section).
+
+
+The scope of `stortingscrape` is almost the entire API of Stortinget, with
+some notable shortcomings. First, there are no functions for dynamically
+updated data sources, such as current speaker lists
+(https://data.stortinget.no/dokumentasjon-og-hjelp/talerliste/). Second,
+as mentioned above, duplicated data i avoided whenever possible. Third, certain
+unstandardized image sources -- such as publication attachment figures -- are
+not supported in the package. And finally, publications from the
+`get_publication()` function can be retrieved, but are returned in a
+parsed XML data format from the `rvest` package because these data are
+not standardized across different publications.
+
+<!-- % The various sources touched by the various functions in `stortingscrape` can -->
+<!-- % best be summarized as a network of interconnected nodes, as shown in figure -->
+<!-- % \ref{fig:flowchart} -->
+<!-- % -->
+<!-- % \input{./flowchart.tex} -->
+<!-- % -->
+<!-- % As is shown in figure [fixme: figure ref], -->
+
+There are three overarching sources of data in `stortingscrape`: 1)
+Parliamentary structure data, 2) MP data, and 3) Parliamentary activity data.
+These are, in some/most cases, linked by various forms of ID tags. For example,
+retrieving all MPs for a given session (`get_parlperiod_mps()`) will give
+access to MP IDs (`mp_id`) for that session, which can be used to extract
+biographies, pictures, speech activity, and more for those MPs. Next, I will
+showcase some examples of how a typical workflow for using `stortingscrape`
+could look like.
+
+# Workflow {#sec:workflow}
+
+In the following section, I will discuss some examples of data extraction with
+`stortingscrape`. I start by showing basic extraction of voting data based on
+vote IDs from the frontend web-page --
+[stortinget.no](https://stortinget.no). Next, I exemplify the large set of
+period and session specific data by retrieving all MPs for a specific
+parliamentary period and all interpellations for a specified parliamentary
+session. Finally, I show how the different functions of the `stortingscrape`
+package works together -- merging data on cases with their belonging vote
+results. Note that the vignette is built using the examples in the
+data folder of the package.^[This is done in order to not call the API each
+time the vignette is built.]
+
+```{r load_predl_data}
+data_files <- data(package = "stortingscrape")$results[,"Item"]
+data(list = data_files)
+```
+
+## Basic extraction
+
+The basic extraction of specific data from Stortinget's API revolves around
+various forms of ID tags. For example, all MPs have a unique ID, all cases have
+unique IDs, all votes have unique IDs, and so on. For the following example, I
+will highlight going from a case on economic measures for the Covid pandemic to
+party distribution on a specific vote in this case. First, the case was
+relatively rapidly proposed and treated in the Storting during the early days of
+June 2021. The case in its entirety can be found at
+[here](https://stortinget.no/no/Saker-og-publikasjoner/Saker/Sak/?p=85196). You 
+will see the procedure steps from a government proposal, through work in the
+finance committee, to debate and decision. Lets say a particular proposal under
+the case caught our eye -- for instance, [vote number 61 from the Labor Party](https://stortinget.no/no/Saker-og-publikasjoner/Saker/Sak/Voteringsoversikt/?p=85196&dnid=1)
+asking the government to propose a plan for implementing the International Labor
+Organization's core conventions to the Human Rights Act
+(menneskerettighetsloven).
+
+As can be seen from the link to the case itself, we have an ID within the URL:
+"85196". This is the case ID. We can use the `get_case()`  function from
+`stortingscrape` to extract all votes  on this case:
+
+```{r covid_relief, eval=-1}
+covid_relief <- get_vote("85196")
+
+```
+
+We now have a data frame with 71 votes over 22 variables. The data structure for
+some selected variables, looks like this:
+
+```{r covid_struct}
+head(covid_relief[, c("case_id", "vote_id", "n_for", "n_against", "adopted")])
+```
+
+
+As we are interested in the result of proposal 217 from the Labor Party, we can
+extract the ID of this particular vote from our data:
+
+```{r covid_id, eval=FALSE}
+
+covid_relief$vote_id[which(grepl("217", covid_relief$vote_topic))]
+
+```
+
+To get the personal MP vote results for this particular vote, we can use the
+`get_result_vote()` function:^[I have not decided if data values
+should be translated or not. In this case, "for" is "for", "mot" is
+"against", and "ikke_tilstede" is "absent".}]
+
+
+```{r covid_relief_result, eval=-1}
+covid_relief_result <- get_result_vote("17689")
+
+head(covid_relief_result[, c("vote_id", "mp_id", "party_id", "vote")])
+
+```
+
+From looking only at the first six rows of the data, the readers who
+know the Norwegian political system will suspect that this vote was an
+opposition versus government vote, but we can also easily get the distribution
+of votes by party:
+
+```{r party_dist}
+
+table(covid_relief_result$party_id, 
+      covid_relief_result$vote) |>
+  addmargins()
+
+```
+
+As suspected, the vote was divided between the opposition (A, MDG, R, SP, and
+SV) and government parties (H, KrF, V, and FrP), and was not adopted by a thin
+margin of 2 votes. Of course, this is a minimal example, but I will highlight
+more methods for extracting multiple votes below.
+
+## Sequences of data extraction
+
+Below, I show two examples of sequentially extracting data of interest.
+
+### Example 1: From periods to interpellations
+
+Most of the mentioned IDs for Stortinget's data are not only extractable from
+the frontend web-page, but also from the back-end API. These data can be
+retrieved by various forms of parliamentary period or session specific functions
+in `stortingscrape`. In this section, I will show how to get all MPs for a
+specific parliamentary period and all interpellations for a parliamentary
+session.
+
+First, however, I note that IDs for periods and sessions are accessed through two
+core functions in the package:
+
+```{r per_sess, eval=-(1:2)}
+parl_periods <- get_parlperiods()
+parl_sessions <- get_parlsessions()
+
+tail(parl_periods[,c("id", "years")])
+tail(parl_sessions[,c("id", "years")])
+
+```
+
+The parliamentary period IDs is mainly used for MP data; Norwegian MPs are 
+elected for 4 year terms, with no constitutional arrangement for snap elections. 
+The MP data also stretch way further back in time than most of the other data in 
+the API:
+
+```{r period_id}
+
+parl_periods$id[nrow(parl_periods)]
+
+```
+
+
+```{r mps4549, eval=-1}
+mps4549 <- get_parlperiod_mps("1945-49")
+head(mps4549[, c("mp_id", "county_id", "party_id", "period_id")])
+```
+
+From these data, the way is short to extracting more rich data on individual
+MPs, as will be demonstrated below.
+
+Content data, however, use parliamentary session IDs rather than period IDs.
+These functions are standardized to function names as `get_session_*()`. For
+example, we can access all interpellations from the 2002-2003 session with the
+`get_session_questions()` function:
+
+```{r interp0203, eval=-1}
+interp0203 <- get_session_questions("2002-2003", q_type = "interpellasjoner")
+dim(interp0203)
+```
+
+Here, we have 22 interpellations over 26 different variables. Unfortunately, the
+API only gives the question and not the answer for the different types of
+question requests. Retrieval of question answers is a daunting task, because it
+is only accessible through the unstandardized `get_publication()`
+function.
+
+## Example 2: From cases to MP vote results
+
+Next, I showcase how to get go from cases in a section, through extracting a case 
+of interest and vote results, to vote matrices for that case.
+
+First, I extract all cases in the 2019-2020 session:
+
+```{r cases, eval=-1}
+cases <- get_session_cases("2019-2020")
+```
+
+The `cases` object will here contain all cases treated in the 2019-2020
+parliamentary session. Do note that `cases` is a list of 4 elements
+(`$root`, `$topics`, `$proposers`, and `$spokespersons`). In the following, I use
+the case ID in `$root` to access vote information for a case -- in this example
+the 48th row in the data:^[I will note that it is possible to extract
+vote information on all cases by either using the `apply()` family or
+control flow constructs available in R. However, in this case,
+calling the API 616 (`nrow(cases[["root"]])`) times, will require to pause
+between calls (with the {`good_manners` argument). This will increase
+running time substantially.]
+
+
+```{r get_vote}
+
+# The case titles are, unfortunately, not translated
+cases$root$title_short[48]
+```
+
+```{r get_vote2, eval=-1}
+vote <- get_vote(cases$root$id[48])
+
+vote[, c("case_id", "vote_id", 
+         "alternative_vote", 
+         "n_for", "n_absent", "n_against")]
+```
+
+The output gives us a data frame of three votes over 22 variables, whereof one is
+the vote ID for each of the votes. We can use this variable to retrieve rollcall
+data, using the `get_result_vote` function:
+
+```{r vote_result, eval=-1}
+vote_result <- lapply(vote$vote_id, get_result_vote, good_manners = 5)
+names(vote_result) <- vote$vote_id
+
+vote_result <- do.call(rbind, vote_result)
+head(vote_result[, 3:ncol(vote_result)])
+
+```
+
+And make an overall proportion table over party distribution for the three votes:
+
+```{r votetab, eval=FALSE}
+table(vote_result$vote, vote_result$party_id,
+      dnn = c("Vote result", "Vote ID")) |>
+  prop.table(margin = 2) |>
+  round(digits = 2)
+
+```
+
+# Summary {#sec:summary}
+
+In this vignette, I have presented the philosophy, scope, usage, and workflow of the 
+`stortingscrape` package for R. In sum, `stortingscrape` makes retrieving data 
+from the Norwegian parliament (*Stortinget*) more accessible through the back-end 
+API ([data.stortinget.no](https://data.stortinget.no)). One core philosophy of 
+the package is to let the user tailor the data to ones needs, while at the same 
+time extracting minimal overlapping data. The scope of the package ranges from 
+general data on the parliament itself (rules, session info, committees, etc) 
+to data on the parties, bibliographies of the MPs, questions, hearings, debates, 
+votes, and more.
+
+<!-- # Computational details -->
+
+
+
+
+# List of functions {#app:functions}
+
+A list of all functions and their description can be found in the package
+documentation within R or from [github](https://martigso.github.io/stortingscrape/functions.html).
+
+# Bibliography
+
+<font size=3>
+<div id="refs"></div>
+</font>
