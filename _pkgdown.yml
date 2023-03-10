@@ -1,3 +1,5 @@
+development:
+    mode: auto
 url: https://martigso.github.io/stortingscrape/
 template:
   bootstrap: 5
