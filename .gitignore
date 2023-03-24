@@ -1,15 +1,16 @@
 # R stuff
+.Rproj.user
 .Rhistory
 .Rproj.user/*
 ./R/tests
 ./src/r/tests
 .Rbuildignore
+.httr-oauth
+.DS_Store
 
 # Data files
 *.csv
 *.xml
-.Rproj.user
-*.tex
 
 # Unpushed Scripts
 other_scripts/*
@@ -22,3 +23,7 @@ inst/doc
 docs/
 pkgdown/
 docs
+*.tex
+
+
+
