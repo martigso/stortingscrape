@@ -31,7 +31,7 @@
 #' head(sample_text)
 #' }
 
-#' @import stringr dplyr
+#' @import stringr
 #' 
 #' @export
 
@@ -58,32 +58,34 @@ read_obt <- function(file = NA){
   obt_struct <- lapply(obt_split, function(x){
     
     # Extracting "as read" token
-    token <- x[1] %>% 
-      str_remove("\\<word\\>") %>% 
+    token <- x[1] |> 
+      str_remove("\\<word\\>") |>
       str_remove("\\<\\/word\\>")
     
     # Extracting lowercase "as read" token
-    lwr <- x[2] %>% 
+    lwr <- x[2] |>
       str_remove_all('\\"|\\>|\\<')
     
     # Extracting lemmatized token
-    lemma <- x[3] %>% 
-      str_trim() %>% 
-      str_extract_all('\\"(.*)\\"') %>% 
+    lemma <- x[3] |>
+      str_trim() |> 
+      str_extract_all('\\"(.*)\\"') |>
       str_remove_all('\\"')
     
     # Extracting morphological tags
-    morph <- unlist(x[3] %>% str_extract_all('\\"\\s(.*)$')) %>% 
-      str_remove('\\"') %>% 
+    morph <- x[3] |>
+      str_extract_all('\\"\\s(.*)$') |>
+      unlist() |>
+      str_remove('\\"') |> 
       str_trim()
-    
+
     # Extracting parts of speech
-    pos <- morph %>% 
+    pos <- morph |>
       str_extract("([a-z]+\\-*)+")
     
     # Excluding PoS from morph
-    morph <- morph %>% 
-      str_remove("([a-z]+\\-*)+") %>% 
+    morph <- morph |>
+      str_remove("([a-z]+\\-*)+") |> 
       str_trim()
     
     tmp <- data.frame(token,
@@ -104,18 +106,19 @@ read_obt <- function(file = NA){
   # Looping over all rows, giving a new sentence when the "$." 
   # pattern is found in the lemma variable.
   for(i in 2:nrow(obt_struct)){
-    obt_struct$sentence[i] <- ifelse(obt_struct$lemma[i] == "$.",
+    obt_struct$sentence[i] <- ifelse(obt_struct$lemma[i-1] == "$.",
                                      obt_struct$sentence[i-1] + 1, 
                                      obt_struct$sentence[i-1])
   }
   
-  # Lagging the sentence variable, making the first token of a sentence also
-  # be the first $sentence count
-  obt_struct$sentence <- lag(obt_struct$sentence, default = 1)
   
+
   # Making a token index variable for each sentence
-  obt_struct <- obt_struct %>% group_by(.data$sentence) %>% 
-    mutate(index = 1:length(.data$sentence))
+  obt_struct$index <- by(obt_struct, list(obt_struct$sentence), function(x){
+    x$sentence |>
+      length() |>
+      seq(from = 1, to = _, by = 1)
+  }) |> unlist()
   
   # Reordering variables
   obt_struct <- obt_struct[, c("sentence", 
