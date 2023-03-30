@@ -1,5 +1,5 @@
 
-# stortingscrape <img src="man/figures/logo.png" align="right" height="100"/>
+# stortingscrape <img src="man/figures/stortingscrape.png" align="right" width="120"/>
 
 <!-- badges: start -->
 
