@@ -1,4 +1,4 @@
-# stortingscrape (development version)
+# stortingscrape 0.1.4
 
 # stortingscrape 0.1.3
 
