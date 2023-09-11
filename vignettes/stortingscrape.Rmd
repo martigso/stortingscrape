@@ -415,9 +415,6 @@ votes, and more.
 
 <!-- # Computational details -->
 
-
-
-
 # List of functions {#app:functions}
 
 A list of all functions and their description can be found in the package

@@ -29,43 +29,62 @@ data.stortinget.no API.
 
 ## Installation
 
-The package can be installed either by cloning this repository and
-building the package in R or by installing via the
-`devtools::install_github()` function:
+### CRAN (stable version)
+
+The latest stable version of the `stortingscrape` package can be
+installed from by running CRAN:
+
+``` r
+install.packages("stortingscrape")
+```
+
+### Github (development version)
+
+The development version of the package can be installed either by
+cloning this repository and building the package in R or by installing
+via the `devtools::install_github()` function:
 
 ``` r
 devtools::install_github("martigso/stortingscrape")
 library(stortingscrape)
 ```
 
-## Usage example
+## Usage examples
 
 Request all interpellations for a parliamentary session:
 
 ``` r
-sessions <- get_parlsessions()
-qsesh <- get_session_questions(sessions$id[9], q_type = "interpellasjoner")
+library(stortingscrape)
 
-library(pbmcapply) # for progress bar. never use paralell on scraping
+parl_sessions |> # sessions data are built into the package
+  head()         # but can also be retrieved with `get_parlsessions()`
 
-int1213 <- pbmclapply(qsesh$id, function(x){
 
-  get_question(x, good_manners = 2)
+qsesh <- get_session_questions(parl_sessions$id[9], q_type = "interpellasjoner")
 
-}, mc.cores = 1) # do not increase number of cores!
+for(i in qsesh$id) {
+  
+  message("Getting ", i)
+  
+  int1213[[i]] <- get_question(i, good_manners = 2)
+
+}
 
 int1213 <- do.call(rbind, int1213)
+
+head(int1213)
 ```
 
 Get biographies of all MPs for a given parliamentary period (will take
-\~30min to run):
+~30min to run):
 
 ``` r
-parl_periods <- get_parlperiods()
+parl_periods # parliamentary periods (4 years) are built into the package,
+             # but can also be retrieved with `get_parlperiods()`
 
 mps <- get_parlperiod_mps(parl_periods$id[1], substitute = TRUE)
 
-mps_bios <- pbmclapply(mps$id, function(x) get_mp_bio(x, good_manners = 2), mc.cores = 1) # do not increase number of cores!
+mps_bios <- lapply(mps$mp_id, get_mp_bio, good_manners = 2)
 
 # Expand by all periods the MP has been in parliament
 mps_periods <- lapply(mps_bios, function(x){
@@ -93,11 +112,9 @@ mps_positions <- do.call(rbind, mps_positions)
 ## Data description
 
 The data is described in detail in the [API of
-Stortinget](https://data.stortinget.no/dokumentasjon-og-hjelp/). The
-package will implement English translations of this documentation in the
-future.
+Stortinget](https://data.stortinget.no/dokumentasjon-og-hjelp/).
 
-## List of functions currently implemented
+## Functions
 
 [You can find a list of all functions
 here.](https://martigso.github.io/stortingscrape/functions.html)

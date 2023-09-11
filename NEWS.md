@@ -1,5 +1,9 @@
 # stortingscrape 0.1.4
 
+* Fixed some typos in the readme
+* Reworked the `read_obt()` function for the package not to rely on `dplyr`
+* Added a hex badge logo. Extremely important.
+
 # stortingscrape 0.1.3
 
 * IMPORTANT: Fixed an issue with `get_mp_bio()`, which broke after [an API update](https://data.stortinget.no/nyhetsoversikt/endringer-i-biografidata/).
