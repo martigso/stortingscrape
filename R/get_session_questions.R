@@ -58,18 +58,30 @@
 #' 
 #' @export
 #' 
-get_session_questions <- function(sessionid = NA, q_type = NA ,status = NA, good_manners = 0){
+get_session_questions <- function(sessionid = NA, 
+                                  q_type = NA, 
+                                  status = NA, 
+                                  good_manners = 0){
   
   if(is.na(status) == TRUE){
     
-    url <- paste0("https://data.stortinget.no/eksport/", q_type, "?sesjonid=", sessionid)  
+    url <- paste0("https://data.stortinget.no/eksport/", 
+                  q_type, 
+                  "?sesjonid=", 
+                  sessionid)  
+    
     base <- GET(url)
     
     resp <- http_type(base)
-    if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+    if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), 
+                                call. = FALSE)
     
-    status <- http_status(base)
-    if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+    httpstat <- http_status(base)
+    if(httpstat$category != "Success") stop(paste0("Response of ", 
+                                                   url, 
+                                                   " returned as '", 
+                                                   httpstat$message, "'"), 
+                                            call. = FALSE)
     
   
   } else if(status %in% c("til_behandling", "trukket", "bortfalt", "alle") == FALSE){
@@ -84,8 +96,8 @@ get_session_questions <- function(sessionid = NA, q_type = NA ,status = NA, good
     resp <- http_type(base)
     if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
     
-    status <- http_status(base)
-    if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+    httpstat <- http_status(base)
+    if(httpstat$category != "Success") stop(paste0("Response of ", url, " returned as '", httpstat$message, "'"), call. = FALSE)
     
   }
   
@@ -94,30 +106,35 @@ get_session_questions <- function(sessionid = NA, q_type = NA ,status = NA, good
   
   message(paste("Structuring data for", sessionid))
   tmp2 <- data.frame(
-    response_date = tmp %>% html_elements("sporsmal_liste > sporsmal > respons_dato_tid") %>% html_text(),
-    version = tmp %>% html_elements("sporsmal_liste > sporsmal > versjon") %>% html_text(),
-    answ_by_id = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_av > id") %>% html_text(),
-    answ_by_minister_id = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_av_minister_id") %>% html_text(),
-    answ_by_minister_title = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_av_minister_tittel") %>% html_text(),
-    answ_date = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_dato") %>% html_text(),
-    answ_on_belhalf_of = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_pa_vegne_av") %>% html_text(),
-    answ_on_belhalf_of_minister_id = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_pa_vegne_av_minister_id") %>% html_text(),
+    response_date                     = tmp %>% html_elements("sporsmal_liste > sporsmal > respons_dato_tid") %>% html_text(),
+    version                           = tmp %>% html_elements("sporsmal_liste > sporsmal > versjon") %>% html_text(),
+    answ_by_minister_id               = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_av_minister_id") %>% html_text(),
+    answ_by_minister_title            = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_av_minister_tittel") %>% html_text(),
+    answ_date                         = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_dato") %>% html_text(),
+    answ_on_belhalf_of                = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_pa_vegne_av") %>% html_text(),
+    answ_on_belhalf_of_minister_id    = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_pa_vegne_av_minister_id") %>% html_text(),
     answ_on_belhalf_of_minister_title = tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_pa_vegne_av_minister_tittel") %>% html_text(),
-    moved_to = tmp %>% html_elements("sporsmal_liste > sporsmal > flyttet_til") %>% html_text(),
-    id = tmp %>% html_elements("sporsmal_liste > sporsmal > id") %>% html_text(),
-    correct_person_minister_id = tmp %>% html_elements("sporsmal_liste > sporsmal > rette_vedkommende_minister_id") %>% html_text(),
-    correct_person_minister_title = tmp %>% html_elements("sporsmal_liste > sporsmal > rette_vedkommende_minister_tittel") %>% html_text(),
-    sendt_date = tmp %>% html_elements("sporsmal_liste > sporsmal > sendt_dato") %>% html_text(),
-    session_id = tmp %>% html_elements("sporsmal_liste > sporsmal > sesjon_id") %>% html_text(),
-    question_from_id = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_fra > id") %>% html_text(), # get more info with get_mp()
-    question_number = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_nummer") %>% html_text(),
-    question_to_id = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til > id") %>% html_text(),
-    question_to_minister_id = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til_minister_id") %>% html_text(),
-    question_to_minister_title = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til_minister_tittel") %>% html_text(),
-    status = tmp %>% html_elements("sporsmal_liste > sporsmal > status") %>% html_text(),
-    title = tmp %>% html_elements("sporsmal_liste > sporsmal > tittel") %>% html_text(),
-    type = tmp %>% html_elements("sporsmal_liste > sporsmal > type") %>% html_text()
+    moved_to                          = tmp %>% html_elements("sporsmal_liste > sporsmal > flyttet_til") %>% html_text(),
+    id                                = tmp %>% html_elements("sporsmal_liste > sporsmal > id") %>% html_text(),
+    correct_person_minister_id        = tmp %>% html_elements("sporsmal_liste > sporsmal > rette_vedkommende_minister_id") %>% html_text(),
+    correct_person_minister_title     = tmp %>% html_elements("sporsmal_liste > sporsmal > rette_vedkommende_minister_tittel") %>% html_text(),
+    sendt_date                        = tmp %>% html_elements("sporsmal_liste > sporsmal > sendt_dato") %>% html_text(),
+    session_id                        = tmp %>% html_elements("sporsmal_liste > sporsmal > sesjon_id") %>% html_text(),
+    question_from_id                  = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_fra > id") %>% html_text(), # get more info with get_mp()
+    question_number                   = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_nummer") %>% html_text(),
+    question_to_id                    = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til > id") %>% html_text(),
+    question_to_minister_id           = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til_minister_id") %>% html_text(),
+    question_to_minister_title        = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til_minister_tittel") %>% html_text(),
+    status                            = tmp %>% html_elements("sporsmal_liste > sporsmal > status") %>% html_text(),
+    title                             = tmp %>% html_elements("sporsmal_liste > sporsmal > tittel") %>% html_text(),
+    type                              = tmp %>% html_elements("sporsmal_liste > sporsmal > type") %>% html_text()
   )
+  
+  tmp2$answ_by_id <- sapply((tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_av")), function(x){
+    tmp3 <- x %>% html_elements("id") %>% html_text()
+    tmp3 <- ifelse(identical(character(), tmp3), NA, tmp3)
+    tmp3
+  })
   
   tmp2$topic_ids <- sapply((tmp %>% html_elements("sporsmal_liste > sporsmal > emne_liste")), function(x){
     paste((x %>% html_elements("id") %>% html_text()), collapse = "/")
@@ -132,6 +149,7 @@ get_session_questions <- function(sessionid = NA, q_type = NA ,status = NA, good
     tmp3 <- ifelse(identical(character(), tmp3), NA, tmp3)
     tmp3
   })
+  
   
   tmp2 <- tmp2[, c(
     "response_date",
@@ -166,4 +184,3 @@ get_session_questions <- function(sessionid = NA, q_type = NA ,status = NA, good
   return(tmp2)
   
 }
-
