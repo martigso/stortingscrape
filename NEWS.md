@@ -3,6 +3,8 @@
 * Fixed some typos in the readme
 * Reworked the `read_obt()` function for the package not to rely on `dplyr`
 * Added a hex badge logo. Extremely important.
+* **IMPORTANT**: Fixed a bug in `get_session_questions()`, where the presence of unanswered questions returned an error instead of `NA`
+* **IMPORTANT**: Removed a variable from `get_vote()` because it suddenly disappeared from the API.
 
 # stortingscrape 0.1.3
 
