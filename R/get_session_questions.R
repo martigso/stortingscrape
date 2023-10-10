@@ -122,7 +122,7 @@ get_session_questions <- function(sessionid = NA,
     session_id                        = tmp %>% html_elements("sporsmal_liste > sporsmal > sesjon_id") %>% html_text(),
     question_from_id                  = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_fra > id") %>% html_text(), # get more info with get_mp()
     question_number                   = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_nummer") %>% html_text(),
-    question_to_id                    = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til > id") %>% html_text(),
+    # question_to_id                    = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til > id") %>% html_text(),
     question_to_minister_id           = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til_minister_id") %>% html_text(),
     question_to_minister_title        = tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til_minister_tittel") %>% html_text(),
     status                            = tmp %>% html_elements("sporsmal_liste > sporsmal > status") %>% html_text(),
@@ -135,6 +135,13 @@ get_session_questions <- function(sessionid = NA,
     tmp3 <- ifelse(identical(character(), tmp3), NA, tmp3)
     tmp3
   })
+  
+  tmp2$question_to_id <- sapply((tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til")), function(x){
+    tmp3 <- x %>% html_elements("id") %>% html_text()
+    tmp3 <- ifelse(identical(character(), tmp3), NA, tmp3)
+    tmp3
+  })
+  
   
   tmp2$topic_ids <- sapply((tmp %>% html_elements("sporsmal_liste > sporsmal > emne_liste")), function(x){
     paste((x %>% html_elements("id") %>% html_text()), collapse = "/")
