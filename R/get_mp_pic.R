@@ -50,8 +50,10 @@ get_mp_pic <- function(mpid = NA, size = "middels",
   if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
   
   if(is.na(destfile) == TRUE & show_plot == TRUE){
-    p <- imager::load.image(url)
-    plot(p, labels = FALSE)
+    if(require("imager") == FALSE) stop("Package 'imager' required for plotting images")
+    require(imager, quietly = TRUE)
+    p <- load.image(url)
+    plot(p, axes = FALSE)
   }
   
   if(is.na(destfile) == TRUE & show_plot == FALSE){
@@ -61,7 +63,7 @@ get_mp_pic <- function(mpid = NA, size = "middels",
   if(is.na(destfile) == FALSE & show_plot == TRUE){
     download.file(url, destfile = destfile)
     p <- imager::load.image(destfile)
-    plot(p,)
+    plot(p, axes = FALSE)
   }
   
   if(is.na(destfile) == FALSE & show_plot == FALSE){
