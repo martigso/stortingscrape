@@ -71,13 +71,23 @@ get_result_vote <- function(voteid = NA, good_manners = 0){
       x %>% html_elements("fast_vara_for > id") %>% html_text()
     })
     
-    tmp2$permanent_sub_for <- unlist(sapply(sub_holder, function(x) ifelse(identical(x, character()), NA, x)))
+    tmp2$permanent_sub_for <- unlist(sapply(sub_holder, function(x) {
+      if(identical(x, character())) {
+       x <- NA 
+      }
+      x
+    }))
     
     sub_holder <- lapply(tmp %>% html_elements("representant_voteringsresultat"), function(x){
       x %>% html_elements("vara_for > id") %>% html_text()
     })
     
-    tmp2$sub_for <- unlist(sapply(sub_holder, function(x) ifelse(identical(x, character()), NA, x)))
+    tmp2$sub_for <- unlist(sapply(sub_holder, function(x) {
+      if(identical(x, character())) {
+        x <- NA 
+      }
+      x
+    }))
     
   } else {
     tmp2 <- data.frame(response_date = tmp %>% html_elements("voteringsresultat_oversikt > respons_dato_tid") %>% html_text(),

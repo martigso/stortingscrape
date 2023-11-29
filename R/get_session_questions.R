@@ -132,13 +132,17 @@ get_session_questions <- function(sessionid = NA,
   
   tmp2$answ_by_id <- sapply((tmp %>% html_elements("sporsmal_liste > sporsmal > besvart_av")), function(x){
     tmp3 <- x %>% html_elements("id") %>% html_text()
-    tmp3 <- ifelse(identical(character(), tmp3), NA, tmp3)
+    if(identical(character(), tmp3)) {
+      tmp3 <- NA
+    }
     tmp3
   })
   
   tmp2$question_to_id <- sapply((tmp %>% html_elements("sporsmal_liste > sporsmal > sporsmal_til")), function(x){
     tmp3 <- x %>% html_elements("id") %>% html_text()
-    tmp3 <- ifelse(identical(character(), tmp3), NA, tmp3)
+    if(identical(character(), tmp3)) {
+      tmp3 <- NA
+    }
     tmp3
   })
   
@@ -152,8 +156,13 @@ get_session_questions <- function(sessionid = NA,
   })
   
   tmp2$correct_person <- sapply((tmp %>% html_elements("sporsmal_liste > sporsmal > rette_vedkommende")), function(x){
+    
     tmp3 <- x %>% html_elements("id") %>% html_text()
-    tmp3 <- ifelse(identical(character(), tmp3), NA, tmp3)
+    
+    if(identical(character(), tmp3)) {
+      tmp3 <- NA
+    }
+    
     tmp3
   })
   

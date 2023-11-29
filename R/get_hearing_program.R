@@ -80,13 +80,22 @@ get_hearing_program <- function(hearingid = NA, good_manners = 0){
 
   
   if(identical(hearing_program_participants, list())){
+    
+    if(identical(hearing_program_date, character())) {
+      hearing_program_date <- NA
+    }
+    
+    if(identical(hearing_program_footnote, character())) {
+      hearing_program_footnote <- NA
+    }
+
     tmp2 <- data.frame(response_date,
                        version,
                        hearing_id,
                        hearing_type,
                        committee_id,
-                       hearing_program_date = ifelse(identical(hearing_program_date, character()), NA, hearing_program_date),
-                       hearing_program_footnote = ifelse(identical(hearing_program_footnote, character()), NA, hearing_program_footnote),
+                       hearing_program_date,
+                       hearing_program_footnote,
                        order_number = NA,
                        text = NA,
                        time_indication = NA,

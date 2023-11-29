@@ -84,6 +84,13 @@ get_question <- function(questionid = NA, good_manners = 0){
   
   tmp <- read_html(base)
   
+  if(identical((tmp %>% html_elements("rette_vedkommende > id") %>% html_text()), character())) {
+    correct_person_id <- NA
+  } else {
+    correct_person_id <- tmp %>% html_elements("rette_vedkommende > id") %>% html_text()
+  }
+         
+  
   tmp2 <- data.frame(
     response_date = tmp %>% html_elements("besvart_av > respons_dato_tid") %>% html_text(),
     version = tmp %>% html_elements("besvart_av > versjon") %>% html_text(),
@@ -98,8 +105,7 @@ get_question <- function(questionid = NA, good_manners = 0){
     agenda_number = tmp %>% html_elements("dagsorden_saknummer") %>% html_text(),
     moved_to = tmp %>% html_elements("flyttet_til") %>% html_text(),
     id = tmp %>% html_elements("detaljert_sporsmal > id") %>% html_text(),
-    correct_person_id = ifelse(identical((tmp %>% html_elements("rette_vedkommende > id") %>% html_text()), character()), NA,
-                               tmp %>% html_elements("rette_vedkommende > id") %>% html_text()),
+    correct_person_id,
     correct_person_minister_id = tmp %>% html_elements("rette_vedkommende_minister_id") %>% html_text(),
     correct_person_minister_title = tmp %>% html_elements("rette_vedkommende_minister_tittel") %>% html_text(),
     sendt_date = tmp %>% html_elements("sendt_dato") %>% html_text(),
