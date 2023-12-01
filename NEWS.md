@@ -5,6 +5,7 @@
 * Added a hex badge logo. Extremely important.
 * **IMPORTANT**: Fixed a bug in `get_session_questions()`, where the presence of unanswered questions returned an error instead of `NA`
 * **IMPORTANT**: Removed a variable from `get_vote()` because it suddenly disappeared from the API.
+* **IMPORTANT**: Fixed an issue where `ifelse()` lines returned only one element when it was supposed to return several due to someone not realizing the vectorization rules of the function. Affected functions were: `get_case()`, `get_hearing_program()`, `get_question()`, `get_result_vote()`, `get_session_cases()`, and `get_session_questions()`. Only `get_case()` was significant, in that it listed all bill sponsors as being from the same party.
 
 # stortingscrape 0.1.3
 
