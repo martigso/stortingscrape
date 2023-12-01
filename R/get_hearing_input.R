@@ -33,7 +33,7 @@
 #' get_hearing_input(hearingid = 10004166)
 #' }
 #' 
-#' @import rvest parallel
+#' @import httr2 rvest parallel
 #' @export
 #' 
 

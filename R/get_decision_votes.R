@@ -31,7 +31,7 @@
 #' decision
 #' }
 #'  
-#' @import httr rvest
+#' @import httr2 rvest
 #' 
 #' @export
 #' 

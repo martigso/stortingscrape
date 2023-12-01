@@ -1,17 +1,17 @@
 # Functions to convert to httr2
 
 - [x] data.R
-- [ ] get_all_committees.R
-- [ ] get_all_parties.R
-- [ ] get_case.R
-- [ ] get_counties.R
-- [ ] get_decision_votes.R
-- [ ] get_hearing_input.R
-- [ ] get_hearing_program.R
-- [ ] get_meeting_agenda.R
-- [ ] get_mp.R
-- [ ] get_mp_bio.R
+- [x] get_all_committees.R
+- [x] get_all_parties.R
+- [x] get_case.R
+- [x] get_counties.R
+- [x] get_decision_votes.R
+- [x] get_hearing_input.R
+- [x] get_hearing_program.R
+- [x] get_meeting_agenda.R
+- [x] get_mp_bio.R
 - [ ] get_mp_pic.R
+- [ ] get_mp.R
 - [ ] get_parlperiod_mps.R
 - [ ] get_parlperiod_presidency.R
 - [ ] get_parlperiods.R

@@ -42,7 +42,7 @@
 #' meeting_agenda
 #' }
 #'  
-#' @import httr rvest
+#' @import httr2 rvest
 #' 
 #' @export
 #' 
