@@ -152,6 +152,12 @@ get_case <- function(caseid = NA, good_manners = 0){
     resp_body_html(check_type = F) 
   
   
+  if(identical(tmp %>% html_elements("komite > id") %>% html_text(), character())) {
+    committee_id <- NA
+  } else {
+    committee_id <- tmp %>% html_elements("komite > id") %>% html_text()
+  }
+  
   tmp2 <- list(root = data.frame(response_date = tmp %>% html_elements("detaljert_sak > respons_dato_tid") %>% html_text(),
                                  version = tmp %>% html_elements("detaljert_sak > versjon") %>% html_text(),
                                  document_group = tmp %>% html_elements("detaljert_sak > dokumentgruppe") %>% html_text(),
@@ -159,8 +165,7 @@ get_case <- function(caseid = NA, good_manners = 0){
                                  reference = tmp %>% html_elements("henvisning") %>% html_text(), 
                                  id = tmp %>% html_elements("detaljert_sak > id") %>% html_text(),
                                  req_text = tmp %>% html_elements("innstillingstekst") %>% html_text(),
-                                 committee_id = ifelse(identical(tmp %>% html_elements("komite > id") %>% html_text(), character()), "",
-                                                       tmp %>% html_elements("komite > id") %>% html_text()),
+                                 committee_id = committee_id,
                                  title_short = tmp %>% html_elements("korttittel") %>% html_text(),
                                  decision_short = tmp %>% html_elements("kortvedtak") %>% html_text(),
                                  parenthesis_text = tmp %>% html_elements("parentestekst") %>% html_text(),
