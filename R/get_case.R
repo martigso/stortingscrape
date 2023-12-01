@@ -109,7 +109,7 @@
 #' cases_keywords
 #' 
 #' }
-#' @import httr rvest
+#' @import httr2 rvest
 #' 
 #' @export
 get_case <- function(caseid = NA, good_manners = 0){
@@ -149,7 +149,7 @@ get_case <- function(caseid = NA, good_manners = 0){
   }
   
   tmp <- resp |> 
-    resp_body_html(check_type = F) 
+    resp_body_html(check_type = F, encoding = "utf-8") 
   
   
   if(identical(tmp %>% html_elements("komite > id") %>% html_text(), character())) {
