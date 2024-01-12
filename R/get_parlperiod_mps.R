@@ -43,40 +43,62 @@
 #' 
 #' }
 #' 
-#' @import httr rvest
+#' @import httr2 rvest
 #' @export
 #' 
 get_parlperiod_mps <- function(periodid = NA, substitute = FALSE, good_manners = 0){
   
   
   if(substitute == FALSE){
-    url <- paste0("https://data.stortinget.no/eksport/representanter?stortingsperiodeid=", periodid)
+    url <- paste0(
+      "https://data.stortinget.no/eksport/representanter?stortingsperiodeid=", 
+      periodid
+      )
     
-    base <- GET(url)
-    
-    resp <- http_type(base)
-    if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
-    
-    status <- http_status(base)
-    if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
-    
-    tmp <- read_html(base)
-  
     
   } else if(substitute == TRUE){
-    url <- paste0("https://data.stortinget.no/eksport/representanter?stortingsperiodeid=", periodid, "&vararepresentanter=true")
-    
-    base <- GET(url)
-    
-    resp <- http_type(base)
-    if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
-    
-    status <- http_status(base)
-    if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
-    
-    tmp <- read_html(base)
-    
+    url <- paste0(
+      "https://data.stortinget.no/eksport/representanter?stortingsperiodeid=", 
+      periodid, 
+      "&vararepresentanter=true"
+      )
+
   }
+  
+  base <- request(url)
+  
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
+  
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
+  
+  if(resp_content_type(resp) != "text/xml") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'text/xml'."), 
+      call. = FALSE) 
+  }
+  
+  tmp <- resp |> 
+    resp_body_html(check_type = F, encoding = "utf-8") 
   
   tmp <- data.frame(response_date = tmp %>% html_elements("representanter_liste > representant > respons_dato_tid") %>% html_text(),
                     version = tmp %>% html_elements("representanter_liste > representant > versjon") %>% html_text(),
@@ -91,7 +113,7 @@ get_parlperiod_mps <- function(periodid = NA, substitute = FALSE, good_manners =
                     substitute_mp = tmp %>% html_elements("representanter_liste > representant > vara_representant") %>% html_text(),
                     period_id = tmp %>% html_elements("stortingsperiode_id") %>% html_text())
   
-  message(paste(periodid, "done"))
+  message(periodid, " done")
   
   Sys.sleep(good_manners)
   

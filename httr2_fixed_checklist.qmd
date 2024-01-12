@@ -14,11 +14,11 @@ format: gfm
 - [x] get_hearing_program.R
 - [x] get_meeting_agenda.R
 - [x] get_mp_bio.R
-- [ ] get_mp_pic.R
-- [ ] get_mp.R
-- [ ] get_parlperiod_mps.R
-- [ ] get_parlperiod_presidency.R
-- [ ] get_parlperiods.R
+- [x] get_mp_pic.R
+- [x] get_mp.R
+- [x] get_parlperiod_mps.R
+- [x] get_parlperiod_presidency.R
+- [x] get_parlperiods.R
 - [ ] get_parlsessions.R
 - [ ] get_proceedings.R
 - [ ] get_proposal_votes.R
