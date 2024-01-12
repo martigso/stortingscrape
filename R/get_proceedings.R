@@ -39,7 +39,7 @@
 #' 
 #' }
 #' 
-#' @import rvest
+#' @import rvest httr2
 #' @export
 #' 
 
