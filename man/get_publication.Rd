@@ -24,7 +24,6 @@ the returning object is in a raw html_document format, best manipulated with htm
 pub <- get_publication("refs-201819-03-06")
 (pub \%>\% html_elements("replikk"))[1] \%>\% html_text()
 }
-
  
 }
 \seealso{
