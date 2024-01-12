@@ -19,7 +19,7 @@ format: gfm
 - [x] get_parlperiod_mps.R
 - [x] get_parlperiod_presidency.R
 - [x] get_parlperiods.R
-- [ ] get_parlsessions.R
+- [x] get_parlsessions.R
 - [ ] get_proceedings.R
 - [ ] get_proposal_votes.R
 - [ ] get_publication.R

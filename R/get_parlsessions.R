@@ -36,24 +36,49 @@ get_parlsessions <- function(){
   
   url <- "https://data.stortinget.no/eksport/sesjoner"
   
-  base <- GET(url)
+  base <- request(url)
   
-  resp <- http_type(base)
-  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
   
-  status <- http_status(base)
-  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
   
-  tmp <- read_html(base)
+  if(resp_content_type(resp) != "text/xml") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'text/xml'."), 
+      call. = FALSE) 
+  }
+  
+  tmp <- resp |> 
+    resp_body_html(check_type = F, encoding = "utf-8") 
   
   tmp <- data.frame(response_date = tmp %>% html_elements("sesjoner_liste > sesjon > respons_dato_tid") %>% html_text(),
                     version = tmp %>% html_elements("sesjoner_liste > sesjon > versjon") %>% html_text(),
                     from = tmp %>% html_elements("sesjoner_liste > sesjon > fra") %>% html_text(),
                     id = tmp %>% html_elements("sesjoner_liste > sesjon > id") %>% html_text(),
                     to = tmp %>% html_elements("sesjoner_liste > sesjon > til") %>% html_text())
+
   tmp$years <- paste(format(as.Date(tmp$from), "%Y"), format(as.Date(tmp$to), "%Y"), sep = "-")
   
   return(tmp)
-  
   
 }
