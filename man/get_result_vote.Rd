@@ -38,7 +38,7 @@ table(v$vote)
 p <- get_proposal_votes(12345)
 
 stringr::str_replace_all(p$proposal_vote$proposal_text, 
-                         "\\\\<(.*)\\\\>|\\\\r\\\\n", "")  \%>\% 
+                         "\\\\<(.*)\\\\>|\\\\r\\\\n", "")  |> 
   stringr::str_trim()
 }
  

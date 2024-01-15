@@ -37,7 +37,7 @@
 #' }
 #' 
 #' 
-#' @import rvest httr
+#' @import rvest httr2
 #' @export
 #' 
 
@@ -47,30 +47,55 @@ get_hearing_program <- function(hearingid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/horingsprogram?horingid=", hearingid)
   
-  base <- GET(url)
+  base <- request(url)
   
-  resp <- http_type(base)
-  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
   
-  status <- http_status(base)
-  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
   
-  tmp <- read_html(base)
+  if(resp_content_type(resp) != "text/xml") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'text/xml'."), 
+      call. = FALSE) 
+  }
   
-  response_date <- tmp %>% html_elements("horingsprogram_oversikt > respons_dato_tid") %>% html_text()
-  version <- tmp %>% html_elements("horingsprogram_oversikt > versjon") %>% html_text()
-  hearing_id <- tmp %>% html_elements("horingsprogram_oversikt > horing_id") %>% html_text()
-  hearing_type <- tmp %>% html_elements("horingsprogram_oversikt > horing_type") %>% html_text()
-  committee_id <- tmp %>% html_elements("komite > id") %>% html_text()
-  hearing_program_date <- tmp %>% html_elements("horingsprogram > dato") %>% html_text()
-  hearing_program_footnote <- tmp %>% html_elements("horingsprogram > fotnote") %>% html_text()
+  tmp <- resp |> 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
+  
+  response_date <- tmp |> html_elements("horingsprogram_oversikt > respons_dato_tid") |> html_text()
+  version <- tmp |> html_elements("horingsprogram_oversikt > versjon") |> html_text()
+  hearing_id <- tmp |> html_elements("horingsprogram_oversikt > horing_id") |> html_text()
+  hearing_type <- tmp |> html_elements("horingsprogram_oversikt > horing_type") |> html_text()
+  committee_id <- tmp |> html_elements("komite > id") |> html_text()
+  hearing_program_date <- tmp |> html_elements("horingsprogram > dato") |> html_text()
+  hearing_program_footnote <- tmp |> html_elements("horingsprogram > fotnote") |> html_text()
     
   
-  hearing_program_participants <- lapply(tmp %>% html_elements("horingsprogram_element_liste"), function(x){
+  hearing_program_participants <- lapply(tmp |> html_elements("horingsprogram_element_liste"), function(x){
     
-    order_number <- x %>% html_elements("horingsprogram_element > rekkefolge_nummer") %>% html_text()
-    text <- x %>% html_elements("horingsprogram_element > tekst") %>% html_text()
-    time_indication <- x %>% html_elements("horingsprogram_element > tidsangivelse") %>% html_text()
+    order_number <- x |> html_elements("horingsprogram_element > rekkefolge_nummer") |> html_text()
+    text <- x |> html_elements("horingsprogram_element > tekst") |> html_text()
+    time_indication <- x |> html_elements("horingsprogram_element > tidsangivelse") |> html_text()
     
     data.frame(order_number = order_number[2:length(order_number)],
                text = text[2:length(text)],

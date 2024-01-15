@@ -32,32 +32,57 @@
 #' 
 #' }
 #' 
-#' @import rvest
+#' @import rvest httr2
 #' @export
 #' 
 get_parlperiod_presidency <- function(periodid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/presidentskapet?stortingsperiodeid=", periodid)
   
-  base <- GET(url)
+  base <- request(url)
   
-  resp <- http_type(base)
-  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
   
-  status <- http_status(base)
-  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
   
-  tmp <- read_html(base)
+  if(resp_content_type(resp) != "text/xml") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'text/xml'."), 
+      call. = FALSE) 
+  }
   
-  tmp <- data.frame(response_date = tmp %>% html_elements("presidentskapet_oversikt > respons_dato_tid") %>% html_text(),
-                    version = tmp %>% html_elements("presidentskapet_oversikt > versjon") %>% html_text(),
-                    last_name = tmp %>% html_elements("medlem > etternavn") %>% html_text(),
-                    first_name = tmp %>% html_elements("medlem > fornavn") %>% html_text(),
-                    from_date = tmp %>% html_elements("medlem > fra_dato") %>% html_text(),
-                    party_id = tmp %>% html_elements("medlem > parti_id") %>% html_text(),
-                    person_id = tmp %>% html_elements("medlem > person_id") %>% html_text(),
-                    to_date = tmp %>% html_elements("medlem > til_dato") %>% html_text(),
-                    position = tmp %>% html_elements("medlem > verv") %>% html_text())
+  tmp <- resp |> 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
+  
+  tmp <- data.frame(response_date = tmp |> html_elements("presidentskapet_oversikt > respons_dato_tid") |> html_text(),
+                    version = tmp |> html_elements("presidentskapet_oversikt > versjon") |> html_text(),
+                    last_name = tmp |> html_elements("medlem > etternavn") |> html_text(),
+                    first_name = tmp |> html_elements("medlem > fornavn") |> html_text(),
+                    from_date = tmp |> html_elements("medlem > fra_dato") |> html_text(),
+                    party_id = tmp |> html_elements("medlem > parti_id") |> html_text(),
+                    person_id = tmp |> html_elements("medlem > person_id") |> html_text(),
+                    to_date = tmp |> html_elements("medlem > til_dato") |> html_text(),
+                    position = tmp |> html_elements("medlem > verv") |> html_text())
   
   Sys.sleep(good_manners)
   

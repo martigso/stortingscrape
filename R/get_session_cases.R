@@ -50,11 +50,12 @@
 #'    | **party_id**  | Party id of proposing MP                         |
 #'    | **rep_sub**   | Logical indicator for whether MP is a substitute |
 #'    
-#' 4. **$spokespersons** (named list by case id)
+#' 4. **$spokespersons** (data frame by case id)
 #' 
 #'    |               |                                                  |
 #'    |:--------------|:-------------------------------------------------|
-#'    | **rep_id**    | Spokesperson MP id                               |
+#'    | **case_id**   | Case id                                          |
+#'    | **rep_id**    | Spokesperson(s) MP id for the case               |
 #'    | **county_id** | County id of spokesperson MP                     |
 #'    | **party_id**  | Party id of spokesperson MP                      |
 #'    | **rep_sub**   | Logical indicator for whether MP is a substitute |
@@ -71,54 +72,79 @@
 #' head(s0506)
 #' }
 #' 
-#' @import rvest parallel httr
+#' @import rvest parallel httr2
 #' @export
 #' 
 get_session_cases <- function(sessionid = NA, good_manners = 0, cores = 1){
   
   url <- paste0("https://data.stortinget.no/eksport/saker?sesjonid=", sessionid)
   
-  base <- GET(url)
+  base <- request(url)
   
-  resp <- http_type(base)
-  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
   
-  status <- http_status(base)
-  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
   
-  tmp <- read_html(base)
+  if(resp_content_type(resp) != "text/xml") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'text/xml'."), 
+      call. = FALSE) 
+  }
   
-  tmp2 <- list(root = data.frame(response_date      = tmp %>% html_elements("saker_oversikt > saker_liste > sak > respons_dato_tid") %>% html_text(),
-                                 version            = tmp %>% html_elements("saker_oversikt > saker_liste > sak > versjon") %>% html_text(),
-                                 treated_session_id = tmp %>% html_elements("saker_oversikt > saker_liste > sak > behandlet_sesjon_id") %>% html_text(),
-                                 document_group     = tmp %>% html_elements("saker_oversikt > saker_liste > sak > dokumentgruppe") %>% html_text(),
-                                 reference          = tmp %>% html_elements("saker_oversikt > saker_liste > sak > henvisning") %>% html_text(),
-                                 id                 = tmp %>% html_elements("saker_oversikt > saker_liste > sak > id") %>% html_text(),
-                                 com_req_id         = tmp %>% html_elements("saker_oversikt > saker_liste > sak > innstilling_id") %>% html_text(), 
-                                 com_req_code       = tmp %>% html_elements("saker_oversikt > saker_liste > sak > innstilling_kode") %>% html_text(),
-                                 title_short        = tmp %>% html_elements("saker_oversikt > saker_liste > sak > korttittel") %>% html_text(),
-                                 case_filed_id      = tmp %>% html_elements("saker_oversikt > saker_liste > sak > sak_fremmet_id") %>% html_text(),
-                                 last_update_date   = tmp %>% html_elements("saker_oversikt > saker_liste > sak > sist_oppdatert_dato") %>% html_text(),
-                                 status             = tmp %>% html_elements("saker_oversikt > saker_liste > sak > status") %>% html_text(),
-                                 title              = tmp %>% html_elements("saker_oversikt > saker_liste > sak > tittel") %>% html_text(),
-                                 type               = tmp %>% html_elements("saker_oversikt > saker_liste > sak > type") %>% html_text(),
-                                 session_id         = tmp %>% html_elements("saker_oversikt > sesjon_id") %>% html_text()))
+  tmp <- resp |> 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
+  
+  tmp2 <- list(root = data.frame(response_date      = tmp |> html_elements("saker_oversikt > saker_liste > sak > respons_dato_tid") |> html_text(),
+                                 version            = tmp |> html_elements("saker_oversikt > saker_liste > sak > versjon") |> html_text(),
+                                 treated_session_id = tmp |> html_elements("saker_oversikt > saker_liste > sak > behandlet_sesjon_id") |> html_text(),
+                                 document_group     = tmp |> html_elements("saker_oversikt > saker_liste > sak > dokumentgruppe") |> html_text(),
+                                 reference          = tmp |> html_elements("saker_oversikt > saker_liste > sak > henvisning") |> html_text(),
+                                 id                 = tmp |> html_elements("saker_oversikt > saker_liste > sak > id") |> html_text(),
+                                 com_req_id         = tmp |> html_elements("saker_oversikt > saker_liste > sak > innstilling_id") |> html_text(), 
+                                 com_req_code       = tmp |> html_elements("saker_oversikt > saker_liste > sak > innstilling_kode") |> html_text(),
+                                 title_short        = tmp |> html_elements("saker_oversikt > saker_liste > sak > korttittel") |> html_text(),
+                                 case_filed_id      = tmp |> html_elements("saker_oversikt > saker_liste > sak > sak_fremmet_id") |> html_text(),
+                                 last_update_date   = tmp |> html_elements("saker_oversikt > saker_liste > sak > sist_oppdatert_dato") |> html_text(),
+                                 status             = tmp |> html_elements("saker_oversikt > saker_liste > sak > status") |> html_text(),
+                                 title              = tmp |> html_elements("saker_oversikt > saker_liste > sak > tittel") |> html_text(),
+                                 type               = tmp |> html_elements("saker_oversikt > saker_liste > sak > type") |> html_text(),
+                                 session_id         = tmp |> html_elements("saker_oversikt > sesjon_id") |> html_text()))
   
   
   # Case topics
-  tmp2$topics <- mclapply((tmp %>% html_elements("saker_oversikt > saker_liste > sak > emne_liste")), function(x){
-    data.frame(is_main_topic = x %>% html_elements("emne > er_hovedemne") %>% html_text(),
-               main_topic_id = x %>% html_elements("emne > hovedemne_id") %>% html_text(),
-               id = x %>% html_elements("emne > id") %>% html_text(),
-               name = x %>% html_elements("emne > navn") %>% html_text())
+  tmp2$topics <- mclapply((tmp |> html_elements("saker_oversikt > saker_liste > sak > emne_liste")), function(x){
+    data.frame(is_main_topic = x |> html_elements("emne > er_hovedemne") |> html_text(),
+               main_topic_id = x |> html_elements("emne > hovedemne_id") |> html_text(),
+               id = x |> html_elements("emne > id") |> html_text(),
+               name = x |> html_elements("emne > navn") |> html_text())
   }, mc.cores = cores)
   
   names(tmp2$topics) <- tmp2$root$id
   
   # Case proposer
-  tmp2$proposers <- mclapply((tmp %>% html_elements("saker_oversikt > saker_liste > sak > forslagstiller_liste")), function(x){
+  tmp2$proposers <- mclapply((tmp |> html_elements("saker_oversikt > saker_liste > sak > forslagstiller_liste")), function(x){
     
-    if(identical(x %>% html_elements("representant > id") %>% html_text(), character()) == TRUE){
+    if(identical(x |> html_elements("representant > id") |> html_text(), character()) == TRUE){
       data.frame(rep_id = NA,
                  county_id = NA,
                  party_id = NA,
@@ -126,31 +152,31 @@ get_session_cases <- function(sessionid = NA, good_manners = 0, cores = 1){
       
     } else {
       
-      if(identical((x %>% html_elements("representant > fylke > id") %>% html_text()), character())) {
+      if(identical((x |> html_elements("representant > fylke > id") |> html_text()), character())) {
         county_id = NA
       } else {
-        county_id <- x %>% html_elements("representant > fylke > id") %>% html_text()
+        county_id <- x |> html_elements("representant > fylke > id") |> html_text()
       }
       
-      if(identical(x %>% html_elements("representant > parti > id") %>% html_text(), character())) {
+      if(identical(x |> html_elements("representant > parti > id") |> html_text(), character())) {
         party_id <- NA
       } else {
-        party_id <- x %>% html_elements("representant > parti > id") %>% html_text()
+        party_id <- x |> html_elements("representant > parti > id") |> html_text()
       }
       
-      data.frame(rep_id = x %>% html_elements("representant > id") %>% html_text(),
+      data.frame(rep_id = x |> html_elements("representant > id") |> html_text(),
                  county_id = county_id,
                  party_id = party_id,
-                 rep_sub = x %>% html_elements("representant > vara_representant") %>% html_text())
+                 rep_sub = x |> html_elements("representant > vara_representant") |> html_text())
     }
   }, mc.cores = cores)
   
   names(tmp2$proposers) <- tmp2$root$id
   
   # Case committee
-  committee <- mclapply((tmp %>% html_elements("saker_oversikt > saker_liste > sak")), function(x){
+  committee <- mclapply((tmp |> html_elements("saker_oversikt > saker_liste > sak")), function(x){
     
-    tmp3 <- x %>% html_elements("komite > id") %>% html_text()
+    tmp3 <- x |> html_elements("komite > id") |> html_text()
     
     if(identical(tmp3, character())) {
       tmp3 <- NA
@@ -163,31 +189,31 @@ get_session_cases <- function(sessionid = NA, good_manners = 0, cores = 1){
   tmp2$root$committee_id <- unlist(committee)
   
   # Case spokesperson
-  tmp2$spokespersons <- mclapply((tmp %>% html_elements("saker_oversikt > saker_liste > sak > saksordfoerer_liste")), function(x){
+  tmp2$spokespersons <- mclapply((tmp |> html_elements("saker_oversikt > saker_liste > sak > saksordfoerer_liste")), function(x){
     
     
-    if(identical((x %>% html_elements("representant > id") %>% html_text()), character())) {
+    if(identical((x |> html_elements("representant > id") |> html_text()), character())) {
       rep_id <- NA
     } else {
-      rep_id <- x %>% html_elements("representant > id") %>% html_text()
+      rep_id <- x |> html_elements("representant > id") |> html_text()
     }
     
-    if(identical((x %>% html_elements("representant > fylke > id") %>% html_text()), character())) {
+    if(identical((x |> html_elements("representant > fylke > id") |> html_text()), character())) {
       county_id <- NA
     } else {
-      county_id <- x %>% html_elements("representant > fylke > id") %>% html_text()
+      county_id <- x |> html_elements("representant > fylke > id") |> html_text()
     }
     
-    if(identical((x %>% html_elements("representant > parti > id") %>% html_text()), character())) {
+    if(identical((x |> html_elements("representant > parti > id") |> html_text()), character())) {
       party_id <- NA
     } else {
-      party_id <- x %>% html_elements("representant > parti > id") %>% html_text()
+      party_id <- x |> html_elements("representant > parti > id") |> html_text()
     }
     
-    if(identical((x %>% html_elements("representant > vara_representant") %>% html_text()), character())) {
+    if(identical((x |> html_elements("representant > vara_representant") |> html_text()), character())) {
       rep_sub <- NA
     } else {
-      rep_sub <- x %>% html_elements("representant > vara_representant") %>% html_text()
+      rep_sub <- x |> html_elements("representant > vara_representant") |> html_text()
     }
     
     
@@ -200,6 +226,12 @@ get_session_cases <- function(sessionid = NA, good_manners = 0, cores = 1){
   }, mc.cores = cores)
   
   names(tmp2$spokespersons) <- tmp2$root$id
+  
+  tmp2$spokespersons <- do.call(rbind, tmp2$spokespersons)
+  tmp2$spokespersons$case_id <- sub("\\.[0-9]+$", "", rownames(tmp2$spokespersons))
+  rownames(tmp2$spokespersons) <- 1:nrow(tmp2$spokespersons)
+  
+  tmp2$spokespersons <-  tmp2$spokespersons[, c("case_id", "rep_id", "county_id", "party_id", "rep_sub")]
   
   Sys.sleep(good_manners)
   

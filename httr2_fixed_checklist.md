@@ -1,0 +1,38 @@
+# Functions to convert to httr2
+
+- [x] data.R
+- [x] get_all_committees.R
+- [x] get_all_parties.R
+- [x] get_case.R
+- [x] get_counties.R
+- [x] get_decision_votes.R
+- [x] get_hearing_input.R
+- [x] get_hearing_program.R
+- [x] get_meeting_agenda.R
+- [x] get_mp_bio.R
+- [ ] get_mp_pic.R
+- [ ] get_mp.R
+- [ ] get_parlperiod_mps.R
+- [ ] get_parlperiod_presidency.R
+- [ ] get_parlperiods.R
+- [ ] get_parlsessions.R
+- [ ] get_proceedings.R
+- [ ] get_proposal_votes.R
+- [ ] get_publication.R
+- [ ] get_question.R
+- [ ] get_question_hour.R
+- [ ] get_result_vote.R
+- [ ] get_session_cases.R
+- [ ] get_session_committees.R
+- [ ] get_session_decisions.R
+- [ ] get_session_delegations.R
+- [ ] get_session_hearings.R
+- [ ] get_session_meetings.R
+- [ ] get_session_mp_speech_activity.R
+- [ ] get_session_parties.R
+- [ ] get_session_publications.R
+- [ ] get_session_questions.R
+- [ ] get_topics.R
+- [ ] get_vote.R
+- [ ] get_written_hearing_input.R
+- [ ] read_obt.R

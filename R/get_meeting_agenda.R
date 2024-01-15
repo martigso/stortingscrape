@@ -42,7 +42,7 @@
 #' meeting_agenda
 #' }
 #'  
-#' @import httr rvest
+#' @import httr2 rvest
 #' 
 #' @export
 #' 
@@ -50,33 +50,58 @@ get_meeting_agenda <- function(meetingid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/dagsorden?moteid=", meetingid)
   
-  base <- GET(url)
+  base <- request(url)
   
-  resp <- http_type(base)
-  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
   
-  status <- http_status(base)
-  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
   
-  tmp <- read_html(base)
+  if(resp_content_type(resp) != "text/xml") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'text/xml'."), 
+      call. = FALSE) 
+  }
   
-  tmp2 <- data.frame(response_date = tmp %>% html_elements("mote_dagsorden_oversikt > respons_dato_tid") %>% html_text(),
-                     version = tmp %>% html_elements("mote_dagsorden_oversikt > versjon") %>% html_text(),
-                     agenda_number = tmp %>% html_elements("mote_dagsorden_oversikt > dagsorden_nummer") %>% html_text(),
-                     meeting_date = tmp %>% html_elements("mote_dagsorden_oversikt > mote_dato_tid") %>% html_text(),
-                     meeting_id = tmp %>% html_elements("mote_dagsorden_oversikt > mote_id") %>% html_text(),
-                     meeting_place = tmp %>% html_elements("mote_dagsorden_oversikt > mote_ting") %>% html_text(),
-                     agenda_case_reference = tmp %>% html_elements("dagsordensak > dagsordensak_henvisning") %>% html_text(),
-                     agenda_case_number = tmp %>% html_elements("dagsordensak > dagsordensak_nummer") %>% html_text(),
-                     agenda_case_text = tmp %>% html_elements("dagsordensak > dagsordensak_tekst") %>% html_text(),
-                     agenda_case_type = tmp %>% html_elements("dagsordensak > dagsordensak_type") %>% html_text(),
-                     footnote = tmp %>% html_elements("dagsordensak > fotnote") %>% html_text(),
-                     proposition_id = tmp %>% html_elements("dagsordensak > innstilling_id") %>% html_text(),
-                     committee_id = tmp %>% html_elements("dagsordensak > komite_id") %>% html_text(),
-                     loose_proposals = tmp %>% html_elements("dagsordensak > loseforslag") %>% html_text(),
-                     case_id = tmp %>% html_elements("dagsordensak > sak_id") %>% html_text(),
-                     question_hour_type = tmp %>% html_elements("dagsordensak > sporretime_type") %>% html_text(),
-                     question_id = tmp %>% html_elements("dagsordensak > sporsmal_id") %>% html_text())
+  tmp <- resp |> 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
+  
+  tmp2 <- data.frame(response_date = tmp |> html_elements("mote_dagsorden_oversikt > respons_dato_tid") |> html_text(),
+                     version = tmp |> html_elements("mote_dagsorden_oversikt > versjon") |> html_text(),
+                     agenda_number = tmp |> html_elements("mote_dagsorden_oversikt > dagsorden_nummer") |> html_text(),
+                     meeting_date = tmp |> html_elements("mote_dagsorden_oversikt > mote_dato_tid") |> html_text(),
+                     meeting_id = tmp |> html_elements("mote_dagsorden_oversikt > mote_id") |> html_text(),
+                     meeting_place = tmp |> html_elements("mote_dagsorden_oversikt > mote_ting") |> html_text(),
+                     agenda_case_reference = tmp |> html_elements("dagsordensak > dagsordensak_henvisning") |> html_text(),
+                     agenda_case_number = tmp |> html_elements("dagsordensak > dagsordensak_nummer") |> html_text(),
+                     agenda_case_text = tmp |> html_elements("dagsordensak > dagsordensak_tekst") |> html_text(),
+                     agenda_case_type = tmp |> html_elements("dagsordensak > dagsordensak_type") |> html_text(),
+                     footnote = tmp |> html_elements("dagsordensak > fotnote") |> html_text(),
+                     proposition_id = tmp |> html_elements("dagsordensak > innstilling_id") |> html_text(),
+                     committee_id = tmp |> html_elements("dagsordensak > komite_id") |> html_text(),
+                     loose_proposals = tmp |> html_elements("dagsordensak > loseforslag") |> html_text(),
+                     case_id = tmp |> html_elements("dagsordensak > sak_id") |> html_text(),
+                     question_hour_type = tmp |> html_elements("dagsordensak > sporretime_type") |> html_text(),
+                     question_id = tmp |> html_elements("dagsordensak > sporsmal_id") |> html_text())
   
   Sys.sleep(good_manners)
   

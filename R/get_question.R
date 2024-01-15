@@ -64,7 +64,7 @@
 #' quest1213 <- do.call(rbind, int1213)
 #' }
 #' 
-#' @import rvest httr
+#' @import rvest httr2
 #' 
 #' @export
 #' 
@@ -72,54 +72,77 @@ get_question <- function(questionid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/enkeltsporsmal?sporsmalid=", questionid)
   
-  base <- GET(url)
+  base <- request(url)
   
-  resp <- http_type(base)
-  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
   
-  status <- http_status(base)
-  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
   
-  if(identical(base$content, raw(0))) return(NULL)
+  if(resp_content_type(resp) != "text/xml") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'text/xml'."), 
+      call. = FALSE) 
+  }
   
-  tmp <- read_html(base)
+  tmp <- resp |> 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
-  if(identical((tmp %>% html_elements("rette_vedkommende > id") %>% html_text()), character())) {
+  if(identical((tmp |> html_elements("rette_vedkommende > id") |> html_text()), character())) {
     correct_person_id <- NA
   } else {
-    correct_person_id <- tmp %>% html_elements("rette_vedkommende > id") %>% html_text()
+    correct_person_id <- tmp |> html_elements("rette_vedkommende > id") |> html_text()
   }
          
   
   tmp2 <- data.frame(
-    response_date = tmp %>% html_elements("besvart_av > respons_dato_tid") %>% html_text(),
-    version = tmp %>% html_elements("besvart_av > versjon") %>% html_text(),
-    justification = tmp %>% html_elements("begrunnelse") %>% html_text(),
-    answ_by_id = tmp %>% html_elements("besvart_av > id") %>% html_text(),
-    answ_by_minister_id = tmp %>% html_elements("besvart_av_minister_id") %>% html_text(),
-    answ_by_minister_title = tmp %>% html_elements("besvart_av_minister_tittel") %>% html_text(),
-    answ_date = tmp %>% html_elements("besvart_dato") %>% html_text(),
-    answ_on_belhalf_of = tmp %>% html_elements("besvart_pa_vegne_av") %>% html_text(),
-    answ_on_belhalf_of_minister_id = tmp %>% html_elements("besvart_pa_vegne_av_minister_id") %>% html_text(),
-    answ_on_belhalf_of_minister_title = tmp %>% html_elements("besvart_pa_vegne_av_minister_tittel") %>% html_text(),
-    agenda_number = tmp %>% html_elements("dagsorden_saknummer") %>% html_text(),
-    moved_to = tmp %>% html_elements("flyttet_til") %>% html_text(),
-    id = tmp %>% html_elements("detaljert_sporsmal > id") %>% html_text(),
+    response_date = tmp |> html_elements("besvart_av > respons_dato_tid") |> html_text(),
+    version = tmp |> html_elements("besvart_av > versjon") |> html_text(),
+    justification = tmp |> html_elements("begrunnelse") |> html_text(),
+    answ_by_id = tmp |> html_elements("besvart_av > id") |> html_text(),
+    answ_by_minister_id = tmp |> html_elements("besvart_av_minister_id") |> html_text(),
+    answ_by_minister_title = tmp |> html_elements("besvart_av_minister_tittel") |> html_text(),
+    answ_date = tmp |> html_elements("besvart_dato") |> html_text(),
+    answ_on_belhalf_of = tmp |> html_elements("besvart_pa_vegne_av") |> html_text(),
+    answ_on_belhalf_of_minister_id = tmp |> html_elements("besvart_pa_vegne_av_minister_id") |> html_text(),
+    answ_on_belhalf_of_minister_title = tmp |> html_elements("besvart_pa_vegne_av_minister_tittel") |> html_text(),
+    agenda_number = tmp |> html_elements("dagsorden_saknummer") |> html_text(),
+    moved_to = tmp |> html_elements("flyttet_til") |> html_text(),
+    id = tmp |> html_elements("detaljert_sporsmal > id") |> html_text(),
     correct_person_id,
-    correct_person_minister_id = tmp %>% html_elements("rette_vedkommende_minister_id") %>% html_text(),
-    correct_person_minister_title = tmp %>% html_elements("rette_vedkommende_minister_tittel") %>% html_text(),
-    sendt_date = tmp %>% html_elements("sendt_dato") %>% html_text(),
-    session_id = tmp %>% html_elements("sesjon_id") %>% html_text(),
-    question_text = tmp %>% html_elements("sporsmal") %>% html_text(),
-    question_from_id = tmp %>% html_elements("sporsmal_fra > id") %>% html_text(), # get more info with get_mp()
-    qustion_number = tmp %>% html_elements("sporsmal_nummer") %>% html_text(),
-    qustion_to_id = tmp %>% html_elements("sporsmal_til > id") %>% html_text(),
-    qustion_to_minister_id = tmp %>% html_elements("sporsmal_til_minister_id") %>% html_text(),
-    qustion_to_minister_title = tmp %>% html_elements("sporsmal_til_minister_tittel") %>% html_text(),
-    status = tmp %>% html_elements("status") %>% html_text(),
-    answer_text = tmp %>% html_elements("svar") %>% html_text(),
-    title = tmp %>% html_elements("tittel") %>% html_text(),
-    type = tmp %>% html_elements("type") %>% html_text()
+    correct_person_minister_id = tmp |> html_elements("rette_vedkommende_minister_id") |> html_text(),
+    correct_person_minister_title = tmp |> html_elements("rette_vedkommende_minister_tittel") |> html_text(),
+    sendt_date = tmp |> html_elements("sendt_dato") |> html_text(),
+    session_id = tmp |> html_elements("sesjon_id") |> html_text(),
+    question_text = tmp |> html_elements("sporsmal") |> html_text(),
+    question_from_id = tmp |> html_elements("sporsmal_fra > id") |> html_text(), # get more info with get_mp()
+    qustion_number = tmp |> html_elements("sporsmal_nummer") |> html_text(),
+    qustion_to_id = tmp |> html_elements("sporsmal_til > id") |> html_text(),
+    qustion_to_minister_id = tmp |> html_elements("sporsmal_til_minister_id") |> html_text(),
+    qustion_to_minister_title = tmp |> html_elements("sporsmal_til_minister_tittel") |> html_text(),
+    status = tmp |> html_elements("status") |> html_text(),
+    answer_text = tmp |> html_elements("svar") |> html_text(),
+    title = tmp |> html_elements("tittel") |> html_text(),
+    type = tmp |> html_elements("type") |> html_text()
   )
   
   Sys.sleep(good_manners)

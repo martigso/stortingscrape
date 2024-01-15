@@ -33,7 +33,7 @@
 #' get_hearing_input(hearingid = 10004166)
 #' }
 #' 
-#' @import rvest parallel
+#' @import httr2 rvest parallel
 #' @export
 #' 
 
@@ -43,23 +43,48 @@ get_hearing_input <- function(hearingid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/horingsinnspill?horingid=", hearingid)
   
-  base <- GET(url)
+  base <- request(url)
   
-  resp <- http_type(base)
-  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
   
-  status <- http_status(base)
-  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
   
-  tmp <- read_html(base)
+  if(resp_content_type(resp) != "text/xml") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'text/xml'."), 
+      call. = FALSE) 
+  }
+  
+  tmp <- resp |> 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
   
   if(html_text(html_elements(tmp, "horingsinnspill_liste")) == ""){
-    tmp2 <- data.frame(response_date = tmp %>% html_elements("horingsinnspill_oversikt > respons_dato_tid") %>% html_text(),
-                       version = tmp %>% html_elements("horingsinnspill_oversikt > versjon") %>% html_text(),
-                       hearing_id = tmp %>% html_elements("horingsinnspill_oversikt > horing_id") %>% html_text(),
-                       hearing_type = tmp %>% html_elements("horingsinnspill_oversikt > horing_type") %>% html_text(),
-                       committee_id = tmp %>% html_elements("komite > id") %>% html_text(),
+    tmp2 <- data.frame(response_date = tmp |> html_elements("horingsinnspill_oversikt > respons_dato_tid") |> html_text(),
+                       version = tmp |> html_elements("horingsinnspill_oversikt > versjon") |> html_text(),
+                       hearing_id = tmp |> html_elements("horingsinnspill_oversikt > horing_id") |> html_text(),
+                       hearing_type = tmp |> html_elements("horingsinnspill_oversikt > horing_type") |> html_text(),
+                       committee_id = tmp |> html_elements("komite > id") |> html_text(),
                        hearing_input_date = NA,
                        hearing_input_id = NA,
                        hearing_input_organization = NA,
@@ -68,16 +93,16 @@ get_hearing_input <- function(hearingid = NA, good_manners = 0){
     
   } else {
     
-    tmp2 <- data.frame(response_date = tmp %>% html_elements("horingsinnspill_oversikt > respons_dato_tid") %>% html_text(),
-                       version = tmp %>% html_elements("horingsinnspill_oversikt > versjon") %>% html_text(),
-                       hearing_id = tmp %>% html_elements("horingsinnspill_oversikt > horing_id") %>% html_text(),
-                       hearing_type = tmp %>% html_elements("horingsinnspill_oversikt > horing_type") %>% html_text(),
-                       committee_id = tmp %>% html_elements("komite > id") %>% html_text(),
-                       hearing_input_date = tmp %>% html_elements("horingsinnspill > dato") %>% html_text(),
-                       hearing_input_id = tmp %>% html_elements("horingsinnspill > id") %>% html_text(),
-                       hearing_input_organization = tmp %>% html_elements("horingsinnspill > organisasjon") %>% html_text(),
-                       hearing_input_text = tmp %>% html_elements("horingsinnspill > tekst") %>% html_text(),
-                       hearing_input_title = tmp %>% html_elements("horingsinnspill > tittel") %>% html_text())
+    tmp2 <- data.frame(response_date = tmp |> html_elements("horingsinnspill_oversikt > respons_dato_tid") |> html_text(),
+                       version = tmp |> html_elements("horingsinnspill_oversikt > versjon") |> html_text(),
+                       hearing_id = tmp |> html_elements("horingsinnspill_oversikt > horing_id") |> html_text(),
+                       hearing_type = tmp |> html_elements("horingsinnspill_oversikt > horing_type") |> html_text(),
+                       committee_id = tmp |> html_elements("komite > id") |> html_text(),
+                       hearing_input_date = tmp |> html_elements("horingsinnspill > dato") |> html_text(),
+                       hearing_input_id = tmp |> html_elements("horingsinnspill > id") |> html_text(),
+                       hearing_input_organization = tmp |> html_elements("horingsinnspill > organisasjon") |> html_text(),
+                       hearing_input_text = tmp |> html_elements("horingsinnspill > tekst") |> html_text(),
+                       hearing_input_title = tmp |> html_elements("horingsinnspill > tittel") |> html_text())
   }
   
   

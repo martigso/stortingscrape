@@ -47,7 +47,7 @@
 #' }
 #' 
 #'  
-#' @import rvest httr
+#' @import rvest httr2
 #' 
 #' @export
 #' 
@@ -55,20 +55,45 @@ get_vote <- function(caseid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/voteringer?sakid=", caseid)
   
-  base <- GET(url)
+  base <- request(url)
   
-  resp <- http_type(base)
-  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
   
-  status <- http_status(base)
-  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
   
-  tmp <- read_html(base)
+  if(resp_content_type(resp) != "text/xml") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'text/xml'."), 
+      call. = FALSE) 
+  }
   
-  if(identical(tmp %>% html_elements("sak_votering > antall_for") %>% html_text(), character())){
-    tmp2 <- data.frame(response_date = tmp %>% html_elements("sak_votering_oversikt > respons_dato_tid") %>% html_text(),
-                       version = tmp %>% html_elements("sak_votering_oversikt > versjon") %>% html_text(),
-                       case_id = tmp %>% html_elements("sak_votering_oversikt > sak_id") %>% html_text(),
+  tmp <- resp |> 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
+  
+  if(identical(tmp |> html_elements("sak_votering > antall_for") |> html_text(), character())){
+    tmp2 <- data.frame(response_date = tmp |> html_elements("sak_votering_oversikt > respons_dato_tid") |> html_text(),
+                       version = tmp |> html_elements("sak_votering_oversikt > versjon") |> html_text(),
+                       case_id = tmp |> html_elements("sak_votering_oversikt > sak_id") |> html_text(),
                        alternative_vote = NA,
                        n_for = NA,
                        n_absent = NA,
@@ -83,7 +108,7 @@ get_vote <- function(caseid = NA, good_manners = 0){
                        president_party_id = NA,
                        adopted = NA,
                        vote_id = NA,
-                       vote_method = NA,
+                       # vote_method = NA,
                        vote_result_type = NA,
                        vote_result_type_text = NA,
                        vote_topic = NA,
@@ -91,28 +116,28 @@ get_vote <- function(caseid = NA, good_manners = 0){
     
   } else {
     
-  tmp2 <- data.frame(response_date         = tmp %>% html_elements("sak_votering_oversikt > respons_dato_tid") %>% html_text(),
-                     version               = tmp %>% html_elements("sak_votering_oversikt > versjon") %>% html_text(),
-                     case_id               = tmp %>% html_elements("sak_votering_oversikt > sak_id") %>% html_text(),
-                     alternative_vote      = tmp %>% html_elements("sak_votering > alternativ_votering_id") %>% html_text(),
-                     n_for                 = tmp %>% html_elements("sak_votering > antall_for") %>% html_text(),
-                     n_absent              = tmp %>% html_elements("sak_votering > antall_ikke_tilstede") %>% html_text(),
-                     n_against             = tmp %>% html_elements("sak_votering > antall_mot") %>% html_text(),
-                     treatment_order       = tmp %>% html_elements("sak_votering > behandlingsrekkefoelge") %>% html_text(),
-                     agenda_case_number    = tmp %>% html_elements("sak_votering > dagsorden_sak_nummer") %>% html_text(),
-                     free_vote             = tmp %>% html_elements("sak_votering > fri_votering") %>% html_text(),
-                     comment               = tmp %>% html_elements("sak_votering > kommentar") %>% html_text(),
-                     meeting_map_number    = tmp %>% html_elements("sak_votering > mote_kart_nummer") %>% html_text(),
-                     personal_vote         = tmp %>% html_elements("sak_votering > personlig_votering") %>% html_text(),
-                     president_id          = tmp %>% html_elements("sak_votering > president > id") %>% html_text(),
-                     president_party_id    = tmp %>% html_elements("sak_votering > president > parti > id") %>% html_text(),
-                     adopted               = tmp %>% html_elements("sak_votering > vedtatt") %>% html_text(),
-                     vote_id               = tmp %>% html_elements("sak_votering > votering_id") %>% html_text(),
-                     # vote_method           = tmp %>% html_elements("sak_votering > votering_metode") %>% html_text(),
-                     vote_result_type      = tmp %>% html_elements("sak_votering > votering_resultat_type") %>% html_text(),
-                     vote_result_type_text = tmp %>% html_elements("sak_votering > votering_resultat_type_tekst") %>% html_text(),
-                     vote_topic            = tmp %>% html_elements("sak_votering > votering_tema") %>% html_text(),
-                     vote_datetime         = tmp %>% html_elements("sak_votering > votering_tid") %>% html_text())
+  tmp2 <- data.frame(response_date         = tmp |> html_elements("sak_votering_oversikt > respons_dato_tid") |> html_text(),
+                     version               = tmp |> html_elements("sak_votering_oversikt > versjon") |> html_text(),
+                     case_id               = tmp |> html_elements("sak_votering_oversikt > sak_id") |> html_text(),
+                     alternative_vote      = tmp |> html_elements("sak_votering > alternativ_votering_id") |> html_text(),
+                     n_for                 = tmp |> html_elements("sak_votering > antall_for") |> html_text(),
+                     n_absent              = tmp |> html_elements("sak_votering > antall_ikke_tilstede") |> html_text(),
+                     n_against             = tmp |> html_elements("sak_votering > antall_mot") |> html_text(),
+                     treatment_order       = tmp |> html_elements("sak_votering > behandlingsrekkefoelge") |> html_text(),
+                     agenda_case_number    = tmp |> html_elements("sak_votering > dagsorden_sak_nummer") |> html_text(),
+                     free_vote             = tmp |> html_elements("sak_votering > fri_votering") |> html_text(),
+                     comment               = tmp |> html_elements("sak_votering > kommentar") |> html_text(),
+                     meeting_map_number    = tmp |> html_elements("sak_votering > mote_kart_nummer") |> html_text(),
+                     personal_vote         = tmp |> html_elements("sak_votering > personlig_votering") |> html_text(),
+                     president_id          = tmp |> html_elements("sak_votering > president > id") |> html_text(),
+                     president_party_id    = tmp |> html_elements("sak_votering > president > parti > id") |> html_text(),
+                     adopted               = tmp |> html_elements("sak_votering > vedtatt") |> html_text(),
+                     vote_id               = tmp |> html_elements("sak_votering > votering_id") |> html_text(),
+                     # vote_method           = tmp |> html_elements("sak_votering > votering_metode") |> html_text(),
+                     vote_result_type      = tmp |> html_elements("sak_votering > votering_resultat_type") |> html_text(),
+                     vote_result_type_text = tmp |> html_elements("sak_votering > votering_resultat_type_tekst") |> html_text(),
+                     vote_topic            = tmp |> html_elements("sak_votering > votering_tema") |> html_text(),
+                     vote_datetime         = tmp |> html_elements("sak_votering > votering_tid") |> html_text())
   }
     
 

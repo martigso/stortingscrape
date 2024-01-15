@@ -39,32 +39,57 @@
 #' mps <- do.call(rbind, mps)
 #' }
 #' 
-#' @import rvest httr
+#' @import rvest httr2
 #' @export
 #' 
 get_mp <- function(mpid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/person?personid=", mpid)
   
-  base <- GET(url)
+  base <- request(url)
   
-  resp <- http_type(base)
-  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
   
-  status <- http_status(base)
-  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
   
-  tmp <- read_html(base)
+  if(resp_content_type(resp) != "text/xml") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'text/xml'."), 
+      call. = FALSE) 
+  }
+  
+  tmp <- resp |> 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
   
-  tmp <- data.frame(response_date = tmp %>% html_elements("respons_dato_tid") %>% html_text(),
-                    version = tmp %>% html_elements("versjon") %>% html_text(),
-                    death = tmp %>% html_elements("doedsdato") %>% html_text(),
-                    last_name = tmp %>% html_elements("etternavn") %>% html_text(),
-                    birth = tmp %>% html_elements("foedselsdato") %>% html_text(),
-                    first_name = tmp %>% html_elements("fornavn") %>% html_text(),
-                    id = tmp %>% html_elements("id") %>% html_text(),
-                    gender = tmp %>% html_elements("kjoenn") %>% html_text())
+  tmp <- data.frame(response_date = tmp |> html_elements("respons_dato_tid") |> html_text(),
+                    version = tmp |> html_elements("versjon") |> html_text(),
+                    death = tmp |> html_elements("doedsdato") |> html_text(),
+                    last_name = tmp |> html_elements("etternavn") |> html_text(),
+                    birth = tmp |> html_elements("foedselsdato") |> html_text(),
+                    first_name = tmp |> html_elements("fornavn") |> html_text(),
+                    id = tmp |> html_elements("id") |> html_text(),
+                    gender = tmp |> html_elements("kjoenn") |> html_text())
   
   message(paste0(mpid, " (", tmp$first_name, " ", tmp$last_name, ") done."))
   

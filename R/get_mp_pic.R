@@ -28,26 +28,51 @@
 #'   })
 #' }
 #' 
-#' @import httr rvest
+#' @import httr2 rvest
 #' @importFrom utils download.file 
 #' 
 #' @export
 #' 
-
-
-
 get_mp_pic <- function(mpid = NA, size = "middels", 
                        destfile = NA, show_plot = FALSE, good_manners = 0){
   
-  url <- paste0("https://data.stortinget.no/eksport/personbilde?personid=", mpid, "&storrelse=", size)
+  url <- paste0("https://data.stortinget.no/eksport/personbilde?personid=", 
+                mpid, 
+                "&storrelse=", 
+                size)
   
-  base <- GET(url)
+  base <- request(url)
   
-  resp <- http_type(base)
-  if(resp != "image/jpeg") stop(paste0("Response of ", url, " is not image/jpeg."), call. = FALSE)
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
   
-  status <- http_status(base)
-  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
+  
+  if(resp_content_type(resp) != "image/jpeg") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'image/jpeg'."), 
+      call. = FALSE) 
+  }
+  
   
   if(is.na(destfile) == TRUE & show_plot == TRUE){
     if(require("imager") == FALSE) stop("Package 'imager' required for plotting images")

@@ -36,7 +36,7 @@
 #' }
 #' 
 #' 
-#' @import rvest httr
+#' @import rvest httr2
 #' @export
 #' 
 
@@ -46,24 +46,68 @@ get_session_mp_speech_activity <- function(sessionid = NA, mp_id = NA, good_mann
   
   url <- paste0("https://data.stortinget.no/eksport/representanttaleaktiviteter?personid=", mp_id, "&sesjonid=", sessionid)
   
-  base <- GET(url)
+  base <- request(url)
   
-  resp <- http_type(base)
-  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
   
-  status <- http_status(base)
-  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
   
-  tmp <- read_html(base)
+  if(resp_content_type(resp) != "text/xml") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'text/xml'."), 
+      call. = FALSE) 
+  }
   
-  tmp2 <- data.frame(response_date = tmp %>% html_elements("representant_tale_aktivitet_oversikt > respons_dato_tid") %>% html_text(),
-                     version = tmp %>% html_elements("representant_tale_aktivitet_oversikt > versjon") %>% html_text(),
-                     session_id = tmp %>% html_elements("representant_tale_aktivitet_oversikt > sesjon_id") %>% html_text(),
-                     agenda_case_number = tmp %>% html_elements("representant_tale_aktivitet > dagsorden_sak_nummer") %>% html_text(),
-                     meeting_id = tmp %>% html_elements("representant_tale_aktivitet > mote_id") %>% html_text(),
-                     speech_start_time = tmp %>% html_elements("representant_tale_aktivitet > tale_start_tid") %>% html_text(),
-                     speech_type = tmp %>% html_elements("representant_tale_aktivitet > tale_type") %>% html_text(),
-                     speech_length_secs = tmp %>% html_elements("representant_tale_aktivitet > tale_varighet_sekunder") %>% html_text())
+  tmp <- resp |> 
+    resp_body_html(check_type = FALSE, encoding = "utf-8")
+  
+  if(identical(tmp |> html_elements("representant_tale_aktivitet > tale_type") |> html_text(), character())){
+    
+    message(mp_id, " had no activity in ", sessionid, ". \n\tReturning empty...")
+    
+    tmp2 <- data.frame(response_date = tmp |> html_elements("representant_tale_aktivitet_oversikt > respons_dato_tid") |> html_text(),
+                       version = tmp |> html_elements("representant_tale_aktivitet_oversikt > versjon") |> html_text(),
+                       session_id = tmp |> html_elements("representant_tale_aktivitet_oversikt > sesjon_id") |> html_text(),
+                       agenda_case_number = NA,
+                       meeting_id = NA,
+                       speech_start_time = NA,
+                       speech_type = NA,
+                       speech_length_secs = NA)
+    
+    
+  } else {
+    
+    tmp2 <- data.frame(response_date = tmp |> html_elements("representant_tale_aktivitet_oversikt > respons_dato_tid") |> html_text(),
+                       version = tmp |> html_elements("representant_tale_aktivitet_oversikt > versjon") |> html_text(),
+                       session_id = tmp |> html_elements("representant_tale_aktivitet_oversikt > sesjon_id") |> html_text(),
+                       agenda_case_number = tmp |> html_elements("representant_tale_aktivitet > dagsorden_sak_nummer") |> html_text(),
+                       meeting_id = tmp |> html_elements("representant_tale_aktivitet > mote_id") |> html_text(),
+                       speech_start_time = tmp |> html_elements("representant_tale_aktivitet > tale_start_tid") |> html_text(),
+                       speech_type = tmp |> html_elements("representant_tale_aktivitet > tale_type") |> html_text(),
+                       speech_length_secs = tmp |> html_elements("representant_tale_aktivitet > tale_varighet_sekunder") |> html_text())
+    
+  }
+  
   
   Sys.sleep(good_manners)
   

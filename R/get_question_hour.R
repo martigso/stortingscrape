@@ -78,7 +78,7 @@
 #' }
 #' 
 #'  
-#' @import rvest httr
+#' @import rvest httr2
 #' 
 #' @export
 #' 
@@ -86,63 +86,89 @@ get_question_hour <- function(meetingid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/sporretime?moteid=", meetingid)
   
-  base <- GET(url)
+  base <- request(url)
   
-  resp <- http_type(base)
-  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
   
-  status <- http_status(base)
-  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
   
-  tmp <- read_html(base)
+  if(resp_content_type(resp) != "text/xml") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'text/xml'."), 
+      call. = FALSE) 
+  }
   
-  tmp2 <- list(root = data.frame(
-    response_date = tmp %>% html_elements("sporretime_oversikt > respons_dato_tid") %>% html_text(),
-    version = tmp %>% html_elements("sporretime_oversikt > versjon") %>% html_text(),
-    meetingid = meetingid
-  ),
-  question_hour_ministers = data.frame(
-    id = tmp %>% html_elements("muntlig_sporretime > statsraader > person > id") %>% html_text()
-  ),
-  question_time = data.frame(
-    question_justification = tmp %>% html_elements("ordinaer_sporretime_sporsmal_liste > detaljert_sporsmal > begrunnelse") %>% html_text(),
-    answer_by_id = tmp %>% html_elements("detaljert_sporsmal > besvart_av > id") %>% html_text(),
-    answer_by_minister_id = tmp %>% html_elements("detaljert_sporsmal > besvart_av_minister_id") %>% html_text(),
-    answer_by_minister_title = tmp %>% html_elements("detaljert_sporsmal > besvart_av_minister_tittel") %>% html_text(),
-    answer_date = tmp %>% html_elements("detaljert_sporsmal > besvart_dato") %>% html_text(),
-    answer_on_behalf_of_id = sapply(tmp %>% html_elements("detaljert_sporsmal > besvart_pa_vegne_av"), 
-                                 function(x) x %>% html_elements("id") %>% html_text() %>% paste0("_h")),
-    answer_on_behalf_of_minister_id = tmp %>% html_elements("detaljert_sporsmal > besvart_pa_vegne_av_minister_id") %>% html_text(),
-    answer_on_behalf_of_minister_title = tmp %>% html_elements("detaljert_sporsmal > besvart_pa_vegne_av_minister_tittel") %>% html_text(),
-    agenda_case_number = tmp %>% html_elements("detaljert_sporsmal > dagsorden_saknummer") %>% html_text(),
-    date = tmp %>% html_elements("detaljert_sporsmal > datert_dato") %>% html_text(),
-    moved_to = tmp %>% html_elements("detaljert_sporsmal > flyttet_til") %>% html_text(),
-    asked_by_other_id = sapply(tmp %>% html_elements("detaljert_sporsmal > fremsatt_av_annen"),
-                            function(x) x %>% html_element("id") %>% html_text() %>% paste("_h")),
-    question_id = tmp %>% html_elements("detaljert_sporsmal > id") %>% html_text(),
-    correct_person = tmp %>% html_elements("detaljert_sporsmal > rette_vedkommende") %>% html_text(),
-    correct_person_minister_id = tmp %>% html_elements("detaljert_sporsmal > rette_vedkommende_minister_id") %>% html_text(),
-    correct_person_minister_title = tmp %>% html_elements("detaljert_sporsmal > rette_vedkommende_minister_tittel") %>% html_text(),
-    sent_date = tmp %>% html_elements("detaljert_sporsmal > sendt_dato") %>% html_text(),
-    session_id = tmp %>% html_elements("detaljert_sporsmal > sesjon_id") %>% html_text(),
-    question_text = tmp %>% html_elements("detaljert_sporsmal > sporsmal") %>% html_text(),
-    question_from_id = tmp %>% html_elements("detaljert_sporsmal > sporsmal_fra > id") %>% html_text(),
-    question_number = tmp %>% html_elements("detaljert_sporsmal > sporsmal_nummer") %>% html_text(),
-    question_to_id = tmp %>% html_elements("detaljert_sporsmal > sporsmal_til > id") %>% html_text(),
-    question_to_minister_id = tmp %>% html_elements("detaljert_sporsmal > sporsmal_til_minister_id") %>% html_text(),
-    question_to_minister_title = tmp %>% html_elements("detaljert_sporsmal > sporsmal_til_minister_tittel") %>% html_text(),
-    status = tmp %>% html_elements("detaljert_sporsmal > status") %>% html_text(),
-    answer = tmp %>% html_elements("detaljert_sporsmal > svar") %>% html_text(),
-    title = tmp %>% html_elements("detaljert_sporsmal > tittel") %>% html_text(),
-    type = tmp %>% html_elements("detaljert_sporsmal > type") %>% html_text()
-  ),
-  publication_reference = data.frame(
-    export_id = tmp %>% html_elements("publikasjon_referanse > eksport_id") %>% html_text(),
-    link_text = tmp %>% html_elements("publikasjon_referanse > lenke_tekst") %>% html_text(),
-    link_url = tmp %>% html_elements("publikasjon_referanse > lenke_url") %>% html_text(),
-    type = tmp %>% html_elements("publikasjon_referanse > type") %>% html_text(),
-    sub_type = tmp %>% html_elements("publikasjon_referanse > undertype") %>% html_text()
-  )
+  tmp <- resp |> 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
+  
+  tmp2 <- list(
+    root = data.frame(
+      response_date = tmp |> html_elements("sporretime_oversikt > respons_dato_tid") |> html_text(),
+      version = tmp |> html_elements("sporretime_oversikt > versjon") |> html_text(),
+      meetingid = meetingid
+    ),
+    question_hour_ministers = data.frame(
+      id = tmp |> html_elements("muntlig_sporretime > statsraader > person > id") |> html_text()
+    ),
+    question_time = data.frame(
+      question_justification = tmp |> html_elements("ordinaer_sporretime_sporsmal_liste > detaljert_sporsmal > begrunnelse") |> html_text(),
+      answer_by_id = tmp |> html_elements("detaljert_sporsmal > besvart_av > id") |> html_text(),
+      answer_by_minister_id = tmp |> html_elements("detaljert_sporsmal > besvart_av_minister_id") |> html_text(),
+      answer_by_minister_title = tmp |> html_elements("detaljert_sporsmal > besvart_av_minister_tittel") |> html_text(),
+      answer_date = tmp |> html_elements("detaljert_sporsmal > besvart_dato") |> html_text(),
+      answer_on_behalf_of_id = sapply(tmp |> html_elements("detaljert_sporsmal > besvart_pa_vegne_av"), 
+                                      function(x) x |> html_elements("id") |> html_text() |> paste0("_h")),
+      answer_on_behalf_of_minister_id = tmp |> html_elements("detaljert_sporsmal > besvart_pa_vegne_av_minister_id") |> html_text(),
+      answer_on_behalf_of_minister_title = tmp |> html_elements("detaljert_sporsmal > besvart_pa_vegne_av_minister_tittel") |> html_text(),
+      agenda_case_number = tmp |> html_elements("detaljert_sporsmal > dagsorden_saknummer") |> html_text(),
+      date = tmp |> html_elements("detaljert_sporsmal > datert_dato") |> html_text(),
+      moved_to = tmp |> html_elements("detaljert_sporsmal > flyttet_til") |> html_text(),
+      asked_by_other_id = sapply(tmp |> html_elements("detaljert_sporsmal > fremsatt_av_annen"),
+                                 function(x) x |> html_elements("id") |> html_text() |> paste0("_h")),
+      question_id = tmp |> html_elements("detaljert_sporsmal > id") |> html_text(),
+      correct_person = tmp |> html_elements("detaljert_sporsmal > rette_vedkommende") |> html_text(),
+      correct_person_minister_id = tmp |> html_elements("detaljert_sporsmal > rette_vedkommende_minister_id") |> html_text(),
+      correct_person_minister_title = tmp |> html_elements("detaljert_sporsmal > rette_vedkommende_minister_tittel") |> html_text(),
+      sent_date = tmp |> html_elements("detaljert_sporsmal > sendt_dato") |> html_text(),
+      session_id = tmp |> html_elements("detaljert_sporsmal > sesjon_id") |> html_text(),
+      question_text = tmp |> html_elements("detaljert_sporsmal > sporsmal") |> html_text(),
+      question_from_id = tmp |> html_elements("detaljert_sporsmal > sporsmal_fra > id") |> html_text(),
+      question_number = tmp |> html_elements("detaljert_sporsmal > sporsmal_nummer") |> html_text(),
+      question_to_id = tmp |> html_elements("detaljert_sporsmal > sporsmal_til > id") |> html_text(),
+      question_to_minister_id = tmp |> html_elements("detaljert_sporsmal > sporsmal_til_minister_id") |> html_text(),
+      question_to_minister_title = tmp |> html_elements("detaljert_sporsmal > sporsmal_til_minister_tittel") |> html_text(),
+      status = tmp |> html_elements("detaljert_sporsmal > status") |> html_text(),
+      answer = tmp |> html_elements("detaljert_sporsmal > svar") |> html_text(),
+      title = tmp |> html_elements("detaljert_sporsmal > tittel") |> html_text(),
+      type = tmp |> html_elements("detaljert_sporsmal > type") |> html_text()
+    ),
+    publication_reference = data.frame(
+      export_id = tmp |> html_elements("publikasjon_referanse > eksport_id") |> html_text(),
+      link_text = tmp |> html_elements("publikasjon_referanse > lenke_tekst") |> html_text(),
+      link_url = tmp |> html_elements("publikasjon_referanse > lenke_url") |> html_text(),
+      type = tmp |> html_elements("publikasjon_referanse > type") |> html_text(),
+      sub_type = tmp |> html_elements("publikasjon_referanse > undertype") |> html_text()
+    )
   )
   
   tmp2$question_time$answer_on_behalf_of_id <- gsub("_h", "", tmp2$question_time$answer_on_behalf_of_id)
