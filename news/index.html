@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">stortingscrape</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +47,21 @@
       <small>Source: <a href="https://github.com/martigso/stortingscrape/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="stortingscrape-020">stortingscrape 0.2.0<a class="anchor" aria-label="anchor" href="#stortingscrape-020"></a></h2>
+<ul><li>Major changes:
+<ul><li>
+<em>In progress</em>: Replaced <code>magrittr</code> (<code>%&gt;%</code>) pipes with native pipes (<code>|&gt;</code>)</li>
+<li>Converted all get_*() functions from <code>httr</code> to <a href="https://httr2.r-lib.org/" class="external-link"><code>httr2</code></a>
+</li>
+<li>Changed $spokespersons in <code><a href="../reference/get_session_cases.html">get_session_cases()</a></code> to data frame. This will break backwards compatibility (sorry!).</li>
+<li>Rewrote the <em>decision_text</em> variable in<code><a href="../reference/get_session_decisions.html">get_session_decisions()</a></code> so that residual html is stripped from the output. This might break some text processing applications (sorry!).</li>
+<li>Rewrote the date and info sections of <code><a href="../reference/get_session_hearings.html">get_session_hearings()</a></code> to data.frames instead of lists. This might break some text processing applications (sorry!).</li>
+</ul></li>
+<li>Minor changes:
+<ul><li>Rewrote the <em>poceedings_steps</em> variable in<code><a href="../reference/get_proceedings.html">get_proceedings()</a></code> to be scalable to changes in the API. Should not break backwards compatibility.</li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.4" id="stortingscrape-014">stortingscrape 0.1.4<a class="anchor" aria-label="anchor" href="#stortingscrape-014"></a></h2>
 <ul><li>Fixed some typos in the readme</li>

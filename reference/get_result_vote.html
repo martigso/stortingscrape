@@ -12,7 +12,7 @@ Needs some preprocessing for use with rollcall packages, such as ideal."><!-- ma
     
     <a class="navbar-brand me-2" href="../index.html">stortingscrape</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,7 +91,7 @@ Needs some preprocessing for use with rollcall packages, such as <a href="https:
 <span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_proposal_votes.html">get_proposal_votes</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html" class="external-link">str_replace_all</a></span><span class="op">(</span><span class="va">p</span><span class="op">$</span><span class="va">proposal_vote</span><span class="op">$</span><span class="va">proposal_text</span>, </span></span>
-<span class="r-in"><span>                         <span class="st">"\\&lt;(.*)\\&gt;|\\r\\n"</span>, <span class="st">""</span><span class="op">)</span>  <span class="op">%&gt;%</span> </span></span>
+<span class="r-in"><span>                         <span class="st">"\\&lt;(.*)\\&gt;|\\r\\n"</span>, <span class="st">""</span><span class="op">)</span>  <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span>  <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html" class="external-link">str_trim</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span> </span></span>
