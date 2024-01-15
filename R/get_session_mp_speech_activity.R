@@ -81,13 +81,13 @@ get_session_mp_speech_activity <- function(sessionid = NA, mp_id = NA, good_mann
   tmp <- resp |> 
     resp_body_html(check_type = FALSE, encoding = "utf-8")
   
-  if(identical(tmp %>% html_elements("representant_tale_aktivitet > tale_type") %>% html_text(), character())){
+  if(identical(tmp |> html_elements("representant_tale_aktivitet > tale_type") |> html_text(), character())){
     
     message(mp_id, " had no activity in ", sessionid, ". \n\tReturning empty...")
     
-    tmp2 <- data.frame(response_date = tmp %>% html_elements("representant_tale_aktivitet_oversikt > respons_dato_tid") %>% html_text(),
-                       version = tmp %>% html_elements("representant_tale_aktivitet_oversikt > versjon") %>% html_text(),
-                       session_id = tmp %>% html_elements("representant_tale_aktivitet_oversikt > sesjon_id") %>% html_text(),
+    tmp2 <- data.frame(response_date = tmp |> html_elements("representant_tale_aktivitet_oversikt > respons_dato_tid") |> html_text(),
+                       version = tmp |> html_elements("representant_tale_aktivitet_oversikt > versjon") |> html_text(),
+                       session_id = tmp |> html_elements("representant_tale_aktivitet_oversikt > sesjon_id") |> html_text(),
                        agenda_case_number = NA,
                        meeting_id = NA,
                        speech_start_time = NA,
@@ -97,14 +97,14 @@ get_session_mp_speech_activity <- function(sessionid = NA, mp_id = NA, good_mann
     
   } else {
     
-    tmp2 <- data.frame(response_date = tmp %>% html_elements("representant_tale_aktivitet_oversikt > respons_dato_tid") %>% html_text(),
-                       version = tmp %>% html_elements("representant_tale_aktivitet_oversikt > versjon") %>% html_text(),
-                       session_id = tmp %>% html_elements("representant_tale_aktivitet_oversikt > sesjon_id") %>% html_text(),
-                       agenda_case_number = tmp %>% html_elements("representant_tale_aktivitet > dagsorden_sak_nummer") %>% html_text(),
-                       meeting_id = tmp %>% html_elements("representant_tale_aktivitet > mote_id") %>% html_text(),
-                       speech_start_time = tmp %>% html_elements("representant_tale_aktivitet > tale_start_tid") %>% html_text(),
-                       speech_type = tmp %>% html_elements("representant_tale_aktivitet > tale_type") %>% html_text(),
-                       speech_length_secs = tmp %>% html_elements("representant_tale_aktivitet > tale_varighet_sekunder") %>% html_text())
+    tmp2 <- data.frame(response_date = tmp |> html_elements("representant_tale_aktivitet_oversikt > respons_dato_tid") |> html_text(),
+                       version = tmp |> html_elements("representant_tale_aktivitet_oversikt > versjon") |> html_text(),
+                       session_id = tmp |> html_elements("representant_tale_aktivitet_oversikt > sesjon_id") |> html_text(),
+                       agenda_case_number = tmp |> html_elements("representant_tale_aktivitet > dagsorden_sak_nummer") |> html_text(),
+                       meeting_id = tmp |> html_elements("representant_tale_aktivitet > mote_id") |> html_text(),
+                       speech_start_time = tmp |> html_elements("representant_tale_aktivitet > tale_start_tid") |> html_text(),
+                       speech_type = tmp |> html_elements("representant_tale_aktivitet > tale_type") |> html_text(),
+                       speech_length_secs = tmp |> html_elements("representant_tale_aktivitet > tale_varighet_sekunder") |> html_text())
     
   }
   

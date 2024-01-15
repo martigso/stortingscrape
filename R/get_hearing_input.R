@@ -80,11 +80,11 @@ get_hearing_input <- function(hearingid = NA, good_manners = 0){
   
   
   if(html_text(html_elements(tmp, "horingsinnspill_liste")) == ""){
-    tmp2 <- data.frame(response_date = tmp %>% html_elements("horingsinnspill_oversikt > respons_dato_tid") %>% html_text(),
-                       version = tmp %>% html_elements("horingsinnspill_oversikt > versjon") %>% html_text(),
-                       hearing_id = tmp %>% html_elements("horingsinnspill_oversikt > horing_id") %>% html_text(),
-                       hearing_type = tmp %>% html_elements("horingsinnspill_oversikt > horing_type") %>% html_text(),
-                       committee_id = tmp %>% html_elements("komite > id") %>% html_text(),
+    tmp2 <- data.frame(response_date = tmp |> html_elements("horingsinnspill_oversikt > respons_dato_tid") |> html_text(),
+                       version = tmp |> html_elements("horingsinnspill_oversikt > versjon") |> html_text(),
+                       hearing_id = tmp |> html_elements("horingsinnspill_oversikt > horing_id") |> html_text(),
+                       hearing_type = tmp |> html_elements("horingsinnspill_oversikt > horing_type") |> html_text(),
+                       committee_id = tmp |> html_elements("komite > id") |> html_text(),
                        hearing_input_date = NA,
                        hearing_input_id = NA,
                        hearing_input_organization = NA,
@@ -93,16 +93,16 @@ get_hearing_input <- function(hearingid = NA, good_manners = 0){
     
   } else {
     
-    tmp2 <- data.frame(response_date = tmp %>% html_elements("horingsinnspill_oversikt > respons_dato_tid") %>% html_text(),
-                       version = tmp %>% html_elements("horingsinnspill_oversikt > versjon") %>% html_text(),
-                       hearing_id = tmp %>% html_elements("horingsinnspill_oversikt > horing_id") %>% html_text(),
-                       hearing_type = tmp %>% html_elements("horingsinnspill_oversikt > horing_type") %>% html_text(),
-                       committee_id = tmp %>% html_elements("komite > id") %>% html_text(),
-                       hearing_input_date = tmp %>% html_elements("horingsinnspill > dato") %>% html_text(),
-                       hearing_input_id = tmp %>% html_elements("horingsinnspill > id") %>% html_text(),
-                       hearing_input_organization = tmp %>% html_elements("horingsinnspill > organisasjon") %>% html_text(),
-                       hearing_input_text = tmp %>% html_elements("horingsinnspill > tekst") %>% html_text(),
-                       hearing_input_title = tmp %>% html_elements("horingsinnspill > tittel") %>% html_text())
+    tmp2 <- data.frame(response_date = tmp |> html_elements("horingsinnspill_oversikt > respons_dato_tid") |> html_text(),
+                       version = tmp |> html_elements("horingsinnspill_oversikt > versjon") |> html_text(),
+                       hearing_id = tmp |> html_elements("horingsinnspill_oversikt > horing_id") |> html_text(),
+                       hearing_type = tmp |> html_elements("horingsinnspill_oversikt > horing_type") |> html_text(),
+                       committee_id = tmp |> html_elements("komite > id") |> html_text(),
+                       hearing_input_date = tmp |> html_elements("horingsinnspill > dato") |> html_text(),
+                       hearing_input_id = tmp |> html_elements("horingsinnspill > id") |> html_text(),
+                       hearing_input_organization = tmp |> html_elements("horingsinnspill > organisasjon") |> html_text(),
+                       hearing_input_text = tmp |> html_elements("horingsinnspill > tekst") |> html_text(),
+                       hearing_input_title = tmp |> html_elements("horingsinnspill > tittel") |> html_text())
   }
   
   

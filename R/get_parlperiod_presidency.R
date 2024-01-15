@@ -74,15 +74,15 @@ get_parlperiod_presidency <- function(periodid = NA, good_manners = 0){
   tmp <- resp |> 
     resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
-  tmp <- data.frame(response_date = tmp %>% html_elements("presidentskapet_oversikt > respons_dato_tid") %>% html_text(),
-                    version = tmp %>% html_elements("presidentskapet_oversikt > versjon") %>% html_text(),
-                    last_name = tmp %>% html_elements("medlem > etternavn") %>% html_text(),
-                    first_name = tmp %>% html_elements("medlem > fornavn") %>% html_text(),
-                    from_date = tmp %>% html_elements("medlem > fra_dato") %>% html_text(),
-                    party_id = tmp %>% html_elements("medlem > parti_id") %>% html_text(),
-                    person_id = tmp %>% html_elements("medlem > person_id") %>% html_text(),
-                    to_date = tmp %>% html_elements("medlem > til_dato") %>% html_text(),
-                    position = tmp %>% html_elements("medlem > verv") %>% html_text())
+  tmp <- data.frame(response_date = tmp |> html_elements("presidentskapet_oversikt > respons_dato_tid") |> html_text(),
+                    version = tmp |> html_elements("presidentskapet_oversikt > versjon") |> html_text(),
+                    last_name = tmp |> html_elements("medlem > etternavn") |> html_text(),
+                    first_name = tmp |> html_elements("medlem > fornavn") |> html_text(),
+                    from_date = tmp |> html_elements("medlem > fra_dato") |> html_text(),
+                    party_id = tmp |> html_elements("medlem > parti_id") |> html_text(),
+                    person_id = tmp |> html_elements("medlem > person_id") |> html_text(),
+                    to_date = tmp |> html_elements("medlem > til_dato") |> html_text(),
+                    position = tmp |> html_elements("medlem > verv") |> html_text())
   
   Sys.sleep(good_manners)
   

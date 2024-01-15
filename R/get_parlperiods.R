@@ -74,11 +74,11 @@ get_parlperiods <- function(){
   tmp <- resp |> 
     resp_body_html(check_type = FALSE, encoding = "utf-8")   
   
-  tmp <- data.frame(response_date = tmp %>% html_elements("stortingsperioder_liste > stortingsperiode > respons_dato_tid") %>% html_text(),
-                    version = tmp %>% html_elements("stortingsperioder_liste > stortingsperiode > versjon") %>% html_text(),
-                    from = tmp %>% html_elements("stortingsperioder_liste > stortingsperiode > fra") %>% html_text(),
-                    id = tmp %>% html_elements("stortingsperioder_liste > stortingsperiode > id") %>% html_text(),
-                    to = tmp %>% html_elements("stortingsperioder_liste > stortingsperiode > til") %>% html_text())
+  tmp <- data.frame(response_date = tmp |> html_elements("stortingsperioder_liste > stortingsperiode > respons_dato_tid") |> html_text(),
+                    version = tmp |> html_elements("stortingsperioder_liste > stortingsperiode > versjon") |> html_text(),
+                    from = tmp |> html_elements("stortingsperioder_liste > stortingsperiode > fra") |> html_text(),
+                    id = tmp |> html_elements("stortingsperioder_liste > stortingsperiode > id") |> html_text(),
+                    to = tmp |> html_elements("stortingsperioder_liste > stortingsperiode > til") |> html_text())
   tmp$years <- paste(format(as.Date(tmp$from), "%Y"), format(as.Date(tmp$to), "%Y"), sep = "-")
   
   return(tmp)

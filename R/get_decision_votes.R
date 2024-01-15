@@ -74,24 +74,24 @@ get_decision_votes <- function(voteid = NA, good_manners = 0){
   tmp <- resp |> 
     resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
-  if(identical(html_elements(tmp, "voteringsvedtak_liste > voteringsvedtak") %>% html_text(), character()) == TRUE){
-    tmp2 <- data.frame(response_date = tmp %>% html_elements("voteringsvedtak_oversikt > respons_dato_tid") %>% html_text(),
-                       version = tmp %>% html_elements("voteringsvedtak_oversikt > versjon") %>% html_text(),
-                       vote_id = tmp %>% html_elements("voteringsvedtak_oversikt > votering_id") %>% html_text(),
+  if(identical(html_elements(tmp, "voteringsvedtak_liste > voteringsvedtak") |> html_text(), character()) == TRUE){
+    tmp2 <- data.frame(response_date = tmp |> html_elements("voteringsvedtak_oversikt > respons_dato_tid") |> html_text(),
+                       version = tmp |> html_elements("voteringsvedtak_oversikt > versjon") |> html_text(),
+                       vote_id = tmp |> html_elements("voteringsvedtak_oversikt > votering_id") |> html_text(),
                        decision_code = NA,
                        decision_comment = NA,
                        decision_number = NA,
                        decision_reference = NA,
                        decision_text = NA)
   } else {
-    tmp2 <- data.frame(response_date = tmp %>% html_elements("voteringsvedtak_oversikt > respons_dato_tid") %>% html_text(),
-                       version = tmp %>% html_elements("voteringsvedtak_oversikt > versjon") %>% html_text(),
-                       vote_id = tmp %>% html_elements("voteringsvedtak_oversikt > votering_id") %>% html_text(),
-                       decision_code = tmp %>% html_elements("voteringsvedtak_liste > voteringsvedtak > vedtak_kode") %>% html_text(),
-                       decision_comment = tmp %>% html_elements("voteringsvedtak > vedtak_kommentar") %>% html_text(),
-                       decision_number = tmp %>% html_elements("voteringsvedtak > vedtak_nummer") %>% html_text(),
-                       decision_reference = tmp %>% html_elements("voteringsvedtak > vedtak_referanse") %>% html_text(),
-                       decision_text = tmp %>% html_elements("voteringsvedtak > vedtak_tekst") %>% html_text())
+    tmp2 <- data.frame(response_date = tmp |> html_elements("voteringsvedtak_oversikt > respons_dato_tid") |> html_text(),
+                       version = tmp |> html_elements("voteringsvedtak_oversikt > versjon") |> html_text(),
+                       vote_id = tmp |> html_elements("voteringsvedtak_oversikt > votering_id") |> html_text(),
+                       decision_code = tmp |> html_elements("voteringsvedtak_liste > voteringsvedtak > vedtak_kode") |> html_text(),
+                       decision_comment = tmp |> html_elements("voteringsvedtak > vedtak_kommentar") |> html_text(),
+                       decision_number = tmp |> html_elements("voteringsvedtak > vedtak_nummer") |> html_text(),
+                       decision_reference = tmp |> html_elements("voteringsvedtak > vedtak_referanse") |> html_text(),
+                       decision_text = tmp |> html_elements("voteringsvedtak > vedtak_tekst") |> html_text())
     
   }
 

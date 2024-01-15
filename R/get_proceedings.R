@@ -84,14 +84,14 @@ get_proceedings <- function(){
   tmp <- resp |> 
     resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
-  tmp2 <- list(root = data.frame(response_date = tmp %>% html_elements("saksgang_oversikt > respons_dato_tid") %>% html_text(),
-                                 version = tmp %>% html_elements("saksgang_oversikt > versjon") %>% html_text()),
-               proceedings = data.frame(id = tmp %>% html_elements("saksgang > id") %>% html_text(),
-                                        name = tmp %>% html_elements("saksgang > navn") %>% html_text()),
-               poceedings_steps = data.frame(id = tmp %>% html_elements("saksgang_steg > id") %>% html_text(),
-                                        name = tmp %>% html_elements("saksgang_steg > navn") %>% html_text(),
-                                        step_number = tmp %>% html_elements("saksgang_steg > steg_nummer") %>% html_text(),
-                                        outdated = tmp %>% html_elements("saksgang_steg > uaktuell") %>% html_text()))
+  tmp2 <- list(root = data.frame(response_date = tmp |> html_elements("saksgang_oversikt > respons_dato_tid") |> html_text(),
+                                 version = tmp |> html_elements("saksgang_oversikt > versjon") |> html_text()),
+               proceedings = data.frame(id = tmp |> html_elements("saksgang > id") |> html_text(),
+                                        name = tmp |> html_elements("saksgang > navn") |> html_text()),
+               poceedings_steps = data.frame(id = tmp |> html_elements("saksgang_steg > id") |> html_text(),
+                                        name = tmp |> html_elements("saksgang_steg > navn") |> html_text(),
+                                        step_number = tmp |> html_elements("saksgang_steg > steg_nummer") |> html_text(),
+                                        outdated = tmp |> html_elements("saksgang_steg > uaktuell") |> html_text()))
   
   # Because the only indicator for matching main id with
   # sub-ids is the list order, we need to match it by when

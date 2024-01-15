@@ -94,15 +94,15 @@ get_written_hearing_input <- function(hearingid = NA, good_manners = 0){
   tmp <- resp |> 
     resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
-  if(identical(tmp %>% html_elements("skriftlig_innspill > tekst") %>% html_text(), character())){
+  if(identical(tmp |> html_elements("skriftlig_innspill > tekst") |> html_text(), character())){
     
     message(paste0("Response of hearing ", hearingid, " has no text. Returning NA on missing variables"))
     
-    tmp2 <- data.frame(response_date = tmp %>% html_elements("skriftlige_innspill_oversikt > respons_dato_tid") %>% html_text(),
-                       version = tmp %>% html_elements("skriftlige_innspill_oversikt > versjon") %>% html_text(),
-                       hearing_id = tmp %>% html_elements("skriftlige_innspill_oversikt > horing_id") %>% html_text(),
-                       hearing_type = tmp %>% html_elements("skriftlige_innspill_oversikt > horing_type") %>% html_text(),
-                       committee_id = tmp %>% html_elements("skriftlige_innspill_oversikt > komite > id") %>% html_text(),
+    tmp2 <- data.frame(response_date = tmp |> html_elements("skriftlige_innspill_oversikt > respons_dato_tid") |> html_text(),
+                       version = tmp |> html_elements("skriftlige_innspill_oversikt > versjon") |> html_text(),
+                       hearing_id = tmp |> html_elements("skriftlige_innspill_oversikt > horing_id") |> html_text(),
+                       hearing_type = tmp |> html_elements("skriftlige_innspill_oversikt > horing_type") |> html_text(),
+                       committee_id = tmp |> html_elements("skriftlige_innspill_oversikt > komite > id") |> html_text(),
                        hearing_input_date = NA,
                        hearing_input_id = NA,
                        hearing_input_organization = NA,
@@ -114,16 +114,16 @@ get_written_hearing_input <- function(hearingid = NA, good_manners = 0){
     return(tmp2)
   }
   
-  tmp2 <- data.frame(response_date = tmp %>% html_elements("skriftlige_innspill_oversikt > respons_dato_tid") %>% html_text(),
-                     version = tmp %>% html_elements("skriftlige_innspill_oversikt > versjon") %>% html_text(),
-                     hearing_id = tmp %>% html_elements("skriftlige_innspill_oversikt > horing_id") %>% html_text(),
-                     hearing_type = tmp %>% html_elements("skriftlige_innspill_oversikt > horing_type") %>% html_text(),
-                     committee_id = tmp %>% html_elements("skriftlige_innspill_oversikt > komite > id") %>% html_text(),
-                     hearing_input_date = tmp %>% html_elements("skriftlig_innspill > dato") %>% html_text(),
-                     hearing_input_id = tmp %>% html_elements("skriftlig_innspill > id") %>% html_text(),
-                     hearing_input_organization = tmp %>% html_elements("skriftlig_innspill > organisasjon") %>% html_text(),
-                     hearing_input_text = tmp %>% html_elements("skriftlig_innspill > tekst") %>% html_text(),
-                     hearing_input_title = tmp %>% html_elements("skriftlig_innspill > tittel") %>% html_text())
+  tmp2 <- data.frame(response_date = tmp |> html_elements("skriftlige_innspill_oversikt > respons_dato_tid") |> html_text(),
+                     version = tmp |> html_elements("skriftlige_innspill_oversikt > versjon") |> html_text(),
+                     hearing_id = tmp |> html_elements("skriftlige_innspill_oversikt > horing_id") |> html_text(),
+                     hearing_type = tmp |> html_elements("skriftlige_innspill_oversikt > horing_type") |> html_text(),
+                     committee_id = tmp |> html_elements("skriftlige_innspill_oversikt > komite > id") |> html_text(),
+                     hearing_input_date = tmp |> html_elements("skriftlig_innspill > dato") |> html_text(),
+                     hearing_input_id = tmp |> html_elements("skriftlig_innspill > id") |> html_text(),
+                     hearing_input_organization = tmp |> html_elements("skriftlig_innspill > organisasjon") |> html_text(),
+                     hearing_input_text = tmp |> html_elements("skriftlig_innspill > tekst") |> html_text(),
+                     hearing_input_title = tmp |> html_elements("skriftlig_innspill > tittel") |> html_text())
     
   Sys.sleep(good_manners)
   

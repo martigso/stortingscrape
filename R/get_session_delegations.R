@@ -74,11 +74,11 @@ get_session_delegations <- function(sessionid = NA, good_manners = 0){
   tmp <- resp |> 
     resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
-  tmp <- data.frame(response_date = tmp %>% html_elements("delegasjoner_liste > delegasjon > respons_dato_tid") %>% html_text(),
-                    version = tmp %>% html_elements("delegasjoner_liste > delegasjon > versjon") %>% html_text(),
-                    id = tmp %>% html_elements("delegasjoner_liste > delegasjon > id") %>% html_text(),
-                    name = tmp %>% html_elements("delegasjoner_liste > delegasjon > navn") %>% html_text(),
-                    session_id = tmp %>% html_elements("sesjon_id") %>% html_text())
+  tmp <- data.frame(response_date = tmp |> html_elements("delegasjoner_liste > delegasjon > respons_dato_tid") |> html_text(),
+                    version = tmp |> html_elements("delegasjoner_liste > delegasjon > versjon") |> html_text(),
+                    id = tmp |> html_elements("delegasjoner_liste > delegasjon > id") |> html_text(),
+                    name = tmp |> html_elements("delegasjoner_liste > delegasjon > navn") |> html_text(),
+                    session_id = tmp |> html_elements("sesjon_id") |> html_text())
   
   Sys.sleep(good_manners)
   

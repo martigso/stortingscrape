@@ -71,11 +71,11 @@ get_parlsessions <- function(){
   tmp <- resp |> 
     resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
-  tmp <- data.frame(response_date = tmp %>% html_elements("sesjoner_liste > sesjon > respons_dato_tid") %>% html_text(),
-                    version = tmp %>% html_elements("sesjoner_liste > sesjon > versjon") %>% html_text(),
-                    from = tmp %>% html_elements("sesjoner_liste > sesjon > fra") %>% html_text(),
-                    id = tmp %>% html_elements("sesjoner_liste > sesjon > id") %>% html_text(),
-                    to = tmp %>% html_elements("sesjoner_liste > sesjon > til") %>% html_text())
+  tmp <- data.frame(response_date = tmp |> html_elements("sesjoner_liste > sesjon > respons_dato_tid") |> html_text(),
+                    version = tmp |> html_elements("sesjoner_liste > sesjon > versjon") |> html_text(),
+                    from = tmp |> html_elements("sesjoner_liste > sesjon > fra") |> html_text(),
+                    id = tmp |> html_elements("sesjoner_liste > sesjon > id") |> html_text(),
+                    to = tmp |> html_elements("sesjoner_liste > sesjon > til") |> html_text())
 
   tmp$years <- paste(format(as.Date(tmp$from), "%Y"), format(as.Date(tmp$to), "%Y"), sep = "-")
   

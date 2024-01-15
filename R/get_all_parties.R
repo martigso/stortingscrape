@@ -69,13 +69,13 @@ get_all_parties <- function(){
   tmp <- resp |> 
     resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
-  tmp <- data.frame(response_date = tmp %>% html_elements("partier_liste > parti > respons_dato_tid") %>% html_text(),
-                    version = tmp %>% html_elements("partier_liste > parti > versjon") %>% html_text(),
-                    id = tmp %>% html_elements("partier_liste > parti > id") %>% html_text(),
-                    name = tmp %>% html_elements("partier_liste > parti > navn") %>% html_text(),
-                    represented_party = tmp %>% html_elements("partier_liste > parti > representert_parti") %>% html_text(),
-                    sessionid = tmp %>% html_elements("sesjon_id") %>% html_text(),
-                    period_id = tmp %>% html_elements("stortingsperiode_id") %>% html_text())
+  tmp <- data.frame(response_date = tmp |> html_elements("partier_liste > parti > respons_dato_tid") |> html_text(),
+                    version = tmp |> html_elements("partier_liste > parti > versjon") |> html_text(),
+                    id = tmp |> html_elements("partier_liste > parti > id") |> html_text(),
+                    name = tmp |> html_elements("partier_liste > parti > navn") |> html_text(),
+                    represented_party = tmp |> html_elements("partier_liste > parti > representert_parti") |> html_text(),
+                    sessionid = tmp |> html_elements("sesjon_id") |> html_text(),
+                    period_id = tmp |> html_elements("stortingsperiode_id") |> html_text())
   
   return(tmp)
   

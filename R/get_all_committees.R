@@ -68,11 +68,11 @@ get_all_committees <- function(){
   tmp <- resp |> 
     resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
-  tmp <- data.frame(response_date = tmp %>% html_elements("komiteer_liste > komite > respons_dato_tid") %>% html_text(),
-                    version = tmp %>% html_elements("komiteer_liste > komite > versjon") %>% html_text(),
-                    id = tmp %>% html_elements("komiteer_liste > komite > id") %>% html_text(),
-                    name = tmp %>% html_elements("komiteer_liste > komite > navn") %>% html_text(),
-                    sessionid = tmp %>% html_elements("sesjon_id") %>% html_text())
+  tmp <- data.frame(response_date = tmp |> html_elements("komiteer_liste > komite > respons_dato_tid") |> html_text(),
+                    version = tmp |> html_elements("komiteer_liste > komite > versjon") |> html_text(),
+                    id = tmp |> html_elements("komiteer_liste > komite > id") |> html_text(),
+                    name = tmp |> html_elements("komiteer_liste > komite > navn") |> html_text(),
+                    sessionid = tmp |> html_elements("sesjon_id") |> html_text())
 
   return(tmp)
 

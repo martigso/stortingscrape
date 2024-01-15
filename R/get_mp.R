@@ -82,14 +82,14 @@ get_mp <- function(mpid = NA, good_manners = 0){
     resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
   
-  tmp <- data.frame(response_date = tmp %>% html_elements("respons_dato_tid") %>% html_text(),
-                    version = tmp %>% html_elements("versjon") %>% html_text(),
-                    death = tmp %>% html_elements("doedsdato") %>% html_text(),
-                    last_name = tmp %>% html_elements("etternavn") %>% html_text(),
-                    birth = tmp %>% html_elements("foedselsdato") %>% html_text(),
-                    first_name = tmp %>% html_elements("fornavn") %>% html_text(),
-                    id = tmp %>% html_elements("id") %>% html_text(),
-                    gender = tmp %>% html_elements("kjoenn") %>% html_text())
+  tmp <- data.frame(response_date = tmp |> html_elements("respons_dato_tid") |> html_text(),
+                    version = tmp |> html_elements("versjon") |> html_text(),
+                    death = tmp |> html_elements("doedsdato") |> html_text(),
+                    last_name = tmp |> html_elements("etternavn") |> html_text(),
+                    birth = tmp |> html_elements("foedselsdato") |> html_text(),
+                    first_name = tmp |> html_elements("fornavn") |> html_text(),
+                    id = tmp |> html_elements("id") |> html_text(),
+                    gender = tmp |> html_elements("kjoenn") |> html_text())
   
   message(paste0(mpid, " (", tmp$first_name, " ", tmp$last_name, ") done."))
   

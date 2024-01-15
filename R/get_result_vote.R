@@ -35,7 +35,7 @@
 #' p <- get_proposal_votes(12345)
 #' 
 #' stringr::str_replace_all(p$proposal_vote$proposal_text, 
-#'                          "\\<(.*)\\>|\\r\\n", "")  %>% 
+#'                          "\\<(.*)\\>|\\r\\n", "")  |> 
 #'   stringr::str_trim()
 #' }
 #'  
@@ -82,18 +82,18 @@ get_result_vote <- function(voteid = NA, good_manners = 0){
   tmp <- resp |> 
     resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
-  if(identical(tmp %>% html_elements("representant_voteringsresultat") %>% html_text(), character()) == FALSE){
+  if(identical(tmp |> html_elements("representant_voteringsresultat") |> html_text(), character()) == FALSE){
     
-    tmp2 <- data.frame(response_date = tmp %>% html_elements("voteringsresultat_oversikt > respons_dato_tid") %>% html_text(),
-                       version = tmp %>% html_elements("voteringsresultat_oversikt > versjon") %>% html_text(),
-                       vote_id = tmp %>% html_elements("voteringsresultat_oversikt > votering_id") %>% html_text(),
-                       mp_id = tmp %>% html_elements("representant_voteringsresultat > representant > id") %>% html_text(),
-                       party_id = tmp %>% html_elements("representant_voteringsresultat > representant > parti > id") %>% html_text(),
-                       vote = tmp %>% html_elements("representant_voteringsresultat > votering") %>% html_text())
+    tmp2 <- data.frame(response_date = tmp |> html_elements("voteringsresultat_oversikt > respons_dato_tid") |> html_text(),
+                       version = tmp |> html_elements("voteringsresultat_oversikt > versjon") |> html_text(),
+                       vote_id = tmp |> html_elements("voteringsresultat_oversikt > votering_id") |> html_text(),
+                       mp_id = tmp |> html_elements("representant_voteringsresultat > representant > id") |> html_text(),
+                       party_id = tmp |> html_elements("representant_voteringsresultat > representant > parti > id") |> html_text(),
+                       vote = tmp |> html_elements("representant_voteringsresultat > votering") |> html_text())
     
     
-    sub_holder <- lapply(tmp %>% html_elements("representant_voteringsresultat"), function(x){
-      x %>% html_elements("fast_vara_for > id") %>% html_text()
+    sub_holder <- lapply(tmp |> html_elements("representant_voteringsresultat"), function(x){
+      x |> html_elements("fast_vara_for > id") |> html_text()
     })
     
     tmp2$permanent_sub_for <- unlist(sapply(sub_holder, function(x) {
@@ -103,8 +103,8 @@ get_result_vote <- function(voteid = NA, good_manners = 0){
       x
     }))
     
-    sub_holder <- lapply(tmp %>% html_elements("representant_voteringsresultat"), function(x){
-      x %>% html_elements("vara_for > id") %>% html_text()
+    sub_holder <- lapply(tmp |> html_elements("representant_voteringsresultat"), function(x){
+      x |> html_elements("vara_for > id") |> html_text()
     })
     
     tmp2$sub_for <- unlist(sapply(sub_holder, function(x) {
@@ -115,9 +115,9 @@ get_result_vote <- function(voteid = NA, good_manners = 0){
     }))
     
   } else {
-    tmp2 <- data.frame(response_date = tmp %>% html_elements("voteringsresultat_oversikt > respons_dato_tid") %>% html_text(),
-                       version = tmp %>% html_elements("voteringsresultat_oversikt > versjon") %>% html_text(),
-                       vote_id = tmp %>% html_elements("voteringsresultat_oversikt > votering_id") %>% html_text(),
+    tmp2 <- data.frame(response_date = tmp |> html_elements("voteringsresultat_oversikt > respons_dato_tid") |> html_text(),
+                       version = tmp |> html_elements("voteringsresultat_oversikt > versjon") |> html_text(),
+                       vote_id = tmp |> html_elements("voteringsresultat_oversikt > votering_id") |> html_text(),
                        mp_id = NA,
                        party_id = NA,
                        vote = NA,

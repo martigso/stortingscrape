@@ -82,11 +82,11 @@ get_session_publications <- function(sessionid = NA, type = "referat", good_mann
   tmp <- resp |> 
     resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
-  if(identical(tmp %>% html_elements("publikasjon > id") %>% html_text(), character())){
+  if(identical(tmp |> html_elements("publikasjon > id") |> html_text(), character())){
     message(paste0("No '", type, "' in ", sessionid, ". Returning NA data frame"))
-    tmp2 <- data.frame(response_date = tmp %>% html_elements("publikasjoner_oversikt > respons_dato_tid") %>% html_text(),
-                       version = tmp %>% html_elements("publikasjoner_oversikt > versjon") %>% html_text(),
-                       session_id = tmp %>% html_elements("publikasjoner_oversikt > sesjon_id") %>% html_text(),
+    tmp2 <- data.frame(response_date = tmp |> html_elements("publikasjoner_oversikt > respons_dato_tid") |> html_text(),
+                       version = tmp |> html_elements("publikasjoner_oversikt > versjon") |> html_text(),
+                       session_id = tmp |> html_elements("publikasjoner_oversikt > sesjon_id") |> html_text(),
                        publication_date = NA,
                        publication_id = NA,
                        publication_format = NA,
@@ -95,17 +95,17 @@ get_session_publications <- function(sessionid = NA, type = "referat", good_mann
                        publication_type = NA)
     
   } else {
-    tmp2 <- data.frame(response_date = tmp %>% html_elements("publikasjoner_oversikt > respons_dato_tid") %>% html_text(),
-                       version = tmp %>% html_elements("publikasjoner_oversikt > versjon") %>% html_text(),
-                       session_id = tmp %>% html_elements("publikasjoner_oversikt > sesjon_id") %>% html_text(),
-                       publication_date = tmp %>% html_elements("publikasjon > dato") %>% html_text(),
-                       publication_id = tmp %>% html_elements("publikasjon > id") %>% html_text(),
-                       publication_format = sapply(tmp %>% html_elements("publikasjon > publikasjonformat_liste"), function(x){
-                         paste0(x %>% html_elements("string") %>% html_text(), collapse = "//")
+    tmp2 <- data.frame(response_date = tmp |> html_elements("publikasjoner_oversikt > respons_dato_tid") |> html_text(),
+                       version = tmp |> html_elements("publikasjoner_oversikt > versjon") |> html_text(),
+                       session_id = tmp |> html_elements("publikasjoner_oversikt > sesjon_id") |> html_text(),
+                       publication_date = tmp |> html_elements("publikasjon > dato") |> html_text(),
+                       publication_id = tmp |> html_elements("publikasjon > id") |> html_text(),
+                       publication_format = sapply(tmp |> html_elements("publikasjon > publikasjonformat_liste"), function(x){
+                         paste0(x |> html_elements("string") |> html_text(), collapse = "//")
                        }),
-                       publication_available_date = tmp %>% html_elements("publikasjon > tilgjengelig_dato") %>% html_text(),
-                       publication_title = tmp %>% html_elements("publikasjon > tittel") %>% html_text(),
-                       publication_type = tmp %>% html_elements("publikasjon > type") %>% html_text())
+                       publication_available_date = tmp |> html_elements("publikasjon > tilgjengelig_dato") |> html_text(),
+                       publication_title = tmp |> html_elements("publikasjon > tittel") |> html_text(),
+                       publication_type = tmp |> html_elements("publikasjon > type") |> html_text())
     
   }
   

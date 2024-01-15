@@ -93,32 +93,32 @@ get_topics <- function(keep_sub_topics = TRUE){
     
     tmp <- list(
       topics = data.frame(
-        response_date = tmp %>% html_elements("underemne_liste > emne > respons_dato_tid") %>% html_text(),
-        version = tmp %>% html_elements("underemne_liste > emne > versjon") %>% html_text(),
-        is_main_topic = tmp %>% html_elements("underemne_liste > emne > er_hovedemne") %>% html_text(),
-        main_topic_id = tmp %>% html_elements("underemne_liste > emne > hovedemne_id") %>% html_text(),
-        id = tmp %>% html_elements("underemne_liste > emne > id") %>% html_text(),
-        name = tmp %>% html_elements("underemne_liste > emne > navn") %>% html_text()),
+        response_date = tmp |> html_elements("underemne_liste > emne > respons_dato_tid") |> html_text(),
+        version = tmp |> html_elements("underemne_liste > emne > versjon") |> html_text(),
+        is_main_topic = tmp |> html_elements("underemne_liste > emne > er_hovedemne") |> html_text(),
+        main_topic_id = tmp |> html_elements("underemne_liste > emne > hovedemne_id") |> html_text(),
+        id = tmp |> html_elements("underemne_liste > emne > id") |> html_text(),
+        name = tmp |> html_elements("underemne_liste > emne > navn") |> html_text()),
       
       main_topics = data.frame(
-        response_date = tmp %>% html_elements("emne_liste > emne > respons_dato_tid") %>% html_text(),
-        version = tmp %>% html_elements("emne_liste > emne > versjon") %>% html_text(),
-        is_main_topic = tmp %>% html_elements("emne_liste > emne > er_hovedemne") %>% html_text(),
-        main_topic_id = tmp %>% html_elements("emne_liste > emne > hovedemne_id") %>% html_text(),
-        id = tmp %>% html_elements("emne_liste > emne > id") %>% html_text(),
-        name = tmp %>% html_elements("emne_liste > emne > navn") %>% html_text())
+        response_date = tmp |> html_elements("emne_liste > emne > respons_dato_tid") |> html_text(),
+        version = tmp |> html_elements("emne_liste > emne > versjon") |> html_text(),
+        is_main_topic = tmp |> html_elements("emne_liste > emne > er_hovedemne") |> html_text(),
+        main_topic_id = tmp |> html_elements("emne_liste > emne > hovedemne_id") |> html_text(),
+        id = tmp |> html_elements("emne_liste > emne > id") |> html_text(),
+        name = tmp |> html_elements("emne_liste > emne > navn") |> html_text())
     )
   } 
   
   if(keep_sub_topics == FALSE){
     
     tmp <- data.frame(
-      response_date = tmp %>% html_elements("emne_liste > emne > respons_dato_tid") %>% html_text(),
-      version = tmp %>% html_elements("emne_liste > emne > versjon") %>% html_text(),
-      is_main_topic = tmp %>% html_elements("emne_liste > emne > er_hovedemne") %>% html_text(),
-      main_topic_id = tmp %>% html_elements("emne_liste > emne > hovedemne_id") %>% html_text(),
-      id = tmp %>% html_elements("emne_liste > emne > id") %>% html_text(),
-      name = tmp %>% html_elements("emne_liste > emne > navn") %>% html_text())
+      response_date = tmp |> html_elements("emne_liste > emne > respons_dato_tid") |> html_text(),
+      version = tmp |> html_elements("emne_liste > emne > versjon") |> html_text(),
+      is_main_topic = tmp |> html_elements("emne_liste > emne > er_hovedemne") |> html_text(),
+      main_topic_id = tmp |> html_elements("emne_liste > emne > hovedemne_id") |> html_text(),
+      id = tmp |> html_elements("emne_liste > emne > id") |> html_text(),
+      name = tmp |> html_elements("emne_liste > emne > navn") |> html_text())
     
   }
   

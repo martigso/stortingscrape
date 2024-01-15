@@ -18,7 +18,7 @@
 #' 
 #' \dontrun{
 #' pub <- get_publication("refs-201819-03-06")
-#' (pub %>% html_elements("replikk"))[1] %>% html_text()
+#' (pub |> html_elements("replikk"))[1] |> html_text()
 #' }
 #'  
 #' @import rvest httr2
