@@ -25,8 +25,8 @@ format: gfm
 - [x] get_publication.R
 - [x] get_question.R
 - [x] get_question_hour.R
-- [ ] get_result_vote.R
-- [ ] get_session_cases.R
+- [x] get_result_vote.R
+- [x] get_session_cases.R
 - [ ] get_session_committees.R
 - [ ] get_session_decisions.R
 - [ ] get_session_delegations.R
