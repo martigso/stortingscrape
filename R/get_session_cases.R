@@ -50,11 +50,12 @@
 #'    | **party_id**  | Party id of proposing MP                         |
 #'    | **rep_sub**   | Logical indicator for whether MP is a substitute |
 #'    
-#' 4. **$spokespersons** (named list by case id)
+#' 4. **$spokespersons** (data frame by case id)
 #' 
 #'    |               |                                                  |
 #'    |:--------------|:-------------------------------------------------|
-#'    | **rep_id**    | Spokesperson MP id                               |
+#'    | **case_id**   | Case id                                          |
+#'    | **rep_id**    | Spokesperson(s) MP id for the case               |
 #'    | **county_id** | County id of spokesperson MP                     |
 #'    | **party_id**  | Party id of spokesperson MP                      |
 #'    | **rep_sub**   | Logical indicator for whether MP is a substitute |
@@ -71,22 +72,47 @@
 #' head(s0506)
 #' }
 #' 
-#' @import rvest parallel httr
+#' @import rvest parallel httr2
 #' @export
 #' 
 get_session_cases <- function(sessionid = NA, good_manners = 0, cores = 1){
   
   url <- paste0("https://data.stortinget.no/eksport/saker?sesjonid=", sessionid)
   
-  base <- GET(url)
+  base <- request(url)
   
-  resp <- http_type(base)
-  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
   
-  status <- http_status(base)
-  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
   
-  tmp <- read_html(base)
+  if(resp_content_type(resp) != "text/xml") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'text/xml'."), 
+      call. = FALSE) 
+  }
+  
+  tmp <- resp |> 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
   tmp2 <- list(root = data.frame(response_date      = tmp %>% html_elements("saker_oversikt > saker_liste > sak > respons_dato_tid") %>% html_text(),
                                  version            = tmp %>% html_elements("saker_oversikt > saker_liste > sak > versjon") %>% html_text(),
@@ -200,6 +226,12 @@ get_session_cases <- function(sessionid = NA, good_manners = 0, cores = 1){
   }, mc.cores = cores)
   
   names(tmp2$spokespersons) <- tmp2$root$id
+  
+  tmp2$spokespersons <- do.call(rbind, tmp2$spokespersons)
+  tmp2$spokespersons$case_id <- sub("\\.[0-9]+$", "", rownames(tmp2$spokespersons))
+  rownames(tmp2$spokespersons) <- 1:nrow(tmp2$spokespersons)
+  
+  tmp2$spokespersons <-  tmp2$spokespersons[, c("case_id", "rep_id", "county_id", "party_id", "rep_sub")]
   
   Sys.sleep(good_manners)
   
