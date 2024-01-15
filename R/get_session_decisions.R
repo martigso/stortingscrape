@@ -45,15 +45,40 @@ get_session_decisions <- function(sessionid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/stortingsvedtak?sesjonid=", sessionid)
   
-  base <- GET(url)
+  base <- request(url)
   
-  resp <- http_type(base)
-  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
   
-  status <- http_status(base)
-  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
   
-  tmp <- read_html(base)
+  if(resp_content_type(resp) != "text/xml") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'text/xml'."), 
+      call. = FALSE) 
+  }
+  
+  tmp <- resp |> 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
   tmp2 <- data.frame(response_date = tmp %>% html_elements("stortingsvedtak_oversikt > respons_dato_tid") %>% html_text(),
                      version = tmp %>% html_elements("stortingsvedtak_oversikt > versjon") %>% html_text(),
@@ -64,7 +89,6 @@ get_session_decisions <- function(sessionid = NA, good_manners = 0){
                      decision_date = tmp %>% html_elements("stortingsvedtak > stortingsvedtak_dato_tid") %>% html_text(),
                      decision_link_url = tmp %>% html_elements("stortingsvedtak > stortingsvedtak_lenke_url") %>% html_text(),
                      decision_number = tmp %>% html_elements("stortingsvedtak > stortingsvedtak_nummer") %>% html_text(),
-                     decision_text = tmp %>% html_elements("stortingsvedtak > stortingsvedtak_tekst") %>% html_text(),
                      decision_title = tmp %>% html_elements("stortingsvedtak > stortingsvedtak_tittel") %>% html_text())
   
   decision_type_id <- lapply(tmp %>% html_elements("stortingsvedtak > stortingsvedtak_type"), function(x){
@@ -91,6 +115,17 @@ get_session_decisions <- function(sessionid = NA, good_manners = 0){
     
   })
   
+  decision_text <- lapply(tmp %>% html_elements("stortingsvedtak > stortingsvedtak_tekst"), function(x){
+    
+    if(x |> html_text() == "") {
+      return("")
+    }
+    
+    x %>% html_text() |> read_html() |> html_text() |> trimws()
+    
+  }) |> unlist()
+  
+  tmp2$decision_text <- decision_text
   tmp2$decision_type_id <- do.call(c, decision_type_id)
   tmp2$decision_type_name <- do.call(c, decision_type_name)
   
