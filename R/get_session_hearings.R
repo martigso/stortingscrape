@@ -38,6 +38,7 @@
 #' 
 #'    |                      |                                        |
 #'    |:---------------------|:---------------------------------------|
+#'    | **hearing_id**       | Hearing id                             |
 #'    | **case_reference**   | Text reference for case                |
 #'    | **case_id**          | Case id                                |
 #'    | **case_short_title** | Short title for case                   |
@@ -46,11 +47,11 @@
 #'    
 #' 4. **$hearing_date** (named list by hearing id with date(s) the hearing was held)
 #' 
-#'    |                      |                           |
-#'    |:---------------------|:--------------------------|
-#'    | **response_date**    | Date of data retrieval    |
-#'    | **version**          | Data version from the API |
-#'    | **session_id**       | Session id                |
+#'    |                      |                            |
+#'    |:---------------------|:---------------------------|
+#'    | **hearing_id**       | Hearing id                 |
+#'    | **date**             | Date of hearing            |
+#'    | **place**            | Where the hearing was held |
 #' 
 #' @md
 #' 
@@ -67,7 +68,7 @@
 #' }
 #' 
 #' 
-#' @import rvest parallel httr
+#' @import rvest parallel httr2
 #' @export
 #' 
 
@@ -77,15 +78,41 @@ get_session_hearings <- function(sessionid = NA, good_manners = 0, cores = 1){
   
   url <- paste0("https://data.stortinget.no/eksport/horinger?sesjonid=", sessionid)
   
-  base <- GET(url)
+  base <- request(url)
   
-  resp <- http_type(base)
-  if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
   
-  status <- http_status(base)
-  if(status$category != "Success") stop(paste0("Response of ", url, " returned as '", status$message, "'"), call. = FALSE)
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
   
-  tmp <- read_html(base)
+  if(resp_content_type(resp) != "text/xml") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'text/xml'."), 
+      call. = FALSE) 
+  }
+  
+  tmp <- resp |> 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
+  
   
   tmp2 <- list(
     root = data.frame(
@@ -117,6 +144,12 @@ get_session_hearings <- function(sessionid = NA, good_manners = 0, cores = 1){
   
   names(tmp2$hearing_case_info) <- tmp2$hearing$hearing_id
   
+  tmp2$hearing_case_info <- do.call(rbind, tmp2$hearing_case_info)
+  
+  tmp2$hearing_case_info$hearing_id <- sub("\\.[0-9]+$", "", rownames(tmp2$hearing_case_info))
+  rownames(tmp2$hearing_case_info) <- 1:nrow(tmp2$hearing_case_info)
+  tmp2$hearing_case_info <- tmp2$hearing_case_info[, c("hearing_id", "case_reference", "case_id", "case_short_title", 
+                                                       "case_publication", "case_title")]
   
   tmp2$hearing_date <- mclapply(tmp %>% html_elements("horingstidspunkt_liste"), function(x){
     data.frame(place = x %>% html_elements("horingstidspunkt > sted") %>% html_text(),
@@ -124,6 +157,12 @@ get_session_hearings <- function(sessionid = NA, good_manners = 0, cores = 1){
   })
   
   names(tmp2$hearing_date) <- tmp2$hearing$hearing_id
+  
+  tmp2$hearing_date <- do.call(rbind, tmp2$hearing_date)
+  
+  tmp2$hearing_date$hearing_id <- sub("\\.[0-9]+$", "", rownames(tmp2$hearing_date))
+  rownames(tmp2$hearing_date) <- 1:nrow(tmp2$hearing_date)
+  tmp2$hearing_date <- tmp2$hearing_date[, c("hearing_id", "date", "place")]
   
   Sys.sleep(good_manners)
   
