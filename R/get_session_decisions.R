@@ -37,7 +37,7 @@
 #' head(desci)
 #' }
 #'  
-#' @import rvest httr
+#' @import rvest httr2
 #' 
 #' @export
 #' 

@@ -4,8 +4,10 @@
     * *In progress*: Converted all get_*() functions from `httr` to [`httr2`](https://httr2.r-lib.org/)
     * *In progress*: Replaced `magrittr` (`%>%`) pipes with native pipes (`|>`)
     * Changed $spokespersons in `get_session_cases()` to data frame. This will break backwards compatibility (sorry!).
+    * Rewrote the *decision_text* variable in`get_session_decisions()` so that residual html is stripped from the output. This might break some text processing applications (sorry!).
+    * Rewrote the date and info sections of `get_session_hearings()` to data.frames instead of lists. This might break some text processing applications (sorry!).
 - Minor changes:
-    * Rewrote the *poceedings_steps* variable in`get_proceedings()` to be scalable to changes in the API.
+    * Rewrote the *poceedings_steps* variable in`get_proceedings()` to be scalable to changes in the API. Should not break backwards compatibility.
 
 # stortingscrape 0.1.4
 

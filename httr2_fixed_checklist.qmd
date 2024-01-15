@@ -27,16 +27,16 @@ format: gfm
 - [x] get_question_hour.R
 - [x] get_result_vote.R
 - [x] get_session_cases.R
-- [ ] get_session_committees.R
-- [ ] get_session_decisions.R
-- [ ] get_session_delegations.R
-- [ ] get_session_hearings.R
-- [ ] get_session_meetings.R
-- [ ] get_session_mp_speech_activity.R
-- [ ] get_session_parties.R
-- [ ] get_session_publications.R
-- [ ] get_session_questions.R
-- [ ] get_topics.R
-- [ ] get_vote.R
-- [ ] get_written_hearing_input.R
+- [x] get_session_committees.R
+- [x] get_session_decisions.R
+- [x] get_session_delegations.R
+- [x] get_session_hearings.R
+- [x] get_session_meetings.R
+- [x] get_session_mp_speech_activity.R
+- [x] get_session_parties.R
+- [x] get_session_publications.R
+- [x] get_session_questions.R
+- [x] get_topics.R
+- [x] get_vote.R
+- [x] get_written_hearing_input.R
 - [ ] read_obt.R

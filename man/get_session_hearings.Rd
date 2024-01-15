@@ -40,6 +40,7 @@ A list with four elements:
 
 \item \strong{$hearing_case_info} (named list by hearing id with information on the case(s) belonging to the hearing)\tabular{ll}{
     \tab  \cr
+   \strong{hearing_id} \tab Hearing id \cr
    \strong{case_reference} \tab Text reference for case \cr
    \strong{case_id} \tab Case id \cr
    \strong{case_short_title} \tab Short title for case \cr
@@ -49,9 +50,9 @@ A list with four elements:
 
 \item \strong{$hearing_date} (named list by hearing id with date(s) the hearing was held)\tabular{ll}{
     \tab  \cr
-   \strong{response_date} \tab Date of data retrieval \cr
-   \strong{version} \tab Data version from the API \cr
-   \strong{session_id} \tab Session id \cr
+   \strong{hearing_id} \tab Hearing id \cr
+   \strong{date} \tab Date of hearing \cr
+   \strong{place} \tab Where the hearing was held \cr
 }
 
 }

@@ -53,9 +53,10 @@ A data.frame with the following variables:
    \strong{rep_sub} \tab Logical indicator for whether MP is a substitute \cr
 }
 
-\item \strong{$spokespersons} (named list by case id)\tabular{ll}{
+\item \strong{$spokespersons} (data frame by case id)\tabular{ll}{
     \tab  \cr
-   \strong{rep_id} \tab Spokesperson MP id \cr
+   \strong{case_id} \tab Case id \cr
+   \strong{rep_id} \tab Spokesperson(s) MP id for the case \cr
    \strong{county_id} \tab County id of spokesperson MP \cr
    \strong{party_id} \tab Party id of spokesperson MP \cr
    \strong{rep_sub} \tab Logical indicator for whether MP is a substitute \cr

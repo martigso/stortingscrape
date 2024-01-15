@@ -36,7 +36,7 @@
 #' }
 #' 
 #' 
-#' @import rvest httr
+#' @import rvest httr2
 #' @export
 #' 
 
@@ -82,6 +82,7 @@ get_session_mp_speech_activity <- function(sessionid = NA, mp_id = NA, good_mann
     resp_body_html(check_type = FALSE, encoding = "utf-8")
   
   if(identical(tmp %>% html_elements("representant_tale_aktivitet > tale_type") %>% html_text(), character())){
+    
     message(mp_id, " had no activity in ", sessionid, ". \n\tReturning empty...")
     
     tmp2 <- data.frame(response_date = tmp %>% html_elements("representant_tale_aktivitet_oversikt > respons_dato_tid") %>% html_text(),

@@ -54,7 +54,7 @@
 #'                                 status = "trukket")
 #' interp
 #' }
-#' @import rvest httr
+#' @import rvest httr2
 #' 
 #' @export
 #' 
@@ -63,27 +63,18 @@ get_session_questions <- function(sessionid = NA,
                                   status = NA, 
                                   good_manners = 0){
   
-  if(is.na(status) == TRUE){
+  if(q_type %in% c("interpellasjoner", "sporretimesporsmal", "skriftligesporsmal") == FALSE) {
+    
+    stop('Question type needs to be one of "interpellasjoner", "sporretimesporsmal", "skriftligesporsmal"')
+
+  } else if(is.na(status) == TRUE){
     
     url <- paste0("https://data.stortinget.no/eksport/", 
                   q_type, 
                   "?sesjonid=", 
                   sessionid)  
     
-    base <- GET(url)
     
-    resp <- http_type(base)
-    if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), 
-                                call. = FALSE)
-    
-    httpstat <- http_status(base)
-    if(httpstat$category != "Success") stop(paste0("Response of ", 
-                                                   url, 
-                                                   " returned as '", 
-                                                   httpstat$message, "'"), 
-                                            call. = FALSE)
-    
-  
   } else if(status %in% c("til_behandling", "trukket", "bortfalt", "alle") == FALSE){
     
     stop('Status needs to be one of "til_behandling", "trukket", "bortfalt", or "alle"')
@@ -91,20 +82,44 @@ get_session_questions <- function(sessionid = NA,
   } else {
     
     url <- paste0("https://data.stortinget.no/eksport/", q_type, "?sesjonid=", sessionid, "&status=", status)
-    base <- GET(url)
-    
-    resp <- http_type(base)
-    if(resp != "text/xml") stop(paste0("Response of ", url, " is not text/xml."), call. = FALSE)
-    
-    httpstat <- http_status(base)
-    if(httpstat$category != "Success") stop(paste0("Response of ", url, " returned as '", httpstat$message, "'"), call. = FALSE)
     
   }
   
-  message(paste("Downloading data for", sessionid))
-  tmp <- read_html(base)
+  base <- request(url)
   
-  message(paste("Structuring data for", sessionid))
+  resp <- base |> 
+    req_error(is_error = function(resp) FALSE) |> 
+    req_perform()
+  
+  if(resp$status_code != 200) {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " is '", 
+        resp |> resp_status_desc(),
+        "' (",
+        resp$status_code,
+        ")."
+      ), 
+      call. = FALSE)
+  }
+  
+  if(resp_content_type(resp) != "text/xml") {
+    stop(
+      paste0(
+        "Response of ", 
+        url, 
+        " returned as '", 
+        resp_content_type(resp), 
+        "'.",
+        " Should be 'text/xml'."), 
+      call. = FALSE) 
+  }
+  
+  tmp <- resp |> 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
+  
   tmp2 <- data.frame(
     response_date                     = tmp %>% html_elements("sporsmal_liste > sporsmal > respons_dato_tid") %>% html_text(),
     version                           = tmp %>% html_elements("sporsmal_liste > sporsmal > versjon") %>% html_text(),
