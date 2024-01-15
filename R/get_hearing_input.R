@@ -76,7 +76,7 @@ get_hearing_input <- function(hearingid = NA, good_manners = 0){
   }
   
   tmp <- resp |> 
-    resp_body_html(check_type = F, encoding = "utf-8") 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
   
   if(html_text(html_elements(tmp, "horingsinnspill_liste")) == ""){

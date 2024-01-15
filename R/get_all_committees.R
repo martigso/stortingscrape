@@ -66,7 +66,7 @@ get_all_committees <- function(){
   }
 
   tmp <- resp |> 
-    resp_body_html(check_type = F, encoding = "utf-8") 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
   tmp <- data.frame(response_date = tmp %>% html_elements("komiteer_liste > komite > respons_dato_tid") %>% html_text(),
                     version = tmp %>% html_elements("komiteer_liste > komite > versjon") %>% html_text(),

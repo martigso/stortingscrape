@@ -72,7 +72,7 @@ get_decision_votes <- function(voteid = NA, good_manners = 0){
   }
   
   tmp <- resp |> 
-    resp_body_html(check_type = F, encoding = "utf-8") 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
   if(identical(html_elements(tmp, "voteringsvedtak_liste > voteringsvedtak") %>% html_text(), character()) == TRUE){
     tmp2 <- data.frame(response_date = tmp %>% html_elements("voteringsvedtak_oversikt > respons_dato_tid") %>% html_text(),

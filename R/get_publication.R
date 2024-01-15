@@ -62,7 +62,7 @@ get_publication <- function(publicationid = NA, good_manners = 0){
   }
   
   tmp <- resp |> 
-    resp_body_html(check_type = F, encoding = "utf-8") 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
 
   return(tmp)
   

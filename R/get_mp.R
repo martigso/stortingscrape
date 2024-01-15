@@ -79,7 +79,7 @@ get_mp <- function(mpid = NA, good_manners = 0){
   }
   
   tmp <- resp |> 
-    resp_body_html(check_type = F, encoding = "utf-8") 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
   
   tmp <- data.frame(response_date = tmp %>% html_elements("respons_dato_tid") %>% html_text(),

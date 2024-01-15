@@ -67,7 +67,7 @@ get_all_parties <- function(){
   }
   
   tmp <- resp |> 
-    resp_body_html(check_type = F, encoding = "utf-8") 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
   tmp <- data.frame(response_date = tmp %>% html_elements("partier_liste > parti > respons_dato_tid") %>% html_text(),
                     version = tmp %>% html_elements("partier_liste > parti > versjon") %>% html_text(),

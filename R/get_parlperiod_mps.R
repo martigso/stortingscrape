@@ -98,7 +98,7 @@ get_parlperiod_mps <- function(periodid = NA, substitute = FALSE, good_manners =
   }
   
   tmp <- resp |> 
-    resp_body_html(check_type = F, encoding = "utf-8") 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
   tmp <- data.frame(response_date = tmp %>% html_elements("representanter_liste > representant > respons_dato_tid") %>% html_text(),
                     version = tmp %>% html_elements("representanter_liste > representant > versjon") %>% html_text(),

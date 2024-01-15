@@ -80,7 +80,7 @@ get_proposal_votes <- function(voteid = NA, good_manners = 0){
   }
   
   tmp <- resp |> 
-    resp_body_html(check_type = F, encoding = "utf-8") 
+    resp_body_html(check_type = FALSE, encoding = "utf-8") 
   
   if(identical(tmp %>% html_elements("voteringsforslag > forslag_id") %>% html_text(), character())){
     tmp2 <- list(

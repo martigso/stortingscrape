@@ -72,7 +72,7 @@ get_parlperiods <- function(){
   }
   
   tmp <- resp |> 
-    resp_body_html(check_type = F, encoding = "utf-8")   
+    resp_body_html(check_type = FALSE, encoding = "utf-8")   
   
   tmp <- data.frame(response_date = tmp %>% html_elements("stortingsperioder_liste > stortingsperiode > respons_dato_tid") %>% html_text(),
                     version = tmp %>% html_elements("stortingsperioder_liste > stortingsperiode > versjon") %>% html_text(),
