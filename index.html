@@ -70,11 +70,12 @@
 </h1></div>
 <!-- badges: start -->
 
-<p><code>stortingscrape</code> is an R package for retrieving data from the Norwegian parliament (<em>Stortinget</em>) through their easily accessible back-end API. The data requested using the package require little to no further structuring. The scope of the package ranges from general data on the parliament itself (rules, session info, committees, etc) to data on the parties, bibliographies of the MPs, questions, hearings, debates, votes, and more.</p>
+<p><code>stortingscrape</code> is an R package for retrieving data from the Norwegian parliament (<em>Stortinget</em>) through their easily accessible <a href="https://data.stortinget.no" class="external-link">back-end API</a>. The data requested using the package require little to no further structuring. The scope of the package ranges from general data on the parliament itself (rules, session info, committees, etc) to data on the parties, bibliographies of the MPs, questions, hearings, debates, votes, and more.</p>
 <p>The main goal of <code>stortingscrape</code> is to allow researchers to access any data from the Norwegian parliament easily, but also still be able to structure the data according to ones need. Most importantly, the package is facilitated for weaving together different parts of the data.stortinget.no API.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
+<p>Because I’m not in control of the API itself, the CRAN package might at times be outdated. Submitting to CRAN is quite time consuming and will not be done more than once or twice a year.</p>
 <div class="section level3">
 <h3 id="cran-stable-version">CRAN (stable version)<a class="anchor" aria-label="anchor" href="#cran-stable-version"></a>
 </h3>
@@ -102,7 +103,9 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span>         <span class="co"># but can also be retrieved with `get_parlsessions()`</span></span>
 <span></span>
 <span></span>
-<span><span class="va">qsesh</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_session_questions.html">get_session_questions</a></span><span class="op">(</span><span class="va">parl_sessions</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="fl">9</span><span class="op">]</span>, q_type <span class="op">=</span> <span class="st">"interpellasjoner"</span><span class="op">)</span></span>
+<span><span class="va">qsesh</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_session_questions.html">get_session_questions</a></span><span class="op">(</span><span class="va">parl_sessions</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span>, q_type <span class="op">=</span> <span class="st">"interpellasjoner"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">int1213</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="va">qsesh</span><span class="op">$</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
@@ -149,7 +152,7 @@
 <div class="section level2">
 <h2 id="data-description">Data description<a class="anchor" aria-label="anchor" href="#data-description"></a>
 </h2>
-<p>The data is described in detail in the <a href="https://data.stortinget.no/dokumentasjon-og-hjelp/" class="external-link">API of Stortinget</a>.</p>
+<p>The back-end data is described in detail in the <a href="https://data.stortinget.no/dokumentasjon-og-hjelp/" class="external-link">API of Stortinget</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
