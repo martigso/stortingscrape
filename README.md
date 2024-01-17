@@ -14,12 +14,12 @@ Downloads](http://cranlogs.r-pkg.org/badges/grand-total/stortingscrape?color=ora
 <!-- badges: end -->
 
 `stortingscrape` is an R package for retrieving data from the Norwegian
-parliament (*Stortinget*) through their easily accessible back-end API.
-The data requested using the package require little to no further
-structuring. The scope of the package ranges from general data on the
-parliament itself (rules, session info, committees, etc) to data on the
-parties, bibliographies of the MPs, questions, hearings, debates, votes,
-and more.
+parliament (*Stortinget*) through their easily accessible [back-end
+API](https://data.stortinget.no). The data requested using the package
+require little to no further structuring. The scope of the package
+ranges from general data on the parliament itself (rules, session info,
+committees, etc) to data on the parties, bibliographies of the MPs,
+questions, hearings, debates, votes, and more.
 
 The main goal of `stortingscrape` is to allow researchers to access any
 data from the Norwegian parliament easily, but also still be able to
@@ -28,6 +28,10 @@ is facilitated for weaving together different parts of the
 data.stortinget.no API.
 
 ## Installation
+
+Because I’m not in control of the API itself, the CRAN package might at
+times be outdated. Submitting to CRAN is quite time consuming and will
+not be done more than once or twice a year.
 
 ### CRAN (stable version)
 
@@ -60,7 +64,9 @@ parl_sessions |> # sessions data are built into the package
   head()         # but can also be retrieved with `get_parlsessions()`
 
 
-qsesh <- get_session_questions(parl_sessions$id[9], q_type = "interpellasjoner")
+qsesh <- get_session_questions(parl_sessions$id[4], q_type = "interpellasjoner")
+
+int1213 <- list()
 
 for(i in qsesh$id) {
   
@@ -111,7 +117,7 @@ mps_positions <- do.call(rbind, mps_positions)
 
 ## Data description
 
-The data is described in detail in the [API of
+The back-end data is described in detail in the [API of
 Stortinget](https://data.stortinget.no/dokumentasjon-og-hjelp/).
 
 ## Functions
