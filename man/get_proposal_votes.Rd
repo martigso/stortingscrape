@@ -21,7 +21,7 @@ A list with two elements:
    \strong{vote_id} \tab Id of the vote \cr
 }
 
-\item \strong{$proposal_by_parties${proposal_id}} (what parties (id) stood behind proposal(s))
+\item \strong{$proposal_by_parties$\{proposal_id\}} (what parties (id) stood behind proposal(s))
 }
 }
 \description{

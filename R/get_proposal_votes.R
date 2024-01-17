@@ -17,7 +17,7 @@
 #'    | **version**          | Data version from the API |
 #'    | **vote_id**          | Id of the vote            |
 #'    
-#' 2. **$proposal_by_parties${proposal_id}** (what parties (id) stood behind proposal(s))
+#' 2. **$proposal_by_parties$\{proposal_id\}** (what parties (id) stood behind proposal(s))
 #'    
 #' @md
 #' 
