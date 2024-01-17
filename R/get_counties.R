@@ -1,7 +1,7 @@
-#' Get list of MPs in a given parliamentary period
+#' Get list of electoral districts
 #' 
-#' @description A function for retrieving Norwegian MPs for a given parliamentary 
-#' period from the parliament API.
+#' @description A function for retrieving current and/or historical electoral districts
+#'  (counties) for the Norwegian parliament.
 #' 
 #' @usage get_counties(historical = FALSE)
 #' 

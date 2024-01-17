@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_counties.R
 \name{get_counties}
 \alias{get_counties}
-\title{Get list of MPs in a given parliamentary period}
+\title{Get list of electoral districts}
 \usage{
 get_counties(historical = FALSE)
 }
@@ -20,8 +20,8 @@ A data frame with the following variables:\tabular{ll}{
 }
 }
 \description{
-A function for retrieving Norwegian MPs for a given parliamentary
-period from the parliament API.
+A function for retrieving current and/or historical electoral districts
+(counties) for the Norwegian parliament.
 }
 \examples{
 \dontrun{ 
