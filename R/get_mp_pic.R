@@ -75,9 +75,9 @@ get_mp_pic <- function(mpid = NA, size = "middels",
   
   
   if(is.na(destfile) == TRUE & show_plot == TRUE){
-    if(require("imager") == FALSE) stop("Package 'imager' required for plotting images")
-    require(imager, quietly = TRUE)
-    p <- load.image(url)
+    if(requireNamespace("imager") == FALSE) stop("Package 'imager' required for plotting images")
+    
+    p <- imager::load.image(url)
     plot(p, axes = FALSE)
   }
   
