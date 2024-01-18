@@ -50,8 +50,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="stortingscrape-020">stortingscrape 0.2.0<a class="anchor" aria-label="anchor" href="#stortingscrape-020"></a></h2>
 <ul><li>Major changes:
-<ul><li>
-<em>In progress</em>: Replaced <code>magrittr</code> (<code>%&gt;%</code>) pipes with native pipes (<code>|&gt;</code>)</li>
+<ul><li>Replaced <code>magrittr</code> (<code>%&gt;%</code>) pipes with native pipes (<code>|&gt;</code>)</li>
 <li>Converted all get_*() functions from <code>httr</code> to <a href="https://httr2.r-lib.org/" class="external-link"><code>httr2</code></a>
 </li>
 <li>Changed $spokespersons in <code><a href="../reference/get_session_cases.html">get_session_cases()</a></code> to data frame. This will break backwards compatibility (sorry!).</li>
@@ -59,30 +58,34 @@
 <li>Rewrote the date and info sections of <code><a href="../reference/get_session_hearings.html">get_session_hearings()</a></code> to data.frames instead of lists. This might break some text processing applications (sorry!).</li>
 </ul></li>
 <li>Minor changes:
-<ul><li>Rewrote the <em>poceedings_steps</em> variable in<code><a href="../reference/get_proceedings.html">get_proceedings()</a></code> to be scalable to changes in the API. Should not break backwards compatibility.</li>
+<ul><li>Rewrote the <em>proceedings_steps</em> variable in<code><a href="../reference/get_proceedings.html">get_proceedings()</a></code> to be scalable to changes in the API. Should not break backwards compatibility.</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.4" id="stortingscrape-014">stortingscrape 0.1.4<a class="anchor" aria-label="anchor" href="#stortingscrape-014"></a></h2>
+<ul><li>Major changes
+<ul><li>Fixed a bug in <code><a href="../reference/get_session_questions.html">get_session_questions()</a></code>, where the presence of unanswered questions returned an error instead of <code>NA</code>
+</li>
+<li>Removed a variable from <code><a href="../reference/get_vote.html">get_vote()</a></code> because it suddenly disappeared from the API.</li>
+<li>Fixed an issue where <code><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse()</a></code> lines returned only one element when it was supposed to return several due to someone not realizing the vectorization rules of the function. Affected functions were: <code><a href="../reference/get_case.html">get_case()</a></code>, <code><a href="../reference/get_hearing_program.html">get_hearing_program()</a></code>, <code><a href="../reference/get_question.html">get_question()</a></code>, <code><a href="../reference/get_result_vote.html">get_result_vote()</a></code>, <code><a href="../reference/get_session_cases.html">get_session_cases()</a></code>, and <code><a href="../reference/get_session_questions.html">get_session_questions()</a></code>. Only <code><a href="../reference/get_case.html">get_case()</a></code> was significant, in that it listed all bill sponsors as being from the same party.</li>
+</ul></li>
+<li>Minor changes
 <ul><li>Fixed some typos in the readme</li>
 <li>Reworked the <code><a href="../reference/read_obt.html">read_obt()</a></code> function for the package not to rely on <code>dplyr</code>
 </li>
 <li>Added a hex badge logo. Extremely important.</li>
-<li>
-<strong>IMPORTANT</strong>: Fixed a bug in <code><a href="../reference/get_session_questions.html">get_session_questions()</a></code>, where the presence of unanswered questions returned an error instead of <code>NA</code>
-</li>
-<li>
-<strong>IMPORTANT</strong>: Removed a variable from <code><a href="../reference/get_vote.html">get_vote()</a></code> because it suddenly disappeared from the API.</li>
-<li>
-<strong>IMPORTANT</strong>: Fixed an issue where <code><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse()</a></code> lines returned only one element when it was supposed to return several due to someone not realizing the vectorization rules of the function. Affected functions were: <code><a href="../reference/get_case.html">get_case()</a></code>, <code><a href="../reference/get_hearing_program.html">get_hearing_program()</a></code>, <code><a href="../reference/get_question.html">get_question()</a></code>, <code><a href="../reference/get_result_vote.html">get_result_vote()</a></code>, <code><a href="../reference/get_session_cases.html">get_session_cases()</a></code>, and <code><a href="../reference/get_session_questions.html">get_session_questions()</a></code>. Only <code><a href="../reference/get_case.html">get_case()</a></code> was significant, in that it listed all bill sponsors as being from the same party.</li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.3" id="stortingscrape-013">stortingscrape 0.1.3<a class="anchor" aria-label="anchor" href="#stortingscrape-013"></a></h2><p class="text-muted">CRAN release: 2023-03-23</p>
-<ul><li>IMPORTANT: Fixed an issue with <code><a href="../reference/get_mp_bio.html">get_mp_bio()</a></code>, which broke after <a href="https://data.stortinget.no/nyhetsoversikt/endringer-i-biografidata/" class="external-link">an API update</a>.</li>
-<li>IMPORTANT: Fixed <a href="https://github.com/martigso/stortingscrape/issues/3" class="external-link">typo issue</a> – renaming some variables in `get_session_questions()</li>
-<li>Added <a href="https://martigso.github.io/stortingscrape/">pkgdown page</a> via gh-pages</li>
+<ul><li>Major changes # * Fixed an issue with <code><a href="../reference/get_mp_bio.html">get_mp_bio()</a></code>, which broke after <a href="https://data.stortinget.no/nyhetsoversikt/endringer-i-biografidata/" class="external-link">an API update</a>.
+<ul><li>Fixed <a href="https://github.com/martigso/stortingscrape/issues/3" class="external-link">typo issue</a> – renaming some variables in `get_session_questions()</li>
+</ul></li>
+<li>Minor changes
+<ul><li>Added <a href="https://martigso.github.io/stortingscrape/">pkgdown page</a> via gh-pages</li>
 <li>Changed color of text in logo</li>
 <li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
+</ul></li>
 </ul></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
