@@ -25,5 +25,5 @@ pkgdown/
 docs
 *.tex
 
-
-
+# CRAN stuff
+CRAN-SUBMISSION
