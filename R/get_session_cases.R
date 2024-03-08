@@ -142,7 +142,7 @@ get_session_cases <- function(sessionid = NA, good_manners = 0, cores = 1){
   names(tmp2$topics) <- tmp2$root$id
   
   # Case proposer
-  tmp2$proposers <- mclapply((tmp |> html_elements("saker_oversikt > saker_liste > sak > forslagstiller_liste")), function(x){
+  tmp2$proposers <- lapply((tmp |> html_elements("saker_oversikt > saker_liste > sak > forslagstiller_liste")), function(x){
     
     if(identical(x |> html_elements("representant > id") |> html_text(), character()) == TRUE){
       data.frame(rep_id = NA,
@@ -155,13 +155,32 @@ get_session_cases <- function(sessionid = NA, good_manners = 0, cores = 1){
       if(identical((x |> html_elements("representant > fylke > id") |> html_text()), character())) {
         county_id = NA
       } else {
-        county_id <- x |> html_elements("representant > fylke > id") |> html_text()
+        county_id <- x |> html_elements("representant > fylke")
+        
+        county_id <- lapply(county_id, function(y) {
+          
+          tmp_county_id <- y |> html_elements("id") |> html_text()
+          
+          tmp_county_id <- ifelse(identical(character(), tmp_county_id), NA, tmp_county_id)
+          
+        }) |> unlist()
+        
       }
       
       if(identical(x |> html_elements("representant > parti > id") |> html_text(), character())) {
         party_id <- NA
       } else {
-        party_id <- x |> html_elements("representant > parti > id") |> html_text()
+        
+        party_id <- x |> html_elements("representant > parti")
+        
+        party_id <- lapply(party_id, function(y) {
+          
+          tmp_party_id <- y |> html_elements("id") |> html_text()
+          
+          tmp_party_id <- ifelse(identical(character(), tmp_party_id), NA, tmp_party_id)
+          
+        }) |> unlist()
+        
       }
       
       data.frame(rep_id = x |> html_elements("representant > id") |> html_text(),
