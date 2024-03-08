@@ -142,7 +142,7 @@ get_session_cases <- function(sessionid = NA, good_manners = 0, cores = 1){
   names(tmp2$topics) <- tmp2$root$id
   
   # Case proposer
-  tmp2$proposers <- lapply((tmp |> html_elements("saker_oversikt > saker_liste > sak > forslagstiller_liste")), function(x){
+  tmp2$proposers <- mclapply((tmp |> html_elements("saker_oversikt > saker_liste > sak > forslagstiller_liste")), function(x){
     
     if(identical(x |> html_elements("representant > id") |> html_text(), character()) == TRUE){
       data.frame(rep_id = NA,
