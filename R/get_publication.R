@@ -64,6 +64,8 @@ get_publication <- function(publicationid = NA, good_manners = 0){
   tmp <- resp |> 
     resp_body_html(check_type = FALSE, encoding = "utf-8") 
 
+  Sys.sleep(good_manners)
+  
   return(tmp)
   
 }
