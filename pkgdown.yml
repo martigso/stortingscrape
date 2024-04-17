@@ -1,9 +1,9 @@
 pandoc: 3.1.11
-pkgdown: 2.0.7
+pkgdown: 2.0.8
 pkgdown_sha: ~
 articles:
   stortingscrape: stortingscrape.html
-last_built: 2024-03-14T14:29Z
+last_built: 2024-04-17T12:27Z
 urls:
   reference: https://martigso.github.io/stortingscrape/reference
   article: https://martigso.github.io/stortingscrape/articles
