@@ -2,7 +2,10 @@ Package: stortingscrape
 Type: Package
 Title: Access Data from the Norwegian Parliament API
 Version: 0.3.0
-Authors@R: person("Martin", "Søyland", email = "martin.soyland@stv.uio.no",
+Authors@R: person(given = "Martin", 
+                  family = "Søyland", 
+                  email = "martin.soyland@stv.uio.no",
+                  comment = c(ORCID = "0000-0002-2463-8469"),
                   role = c("aut", "cre"))
 Description: Functions for retrieving general and specific data from the Norwegian Parliament,
   through the Norwegian Parliament API at <https://data.stortinget.no>.
