@@ -1,3 +1,5 @@
+# stortingscrape 0.3.1
+
 # stortingscrape 0.3.0
 
 # stortingscrape 0.2.0
