@@ -124,3 +124,18 @@ Stortinget](https://data.stortinget.no/dokumentasjon-og-hjelp/).
 
 [You can find a list of all functions
 here.](https://martigso.github.io/stortingscrape/functions.html)
+
+## Citation
+
+Please use the following citation when using the package in research:
+
+> Søyland M (2024). “stortingscrape: An R package for accessing data
+> from the Norwegian parliament.” URL:
+> <https://martigso.github.io/stortingscrape/articles/stortingscrape.html>.
+
+This can, as with all R-packages, also be generated using the `citation`
+function:
+
+``` r
+citation("stortingscrape")
+```

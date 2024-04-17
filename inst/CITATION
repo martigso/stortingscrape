@@ -1,7 +1,7 @@
 bibentry(
   bibtype  = "Article",
-  title    = "stortingscrape: Access Data from the Norwegian Parliament API",
+  title    = "stortingscrape: An R package for accessing data from the Norwegian parliament",
   author   = "Martin Søyland",
-  journal  = "{URL: https://github. com/martigso/stortingscrape}", 
+  journal  = "{URL: https://martigso.github.io/stortingscrape/articles/stortingscrape.html}", 
   year     = "2024"
 )
