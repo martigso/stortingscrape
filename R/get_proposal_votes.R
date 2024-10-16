@@ -108,7 +108,7 @@ get_proposal_votes <- function(voteid = NA, good_manners = 0){
                                  proposal_designation = tmp |> html_elements("voteringsforslag > forslag_betegnelse") |> html_text(),
                                  proposal_designation_short = tmp |> html_elements("voteringsforslag > forslag_betegnelse_kort") |> html_text(),
                                  proposal_id = tmp |> html_elements("voteringsforslag > forslag_id") |> html_text(),
-                                 proposal_delivered_by_mp = tmp |> html_elements("voteringsforslag > forslag_levert_av_representant") |> html_text(),
+                                 proposal_delivered_by_mp = tmp |> html_elements("voteringsforslag > forslag_levert_av_representant > id") |> html_text(),
                                  proposal_on_behalf_of_text = tmp |> html_elements("voteringsforslag > forslag_paa_vegne_av_tekst") |> html_text(),
                                  proposal_sortingnumber = tmp |> html_elements("voteringsforslag > forslag_sorteringsnummer") |> html_text(),
                                  proposal_text = tmp |> html_elements("voteringsforslag > forslag_tekst") |> html_text(),

@@ -1,6 +1,14 @@
 # stortingscrape 0.3.1
 
+- Minor changes
+    * Fixed call to sleep in `get_publication()` function (was missing)
+    * Redirected citation to inst/CITATION file
+    * Fixed a minor error in the `get_proposal_votes()` function for the `proposal_delivered_by_mp` variable
+
 # stortingscrape 0.3.0
+
+- Minor changes
+    * Fixed an error in `get_session_cases()`, where the structuring of case proposers did not run in parallel, as was intended.
 
 # stortingscrape 0.2.0
 

@@ -18,6 +18,6 @@ Imports: rvest, httr2, parallel, stringr
 Suggests: imager, rmarkdown, knitr, pscl
 License: GPL (>= 3)
 VignetteBuilder: knitr
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 LazyData: true
