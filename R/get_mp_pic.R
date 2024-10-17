@@ -75,10 +75,10 @@ get_mp_pic <- function(mpid = NA, size = "middels",
   
   
   if(is.na(destfile) == TRUE & show_plot == TRUE){
-    if(requireNamespace("imager") == FALSE) stop("Package 'imager' required for plotting images")
+    if(requireNamespace("magick") == FALSE) stop("Package 'magick' required for plotting images")
     
-    p <- imager::load.image(url)
-    plot(p, axes = FALSE)
+    p <- magick::image_read(url)
+    plot(p)
   }
   
   if(is.na(destfile) == TRUE & show_plot == FALSE){
@@ -87,8 +87,8 @@ get_mp_pic <- function(mpid = NA, size = "middels",
   
   if(is.na(destfile) == FALSE & show_plot == TRUE){
     download.file(url, destfile = destfile)
-    p <- imager::load.image(destfile)
-    plot(p, axes = FALSE)
+    p <- magick::image_read(url)
+    plot(p)
   }
   
   if(is.na(destfile) == FALSE & show_plot == FALSE){

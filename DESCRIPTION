@@ -1,7 +1,7 @@
 Package: stortingscrape
 Type: Package
 Title: Access Data from the Norwegian Parliament API
-Version: 0.3.1
+Version: 0.3.2
 Authors@R: person(given = "Martin", 
                   family = "Søyland", 
                   email = "martin.soyland@stv.uio.no",
@@ -15,7 +15,7 @@ BugReports: https://github.com/martigso/stortingscrape/issues
 Depends: R (>= 4.2.0)
 Encoding: UTF-8
 Imports: rvest, httr2, parallel, stringr
-Suggests: imager, rmarkdown, knitr, pscl
+Suggests: magick, rmarkdown, knitr, pscl
 License: GPL (>= 3)
 VignetteBuilder: knitr
 RoxygenNote: 7.3.2

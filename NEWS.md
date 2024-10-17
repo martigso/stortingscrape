@@ -1,3 +1,8 @@
+# stortingscrape 0.3.2
+
+- Major changes
+    * Changed `get_mp_pic()` to utilize the `magick` package instead if `imagr` when `show_plot = TRUE`
+
 # stortingscrape 0.3.1
 
 - Minor changes
