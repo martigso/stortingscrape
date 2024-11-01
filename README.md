@@ -7,9 +7,9 @@
 Version](http://www.r-pkg.org/badges/version/stortingscrape)](https://cran.r-project.org/package=stortingscrape)
 [![Github
 Version](https://img.shields.io/github/r-package/v/martigso/stortingscrape?color=yellowgreen)](https://github.com/martigso/stortingscrape)
-[![Downloads](http://cranlogs.r-pkg.org/badges/stortingscrape)](https://cran.r-project.org/package=stortingscrape)
+[![Downloads](https://cranlogs.r-pkg.org/badges/stortingscrape)](https://cran.r-project.org/package=stortingscrape)
 [![Total
-Downloads](http://cranlogs.r-pkg.org/badges/grand-total/stortingscrape?color=orange)](https://cran.r-project.org/package=stortingscrape)
+Downloads](https://cranlogs.r-pkg.org/badges/grand-total/stortingscrape?color=orange)](https://cran.r-project.org/package=stortingscrape)
 [![R-CMD-check](https://github.com/martigso/stortingscrape/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/martigso/stortingscrape/actions/workflows/check-standard.yaml)
 <!-- badges: end -->
 
