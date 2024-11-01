@@ -2,6 +2,8 @@
 
 - Major changes
     * Changed `get_mp_pic()` to utilize the `magick` package instead if `imagr` when `show_plot = TRUE`
+- Minor changes
+    * Added color pallette for current political parties in the Storting
 
 # stortingscrape 0.3.1
 
