@@ -195,7 +195,9 @@ get_case <- function(caseid = NA, good_manners = 0){
                                              step_number = tmp |> html_elements("saksgang_steg > steg_nummer") |> html_text(),
                                              outdated = tmp |> html_elements("saksgang_steg > uaktuell") |> html_text()),
                spokespersons = data.frame(mp_id = tmp |> html_elements("saksordfoerer_liste > representant > id") |> html_text(),
-                                          party_id = tmp |> html_elements("saksordfoerer_liste > representant > parti > id") |> html_text(),
+                                          party_id = sapply(tmp |> html_elements("saksordfoerer_liste > representant > parti"),
+                                                            function(x) ifelse(identical(x |> html_elements("id") |> html_text(), character()), 
+                                                                               NA, x |> html_elements("id") |> html_text())),
                                           sub_mp = tmp |> html_elements("saksordfoerer_liste > representant > vara_representant") |> html_text()),
                keywords = data.frame(keyword = tmp |> html_elements("stikkord_liste > string") |> html_text()))
   
