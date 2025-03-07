@@ -1,3 +1,11 @@
+# stortingscrape 0.3.3
+- Major changes
+    * [**Stortinget's API updated their ID scheme for all questions**](https://data.stortinget.no/nyhetsoversikt/endring-i-id-er/)
+        - I can not guarantee that it will be possible to convert previously downloaded data to the new format. The API change did not facilitate this. If you need to append your data, I advice to start from scratch 
+        - I am not happy about this, but I can do nothing
+        - `get_question()` has been updated to the new scheme, and the `legacy_id` variable added
+        - `get_meeting_agenda()` is updated with `legacy_id` keys
+
 # stortingscrape 0.3.2
 
 - Major changes

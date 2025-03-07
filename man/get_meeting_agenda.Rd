@@ -27,6 +27,7 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{footnote} \tab Footnote for the case \cr
    \strong{proposition_id} \tab If relevant, belonging proposition id \cr
    \strong{committee_id} \tab If relevant, id of the responsible committee \cr
+   \strong{legacy_question_id} \tab Legacy question id, only used for mathing with old data (pre 10.12.2024) \cr
    \strong{loose_proposals} \tab Whether there are loose proposals to the case \cr
    \strong{case_id} \tab Id of the case \cr
    \strong{question_hour_type} \tab If relevant, type of question hour \cr

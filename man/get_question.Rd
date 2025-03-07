@@ -27,6 +27,7 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{agenda_number} \tab Agenda number in meeting \cr
    \strong{moved_to} \tab Date moved to \cr
    \strong{id} \tab Question id \cr
+   \strong{legacy_id} \tab Question legacy id (only use to match with data downloaded before 10.12.2024) \cr
    \strong{correct_person_id} \tab Not documented in API \cr
    \strong{correct_person_minister_id} \tab Not documented in API \cr
    \strong{correct_person_minister_title} \tab Not documented in API \cr

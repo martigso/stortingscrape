@@ -9,25 +9,26 @@
 #' 
 #' @return A data.frame with the following variables:
 #' 
-#'    |                           |                                               |
-#'    |:--------------------------|:----------------------------------------------|
-#'    | **response_date**         | Date of data retrieval                        |
-#'    | **version**               | Data version from the API                     |
-#'    | **agenda_number**         | The agenda number for the session             |
-#'    | **meeting_date**          | Date of the meeting                           |
-#'    | **meeting_id**            | Meeting id                                    |
-#'    | **meeting_place**         | Where the meeting was held                    |
-#'    | **agenda_case_reference** | Reference for the case on the agenda          |
-#'    | **agenda_case_number**    | Case number                                   |
-#'    | **agenda_case_text**      | Case description                              |
-#'    | **agenda_case_type**      | Case type                                     |
-#'    | **footnote**              | Footnote for the case                         |
-#'    | **proposition_id**        | If relevant, belonging proposition id         |
-#'    | **committee_id**          | If relevant, id of the responsible committee  |
-#'    | **loose_proposals**       | Whether there are loose proposals to the case |
-#'    | **case_id**               | Id of the case                                |
-#'    | **question_hour_type**    | If relevant, type of question hour            |
-#'    | **question_id**           | If relevant, question id                      |
+#'    |                           |                                                                          |
+#'    |:--------------------------|:-------------------------------------------------------------------------|
+#'    | **response_date**         | Date of data retrieval                                                   |
+#'    | **version**               | Data version from the API                                                |
+#'    | **agenda_number**         | The agenda number for the session                                        |
+#'    | **meeting_date**          | Date of the meeting                                                      |
+#'    | **meeting_id**            | Meeting id                                                               |
+#'    | **meeting_place**         | Where the meeting was held                                               |
+#'    | **agenda_case_reference** | Reference for the case on the agenda                                     |
+#'    | **agenda_case_number**    | Case number                                                              |
+#'    | **agenda_case_text**      | Case description                                                         |
+#'    | **agenda_case_type**      | Case type                                                                |
+#'    | **footnote**              | Footnote for the case                                                    |
+#'    | **proposition_id**        | If relevant, belonging proposition id                                    |
+#'    | **committee_id**          | If relevant, id of the responsible committee                             |
+#'    | **legacy_question_id**    | Legacy question id, only used for mathing with old data (pre 10.12.2024) |
+#'    | **loose_proposals**       | Whether there are loose proposals to the case                            |
+#'    | **case_id**               | Id of the case                                                           |
+#'    | **question_hour_type**    | If relevant, type of question hour                                       |
+#'    | **question_id**           | If relevant, question id                                                 |
 #' 
 #' @md
 #' 
@@ -98,6 +99,7 @@ get_meeting_agenda <- function(meetingid = NA, good_manners = 0){
                      footnote = tmp |> html_elements("dagsordensak > fotnote") |> html_text(),
                      proposition_id = tmp |> html_elements("dagsordensak > innstilling_id") |> html_text(),
                      committee_id = tmp |> html_elements("dagsordensak > komite_id") |> html_text(),
+                     legacy_question_id = tmp |> html_elements("dagsordensak > legacy_sporsmal_id") |> html_text(),
                      loose_proposals = tmp |> html_elements("dagsordensak > loseforslag") |> html_text(),
                      case_id = tmp |> html_elements("dagsordensak > sak_id") |> html_text(),
                      question_hour_type = tmp |> html_elements("dagsordensak > sporretime_type") |> html_text(),
