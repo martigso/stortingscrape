@@ -42,6 +42,7 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{answer_text} \tab Answer text (often empty) \cr
    \strong{title} \tab Question title \cr
    \strong{type} \tab Question type \cr
+   \strong{asked_by_other_id} \tab ID of person that asked the question on behalf of \code{question_from_id} \cr
 }
 }
 \description{
@@ -70,5 +71,5 @@ quest1213 <- do.call(rbind, int1213)
 
 }
 \seealso{
-\link{get_question_hour} \link{get_publication}
+\link{get_question_hour} \link{get_publication} \link{get_meeting_agenda}
 }

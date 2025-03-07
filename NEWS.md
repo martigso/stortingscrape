@@ -1,4 +1,5 @@
-# stortingscrape 0.3.3
+# stortingscrape 0.4.0
+
 - Major changes
     * [**Stortinget's API updated their ID scheme for all questions**](https://data.stortinget.no/nyhetsoversikt/endring-i-id-er/)
         - I can not guarantee that it will be possible to convert previously downloaded data to the new format. The API change did not facilitate this. If you need to append your data, I advice to start from scratch 
