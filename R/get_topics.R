@@ -33,7 +33,7 @@
 #' 
 #' 
 #' @examples 
-#' 
+#' \dontrun{
 #' # Request the data
 #' tops <- get_topics()
 #' 
@@ -42,6 +42,7 @@
 #' 
 #' # Extract all sub-topics for the first main topic
 #' tops$topics[which(tops$topics$main_topic_id == 5), ]
+#' }
 #' 
 #' @import rvest httr2
 #' 

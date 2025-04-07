@@ -38,7 +38,7 @@ A list with two elements:
 A function for retrieving topic keys used to label various data from the Norwegian parliament.
 }
 \examples{
-
+\dontrun{
 # Request the data
 tops <- get_topics()
 
@@ -47,5 +47,6 @@ tops$main_topics[1, ]
 
 # Extract all sub-topics for the first main topic
 tops$topics[which(tops$topics$main_topic_id == 5), ]
+}
 
 }
