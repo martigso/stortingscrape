@@ -1,7 +1,7 @@
 Package: stortingscrape
 Type: Package
 Title: Access Data from the Norwegian Parliament API
-Version: 0.4.0
+Version: 0.4.1
 Authors@R: person(given = "Martin", 
                   family = "Søyland", 
                   email = "martin.soyland@stv.uio.no",
