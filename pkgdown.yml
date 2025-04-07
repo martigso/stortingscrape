@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   stortingscrape: stortingscrape.html
-last_built: 2025-04-07T07:16Z
+last_built: 2025-04-07T07:37Z
 urls:
   reference: https://martigso.github.io/stortingscrape/reference
   article: https://martigso.github.io/stortingscrape/articles
