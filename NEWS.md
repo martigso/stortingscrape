@@ -1,5 +1,9 @@
 # stortingscrape 0.4.1
 
+- Minor changes
+    * Fixed a CRAN issue with the `get_topics()` function throwing an error because of an example
+        - Fixed by adding in a `\dontrun{}` for the example
+
 # stortingscrape 0.4.0
 
 - Major changes
