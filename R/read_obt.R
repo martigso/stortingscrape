@@ -44,8 +44,8 @@ read_obt <- function(file = NA){
   # <word>lever</word>
   # "<lever>"
   #     "leve" verb pres
-  seq_a <- seq(1, length(obt_raw)-2, 3)
-  seq_b <- seq(3, length(obt_raw), 3)
+  seq_a <- which(grepl("^<word>", obt_raw))
+  seq_b <- c(seq_a[2:length(seq_a)], length(obt_raw))
   
   # Splitting raw OBT into a list of single instances
   # and their tags
