@@ -7,14 +7,14 @@
 get_session_publications(sessionid = NA, type = "referat", good_manners = 0)
 }
 \arguments{
-\item{sessionid}{Character string indicating the id of the hearing to retrieve.}
+\item{sessionid}{Character string, or a vector of strings, indicating the id of the session to retrieve publications from.}
 
 \item{type}{Character specifying type of publication to download. Available types are "referat" (minutes),
 "innstilling" (proposition), "innberetning" (report), "lovvedtak" (law decision), "lovanmerkning" (law note),
 "dok8" (MP proposal) "dok12" (Constitutional proposal), and "dokumentserie" (document series).
 Defaults to "referat".}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
+\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 A data.frame with the following variables:\tabular{ll}{

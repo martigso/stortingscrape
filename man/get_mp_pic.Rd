@@ -17,7 +17,7 @@ get_mp_pic(mpid = NA, size = "middels",
 
 \item{show_plot}{Logical. FALSE (default) if no plot should be produced and TRUE if plot should be produced. Requires the "imager" package.}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
+\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 Picture of the requested MP in the preferred size.

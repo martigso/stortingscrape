@@ -4,12 +4,12 @@
 #' 
 #' @usage get_session_publications(sessionid = NA, type = "referat", good_manners = 0)
 #' 
-#' @param sessionid Character string indicating the id of the hearing to retrieve.
+#' @param sessionid Character string, or a vector of strings, indicating the id of the session to retrieve publications from.
 #' @param type Character specifying type of publication to download. Available types are "referat" (minutes), 
 #' "innstilling" (proposition), "innberetning" (report), "lovvedtak" (law decision), "lovanmerkning" (law note),
 #' "dok8" (MP proposal) "dok12" (Constitutional proposal), and "dokumentserie" (document series). 
 #' Defaults to "referat".
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
+#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame with the following variables:
 #' 
@@ -44,43 +44,13 @@
 #' @export
 #' 
 get_session_publications <- function(sessionid = NA, type = "referat", good_manners = 0){
+
+  if(length(sessionid) > 1)
+    return(fetch_multi(sessionid, get_session_publications, good_manners, type = type))
   
   url <- paste0("https://data.stortinget.no/eksport/publikasjoner?publikasjontype=", type, "&sesjonid=", sessionid)
   
-  base <- request(url)
-  
-  resp <- base |> 
-    req_error(is_error = function(resp) FALSE) |> 
-    req_perform()
-  
-  if(resp$status_code != 200) {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " is '", 
-        resp |> resp_status_desc(),
-        "' (",
-        resp$status_code,
-        ")."
-      ), 
-      call. = FALSE)
-  }
-  
-  if(resp_content_type(resp) != "text/xml") {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " returned as '", 
-        resp_content_type(resp), 
-        "'.",
-        " Should be 'text/xml'."), 
-      call. = FALSE) 
-  }
-  
-  tmp <- resp |> 
-    resp_body_html(check_type = FALSE, encoding = "utf-8") 
+  tmp <- api_get(url)
   
   if(identical(tmp |> html_elements("publikasjon > id") |> html_text(), character())){
     message(paste0("No '", type, "' in ", sessionid, ". Returning NA data frame"))

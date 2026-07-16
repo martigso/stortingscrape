@@ -9,7 +9,7 @@ get_session_cases(sessionid = NA, good_manners = 0, cores = 1)
 \arguments{
 \item{sessionid}{Character string indicating the id of the parliamentary session to retrieve.}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
+\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 
 \item{cores}{Integer. Number of cores (1 by default) to use in structuring the data.
 More than 1 will not work on windows}

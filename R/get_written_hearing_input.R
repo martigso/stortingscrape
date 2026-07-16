@@ -4,8 +4,8 @@
 #' 
 #' @usage get_written_hearing_input(hearingid = NA, good_manners = 0)
 #' 
-#' @param hearingid Character string indicating the id of the hearing to retrieve.
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
+#' @param hearingid Character string, or a vector of strings, indicating the id of the hearing to retrieve.
+#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame the following variables:
 #' 
@@ -40,14 +40,13 @@
 #' 
 get_written_hearing_input <- function(hearingid = NA, good_manners = 0){
   
+  if(length(hearingid) > 1)
+    return(fetch_multi(hearingid, get_written_hearing_input, good_manners))
+
   url <- paste0("https://data.stortinget.no/eksport/skriftligInnspill?horingid=", hearingid)
-  
-  base <- request(url)
-  
-  resp <- base |> 
-    req_error(is_error = function(resp) FALSE) |> 
-    req_perform()
-  
+
+  resp <- api_perform(url)
+
   if(resp$status_code == 500) {
     message("Hearing (",hearingid, ") did not have written input. Returning NA.")
     

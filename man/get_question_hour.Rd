@@ -7,9 +7,9 @@
 get_question_hour(meetingid = NA, good_manners = 0)
 }
 \arguments{
-\item{meetingid}{Character string indicating the id of the meeting to request all votes from}
+\item{meetingid}{Character string, or a vector of strings, indicating the id of the meeting to retrieve the question hour from}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
+\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 A list with ten data frames:

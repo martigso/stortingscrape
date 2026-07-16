@@ -4,8 +4,8 @@
 #' 
 #' @usage get_case(caseid = NA, good_manners = 0)
 #' 
-#' @param caseid Character string indicating the id of the case to request
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
+#' @param caseid Character string, or a vector of strings, indicating the id of the case to request
+#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A list with seven data frame elements:
 #' 
@@ -113,43 +113,13 @@
 #' 
 #' @export
 get_case <- function(caseid = NA, good_manners = 0){
+
+  if(length(caseid) > 1)
+    return(fetch_multi(caseid, get_case, good_manners, .combine = NULL))
   
   url <- paste0("https://data.stortinget.no/eksport/sak?sakid=", caseid)
   
-  base <- request(url)
-  
-  resp <- base |> 
-    req_error(is_error = function(resp) FALSE) |> 
-    req_perform()
-  
-  if(resp$status_code != 200) {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " is '", 
-        resp |> resp_status_desc(),
-        "' (",
-        resp$status_code,
-        ")."
-      ), 
-      call. = FALSE)
-  }
-  
-  if(resp_content_type(resp) != "text/xml") {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " returned as '", 
-        resp_content_type(resp), 
-        "'.",
-        " Should be 'text/xml'."), 
-      call. = FALSE) 
-  }
-  
-  tmp <- resp |> 
-    resp_body_html(check_type = FALSE, encoding = "utf-8") 
+  tmp <- api_get(url)
   
   
   if(identical(tmp |> html_elements("komite > id") |> html_text(), character())) {

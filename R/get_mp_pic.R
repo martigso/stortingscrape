@@ -10,7 +10,7 @@
 #' @param size Character string size of the picture. Accepts values "lite" (small), "middels" (medium -- default), and "stort" (big).
 #' @param destfile Character string specifying where to save the picture
 #' @param show_plot Logical. FALSE (default) if no plot should be produced and TRUE if plot should be produced. Requires the "imager" package.
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
+#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return Picture of the requested MP in the preferred size.
 #' 
@@ -41,12 +41,8 @@ get_mp_pic <- function(mpid = NA, size = "middels",
                 "&storrelse=", 
                 size)
   
-  base <- request(url)
-  
-  resp <- base |> 
-    req_error(is_error = function(resp) FALSE) |> 
-    req_perform()
-  
+  resp <- api_perform(url)
+
   if(resp$status_code != 200) {
     stop(
       paste0(

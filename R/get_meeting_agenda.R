@@ -4,8 +4,8 @@
 #' 
 #' @usage get_meeting_agenda(meetingid = NA, good_manners = 0)
 #' 
-#' @param meetingid Character string indicating the id of the meeting to request all votes from
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
+#' @param meetingid Character string, or a vector of strings, indicating the id of the meeting to retrieve the agenda from
+#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame with the following variables:
 #' 
@@ -48,43 +48,13 @@
 #' @export
 #' 
 get_meeting_agenda <- function(meetingid = NA, good_manners = 0){
+
+  if(length(meetingid) > 1)
+    return(fetch_multi(meetingid, get_meeting_agenda, good_manners))
   
   url <- paste0("https://data.stortinget.no/eksport/dagsorden?moteid=", meetingid)
   
-  base <- request(url)
-  
-  resp <- base |> 
-    req_error(is_error = function(resp) FALSE) |> 
-    req_perform()
-  
-  if(resp$status_code != 200) {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " is '", 
-        resp |> resp_status_desc(),
-        "' (",
-        resp$status_code,
-        ")."
-      ), 
-      call. = FALSE)
-  }
-  
-  if(resp_content_type(resp) != "text/xml") {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " returned as '", 
-        resp_content_type(resp), 
-        "'.",
-        " Should be 'text/xml'."), 
-      call. = FALSE) 
-  }
-  
-  tmp <- resp |> 
-    resp_body_html(check_type = FALSE, encoding = "utf-8") 
+  tmp <- api_get(url)
   
   tmp2 <- data.frame(response_date = tmp |> html_elements("mote_dagsorden_oversikt > respons_dato_tid") |> html_text(),
                      version = tmp |> html_elements("mote_dagsorden_oversikt > versjon") |> html_text(),

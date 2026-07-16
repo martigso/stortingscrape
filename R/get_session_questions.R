@@ -4,12 +4,12 @@
 #' 
 #' @usage get_session_questions(sessionid = NA, q_type = NA, status = NA, good_manners = 0)
 #' 
-#' @param sessionid Character string indicating the id of the session to request interpellations from
+#' @param sessionid Character string, or a vector of strings, indicating the id of the session to retrieve questions from
 #' @param q_type Character string indicating type of question to retrieve. 
 #' Options are "interpellasjoner" (interpellations), "sporretimesporsmal" (oral questions), or "skriftligesporsmal" (written questions).
 #' @param status Character string question status extraction. Possible values are NA (extract all questions), "til_behandling" (pending questions), 
 #' "trukket" (withdrawn questions), "bortfalt" (lapsed questions), or "alle" (all questions)
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
+#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame with the following variables:
 #' 
@@ -62,6 +62,9 @@ get_session_questions <- function(sessionid = NA,
                                   q_type = NA, 
                                   status = NA, 
                                   good_manners = 0){
+
+  if(length(sessionid) > 1)
+    return(fetch_multi(sessionid, get_session_questions, good_manners, q_type = q_type))
   
   if(q_type %in% c("interpellasjoner", "sporretimesporsmal", "skriftligesporsmal") == FALSE) {
     
@@ -85,40 +88,7 @@ get_session_questions <- function(sessionid = NA,
     
   }
   
-  base <- request(url)
-  
-  resp <- base |> 
-    req_error(is_error = function(resp) FALSE) |> 
-    req_perform()
-  
-  if(resp$status_code != 200) {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " is '", 
-        resp |> resp_status_desc(),
-        "' (",
-        resp$status_code,
-        ")."
-      ), 
-      call. = FALSE)
-  }
-  
-  if(resp_content_type(resp) != "text/xml") {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " returned as '", 
-        resp_content_type(resp), 
-        "'.",
-        " Should be 'text/xml'."), 
-      call. = FALSE) 
-  }
-  
-  tmp <- resp |> 
-    resp_body_html(check_type = FALSE, encoding = "utf-8") 
+  tmp <- api_get(url)
   
   tmp2 <- data.frame(
     response_date                     = tmp |> html_elements("sporsmal_liste > sporsmal > respons_dato_tid") |> html_text(),

@@ -7,9 +7,9 @@
 get_mp_bio(mpid = NA, good_manners = 0)
 }
 \arguments{
-\item{mpid}{Character string indicating the id of the MP to retrieve.}
+\item{mpid}{Character string, or a vector of strings, indicating the id of the MP to retrieve.}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
+\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 A list with ten data frames:

@@ -7,11 +7,11 @@
 get_parlperiod_mps(periodid = NA, substitute = FALSE, good_manners = 0)
 }
 \arguments{
-\item{periodid}{Character string indicating the id of the parliamentary period to retrieve.}
+\item{periodid}{Character string, or a vector of strings, indicating the id of the parliamentary period to retrieve.}
 
 \item{substitute}{Logical. Whether or not to include substitute MPs.}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
+\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 A data.frame with the following variables:\tabular{ll}{

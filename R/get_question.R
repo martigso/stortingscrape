@@ -5,8 +5,8 @@
 #' 
 #' @usage get_question(questionid = NA, good_manners = 0)
 #' 
-#' @param questionid Character string indicating the id of the session to request interpellations from
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
+#' @param questionid Character string, or a vector of strings, indicating the id of the question to retrieve
+#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame with the following variables:
 #' 
@@ -71,43 +71,13 @@
 #' @export
 #' 
 get_question <- function(questionid = NA, good_manners = 0){
-  
+
+  if(length(questionid) > 1)
+    return(fetch_multi(questionid, get_question, good_manners))
+
   url <- paste0("https://data.stortinget.no/eksport/enkeltsporsmal?NSporsmalId=", questionid)
-  
-  base <- request(url)
-  
-  resp <- base |> 
-    req_error(is_error = function(resp) FALSE) |> 
-    req_perform()
-  
-  if(resp$status_code != 200) {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " is '", 
-        resp |> resp_status_desc(),
-        "' (",
-        resp$status_code,
-        ")."
-      ), 
-      call. = FALSE)
-  }
-  
-  if(resp_content_type(resp) != "text/xml") {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " returned as '", 
-        resp_content_type(resp), 
-        "'.",
-        " Should be 'text/xml'."), 
-      call. = FALSE) 
-  }
-  
-  tmp <- resp |> 
-    resp_body_html(check_type = FALSE, encoding = "utf-8") 
+
+  tmp <- api_get(url)
   
   if(identical((tmp |> html_elements("rette_vedkommende > id") |> html_text()), character())) {
     correct_person_id <- NA

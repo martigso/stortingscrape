@@ -4,8 +4,8 @@
 #' 
 #' @usage get_mp_bio(mpid = NA, good_manners = 0)
 #' 
-#' @param mpid Character string indicating the id of the MP to retrieve.
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
+#' @param mpid Character string, or a vector of strings, indicating the id of the MP to retrieve.
+#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #'
 #' @return A list with ten data frames:
 #' 
@@ -147,44 +147,14 @@
 #' @export
 #' 
 get_mp_bio <- function(mpid = NA, good_manners = 0){
-  
+
+  if(length(mpid) > 1)
+    return(fetch_multi(mpid, get_mp_bio, good_manners, .combine = NULL))
+
   url <- paste0("https://data.stortinget.no/eksport/kodetbiografi?personid=", mpid)
-  
-  base <- request(url)
-  
-  resp <- base |> 
-    req_error(is_error = function(resp) FALSE) |> 
-    req_perform()
-  
-  if(resp$status_code != 200) {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " is '", 
-        resp |> resp_status_desc(),
-        "' (",
-        resp$status_code,
-        ")."
-      ), 
-      call. = FALSE)
-  }
-  
-  if(resp_content_type(resp) != "text/xml") {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " returned as '", 
-        resp_content_type(resp), 
-        "'.",
-        " Should be 'text/xml'."), 
-      call. = FALSE) 
-  }
-  
-  tmp <- resp |> 
-    resp_body_html(check_type = FALSE, encoding = "utf-8") 
-  
+
+  tmp <- api_get(url)
+
   tmp2 <- list(root = data.frame(response_date = tmp |> html_elements("respons_dato_tid") |> html_text(),
                                  version = tmp |> html_elements("versjon") |> html_text(),
                                  id = tmp |> html_elements("person_id") |> html_text()),

@@ -4,8 +4,8 @@
 #' 
 #' @usage get_question_hour(meetingid = NA, good_manners = 0)
 #' 
-#' @param meetingid Character string indicating the id of the meeting to request all votes from
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
+#' @param meetingid Character string, or a vector of strings, indicating the id of the meeting to retrieve the question hour from
+#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A list with ten data frames:
 #' 
@@ -83,43 +83,13 @@
 #' @export
 #' 
 get_question_hour <- function(meetingid = NA, good_manners = 0){
+
+  if(length(meetingid) > 1)
+    return(fetch_multi(meetingid, get_question_hour, good_manners, .combine = NULL))
   
   url <- paste0("https://data.stortinget.no/eksport/sporretime?moteid=", meetingid)
   
-  base <- request(url)
-  
-  resp <- base |> 
-    req_error(is_error = function(resp) FALSE) |> 
-    req_perform()
-  
-  if(resp$status_code != 200) {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " is '", 
-        resp |> resp_status_desc(),
-        "' (",
-        resp$status_code,
-        ")."
-      ), 
-      call. = FALSE)
-  }
-  
-  if(resp_content_type(resp) != "text/xml") {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " returned as '", 
-        resp_content_type(resp), 
-        "'.",
-        " Should be 'text/xml'."), 
-      call. = FALSE) 
-  }
-  
-  tmp <- resp |> 
-    resp_body_html(check_type = FALSE, encoding = "utf-8") 
+  tmp <- api_get(url)
   
   tmp2 <- list(
     root = data.frame(

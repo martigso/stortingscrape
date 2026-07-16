@@ -11,7 +11,7 @@ get_session_mp_speech_activity(sessionid = NA, mp_id = NA, good_manners = 0)
 
 \item{mp_id}{Character string for the MP to retreive all speeches of in a given session.}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
+\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 A data.frame with the following variables:\tabular{ll}{

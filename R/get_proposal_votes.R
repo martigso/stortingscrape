@@ -4,8 +4,8 @@
 #' 
 #' @usage get_proposal_votes(voteid = NA, good_manners = 0)
 #' 
-#' @param voteid Character string indicating the id of the vote to request all votes from
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
+#' @param voteid Character string, or a vector of strings, indicating the id of the vote to retrieve proposals from
+#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A list with two elements:
 #' 
@@ -44,43 +44,13 @@
 #' @export
 #' 
 get_proposal_votes <- function(voteid = NA, good_manners = 0){
+
+  if(length(voteid) > 1)
+    return(fetch_multi(voteid, get_proposal_votes, good_manners, .combine = NULL))
   
   url <- paste0("https://data.stortinget.no/eksport/voteringsforslag?voteringid=", voteid)
   
-  base <- request(url)
-  
-  resp <- base |> 
-    req_error(is_error = function(resp) FALSE) |> 
-    req_perform()
-  
-  if(resp$status_code != 200) {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " is '", 
-        resp |> resp_status_desc(),
-        "' (",
-        resp$status_code,
-        ")."
-      ), 
-      call. = FALSE)
-  }
-  
-  if(resp_content_type(resp) != "text/xml") {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " returned as '", 
-        resp_content_type(resp), 
-        "'.",
-        " Should be 'text/xml'."), 
-      call. = FALSE) 
-  }
-  
-  tmp <- resp |> 
-    resp_body_html(check_type = FALSE, encoding = "utf-8") 
+  tmp <- api_get(url)
   
   if(identical(tmp |> html_elements("voteringsforslag > forslag_id") |> html_text(), character())){
     tmp2 <- list(

@@ -7,7 +7,7 @@
 get_session_questions(sessionid = NA, q_type = NA, status = NA, good_manners = 0)
 }
 \arguments{
-\item{sessionid}{Character string indicating the id of the session to request interpellations from}
+\item{sessionid}{Character string, or a vector of strings, indicating the id of the session to retrieve questions from}
 
 \item{q_type}{Character string indicating type of question to retrieve.
 Options are "interpellasjoner" (interpellations), "sporretimesporsmal" (oral questions), or "skriftligesporsmal" (written questions).}
@@ -15,7 +15,7 @@ Options are "interpellasjoner" (interpellations), "sporretimesporsmal" (oral que
 \item{status}{Character string question status extraction. Possible values are NA (extract all questions), "til_behandling" (pending questions),
 "trukket" (withdrawn questions), "bortfalt" (lapsed questions), or "alle" (all questions)}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function}
+\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 A data.frame with the following variables:\tabular{ll}{

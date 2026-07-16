@@ -7,7 +7,7 @@
 #' 
 #' @param sessionid Character string indicating the session to retrieve speeches from.
 #' @param mp_id Character string for the MP to retreive all speeches of in a given session.
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
+#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame with the following variables:
 #' 
@@ -46,40 +46,7 @@ get_session_mp_speech_activity <- function(sessionid = NA, mp_id = NA, good_mann
   
   url <- paste0("https://data.stortinget.no/eksport/representanttaleaktiviteter?personid=", mp_id, "&sesjonid=", sessionid)
   
-  base <- request(url)
-  
-  resp <- base |> 
-    req_error(is_error = function(resp) FALSE) |> 
-    req_perform()
-  
-  if(resp$status_code != 200) {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " is '", 
-        resp |> resp_status_desc(),
-        "' (",
-        resp$status_code,
-        ")."
-      ), 
-      call. = FALSE)
-  }
-  
-  if(resp_content_type(resp) != "text/xml") {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " returned as '", 
-        resp_content_type(resp), 
-        "'.",
-        " Should be 'text/xml'."), 
-      call. = FALSE) 
-  }
-  
-  tmp <- resp |> 
-    resp_body_html(check_type = FALSE, encoding = "utf-8")
+  tmp <- api_get(url)
   
   if(identical(tmp |> html_elements("representant_tale_aktivitet > tale_type") |> html_text(), character())){
     

@@ -137,8 +137,27 @@ are expected to often be ran repeatedly have a `good_manners` argument.
 This will make R sleep for the set amount of seconds after calling
 the API. It is recommended to set this argument to 2 seconds or higher on multiple
 calls to the API. Generally, the package is built by the recommendations given
-by the `httr2` package [@wickham2023]^[Especially, see 
+by the `httr2` package [@wickham2023]^[Especially, see
 https://httr2.r-lib.org/articles/wrapping-apis.html].
+
+Note that Stortinget limits the API to 100 calls per minute; exceeding
+this returns an `HTTP 429 ("Too Many Requests")` response.^[See
+https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/. Users with
+special needs may request an exemption from Stortinget's web team.] Since version
+0.5.0, `stortingscrape` enforces this limit automatically by throttling all calls
+and retrying transient `429` responses, so the 100-per-minute ceiling is never
+crossed. The `good_manners` argument remains useful as an additional, more
+conservative pacing on top of this safety net; a delay of 0.6 seconds already
+keeps you at the hard limit, so the recommended 2 seconds stays comfortably below it.
+
+Since version 0.5.0, the single-id data-retrieving functions also accept a
+*vector* of ids. Passing several ids at once — for instance
+`get_question(c(id1, id2))` — retrieves them all in a single call. Functions that
+return a `data.frame` bind the rows together, while functions that return a list
+(such as `get_mp_bio()`, `get_case()`, or `get_publication()`) return a named list
+of results keyed by id. Passing a single id behaves exactly as before. An
+individual id that fails is turned into a warning rather than an error, so a single
+bad id does not discard the results of the successful ones.
 
 Most of the data from Stortinget's API and frontend web page are interconnected
 through ids for the various sources (session id, MP id, case id, question id,

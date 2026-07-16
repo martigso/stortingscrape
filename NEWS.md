@@ -1,3 +1,12 @@
+# stortingscrape 0.5.0
+
+- Major changes
+    * The single-id data-retrieving functions now accept a **vector of ids**. Passing several ids (e.g. `get_question(c(id1, id2))`) retrieves them all in one call: functions returning a `data.frame` bind the rows together, while functions returning a list (e.g. `get_mp_bio()`, `get_case()`, `get_publication()`) return a named list of results keyed by id. A single id behaves exactly as before, so existing code is unaffected. Individual ids that fail are turned into warnings so a single bad id does not discard the successful ones.
+    * All API calls now respect [Stortinget's documented rate limit of 100 calls per minute](https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/). Requests are throttled automatically and transient `429 Too Many Requests` responses are retried (respecting the `Retry-After` header). The `good_manners` argument remains available for additional polite pacing.
+- Minor changes
+    * The shared `httr2` request pipeline was refactored into internal helpers (`api_perform()`, `api_get()`), removing roughly a thousand lines of duplicated boilerplate across the data-retrieving functions with no change to their returned output.
+    * Minimum `httr2` version is now 1.1.0.
+
 # stortingscrape 0.4.1
 
 - Minor changes

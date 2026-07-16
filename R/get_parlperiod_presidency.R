@@ -4,8 +4,8 @@
 #' 
 #' @usage get_parlperiod_presidency(periodid = NA, good_manners = 0)
 #' 
-#' @param periodid Character string indicating the id of the parliamentary period to retrieve.
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function
+#' @param periodid Character string, or a vector of strings, indicating the id of the parliamentary period to retrieve.
+#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame with the following variables:
 #' 
@@ -36,43 +36,13 @@
 #' @export
 #' 
 get_parlperiod_presidency <- function(periodid = NA, good_manners = 0){
+
+  if(length(periodid) > 1)
+    return(fetch_multi(periodid, get_parlperiod_presidency, good_manners))
   
   url <- paste0("https://data.stortinget.no/eksport/presidentskapet?stortingsperiodeid=", periodid)
   
-  base <- request(url)
-  
-  resp <- base |> 
-    req_error(is_error = function(resp) FALSE) |> 
-    req_perform()
-  
-  if(resp$status_code != 200) {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " is '", 
-        resp |> resp_status_desc(),
-        "' (",
-        resp$status_code,
-        ")."
-      ), 
-      call. = FALSE)
-  }
-  
-  if(resp_content_type(resp) != "text/xml") {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " returned as '", 
-        resp_content_type(resp), 
-        "'.",
-        " Should be 'text/xml'."), 
-      call. = FALSE) 
-  }
-  
-  tmp <- resp |> 
-    resp_body_html(check_type = FALSE, encoding = "utf-8") 
+  tmp <- api_get(url)
   
   tmp <- data.frame(response_date = tmp |> html_elements("presidentskapet_oversikt > respons_dato_tid") |> html_text(),
                     version = tmp |> html_elements("presidentskapet_oversikt > versjon") |> html_text(),
