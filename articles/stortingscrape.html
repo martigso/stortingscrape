@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>stortingscrape: An R package for accessing data from the Norwegian parliament • stortingscrape</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="stortingscrape: An R package for accessing data from the Norwegian parliament">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">stortingscrape</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,18 +82,19 @@ the MPs, questions, hearings, debates, votes, and more.</p>
 <em>Stortinget</em> more easily accessible, <code>stortingscrape</code>
 does not live in a vacuum. A variety of parliamentary data for different
 countries are available for researchers to use freely. For parliamentary
-debates, <span class="citation">Thomas, Pang, and Lee (2006)</span> were
-one of the first to gather and make available data. Their data cover the
+debates, <span class="citation">Thomas et al. (2006)</span> were one of
+the first to gather and make available data. Their data cover the
 proceedings of the 2005 House debates. <span class="citation">Eggers and
 Spirling (2014)</span> structured the UK Hansard speech data, which
-spans from 1802 to 2010. <span class="citation">Beelen et al.
-(2017)</span> provided continuously updated data for the Canadian
-parliament, <span class="citation">Rauh and Schwalbach (2020)</span>
-made available a collection of speech data from 9 countries, and <span class="citation">Turner-Zwinkels et al. (2021)</span> developed a
-day-by-day dataset of MPs in Germany, Switzerland, and the Netherlands,
-in the period between 1947 and 2017. These examples are, however,
-different from <code>stortingscrape</code> in that they are finished
-datasets ready for download and have limited scope.</p>
+spans from 1802 to 2010. <span class="citation"><span class="nocase">Beelen et al.</span> (2017)</span> provided continuously
+updated data for the Canadian parliament, <span class="citation">Rauh
+and Schwalbach (2020)</span> made available a collection of speech data
+from 9 countries, and <span class="citation">Turner-Zwinkels et al.
+(2021)</span> developed a day-by-day dataset of MPs in Germany,
+Switzerland, and the Netherlands, in the period between 1947 and 2017.
+These examples are, however, different from <code>stortingscrape</code>
+in that they are finished datasets ready for download and have limited
+scope.</p>
 <p>The main goal of <code>stortingscrape</code> is to allow researchers
 to access any data from the Norwegian parliament easily, but also still
 be able to structure the data according to ones need. Most importantly,
@@ -177,6 +178,28 @@ will make R sleep for the set amount of seconds after calling the API.
 It is recommended to set this argument to 2 seconds or higher on
 multiple calls to the API. Generally, the package is built by the
 recommendations given by the <code>httr2</code> package <span class="citation">(Wickham 2023)</span><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;Especially, see &lt;a href="https://httr2.r-lib.org/articles/wrapping-apis.html" class="external-link uri"&gt;https://httr2.r-lib.org/articles/wrapping-apis.html&lt;/a&gt;&lt;/p&gt;'><sup>5</sup></a>.</p>
+<p>Note that Stortinget limits the API to 100 calls per minute;
+exceeding this returns an <code>HTTP 429 ("Too Many Requests")</code>
+response.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;See &lt;a href="https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/" class="external-link uri"&gt;https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/&lt;/a&gt;.
+Users with special needs may request an exemption from Stortinget’s web
+team.&lt;/p&gt;'><sup>6</sup></a> Since version 0.5.0,
+<code>stortingscrape</code> enforces this limit automatically by
+throttling all calls and retrying transient <code>429</code> responses,
+so the 100-per-minute ceiling is never crossed. The
+<code>good_manners</code> argument remains useful as an additional, more
+conservative pacing on top of this safety net; a delay of 0.6 seconds
+already keeps you at the hard limit, so the recommended 2 seconds stays
+comfortably below it.</p>
+<p>Since version 0.5.0, the single-id data-retrieving functions also
+accept a <em>vector</em> of ids. Passing several ids at once — for
+instance <code>get_question(c(id1, id2))</code> — retrieves them all in
+a single call. Functions that return a <code>data.frame</code> bind the
+rows together, while functions that return a list (such as
+<code><a href="../reference/get_mp_bio.html">get_mp_bio()</a></code>, <code><a href="../reference/get_case.html">get_case()</a></code>, or
+<code><a href="../reference/get_publication.html">get_publication()</a></code>) return a named list of results keyed by
+id. Passing a single id behaves exactly as before. An individual id that
+fails is turned into a warning rather than an error, so a single bad id
+does not discard the results of the successful ones.</p>
 <p>Most of the data from Stortinget’s API and frontend web page are
 interconnected through ids for the various sources (session id, MP id,
 case id, question id, vote id, etc.). <code>stortingscrape</code> core
@@ -186,7 +209,7 @@ question found on the frontend web page, or all questions for a
 parliamentary session, the package is flexible enough to suit both needs
 (see the <a href="#workflow">workflow</a> section). It will also enable
 users to quickly retreive data from the frontend web-page.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;&lt;a href="https://stortinget.no" class="external-link"&gt;stortinget.no&lt;/a&gt; as the
-ids are embedded in the urls.&lt;/p&gt;'><sup>6</sup></a></p>
+ids are embedded in the urls.&lt;/p&gt;'><sup>7</sup></a></p>
 <p>Because of the interconnectedness of the API’s data, there are some
 overlapping sources of data. For instance, both retreival of MP general
 information (<code><a href="../reference/get_mp.html">get_mp()</a></code>), biography
@@ -237,7 +260,7 @@ parliamentary session. Finally, I show how the different functions of
 the <code>stortingscrape</code> package works together – merging data on
 cases with their belonging vote results. Note that the vignette is built
 using the examples in the data folder of the package.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;This is done in order to not call the API each time the
-vignette is built.&lt;/p&gt;"><sup>7</sup></a></p>
+vignette is built.&lt;/p&gt;"><sup>8</sup></a></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"stortingscrape"</span><span class="op">)</span><span class="op">$</span><span class="va">results</span><span class="op">[</span>,<span class="st">"Item"</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span>list <span class="op">=</span> <span class="va">data_files</span><span class="op">)</span></span></code></pre></div>
@@ -283,7 +306,7 @@ Party, we can extract the ID of this particular vote from our data:</p>
 <p>To get the personal MP vote results for this particular vote, we can
 use the <code><a href="../reference/get_result_vote.html">get_result_vote()</a></code> function:<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;I have not decided if data values should be translated
 or not. In this case, “for” is “for”, “mot” is “against”, and
-“ikke_tilstede” is “absent”.}&lt;/p&gt;"><sup>8</sup></a></p>
+“ikke_tilstede” is “absent”.}&lt;/p&gt;"><sup>9</sup></a></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## covid_relief_result &lt;- get_result_vote("17689")</span></span>
 <span></span>
@@ -414,7 +437,7 @@ information on all cases by either using the &lt;code&gt;&lt;a href="https://rdr
 or control flow constructs available in R. However, in this case,
 calling the API 616 (&lt;code&gt;nrow(cases[["root"]])&lt;/code&gt;) times, will
 require to pause between calls (with the {&lt;code&gt;good_manners&lt;/code&gt;
-argument). This will increase running time substantially.&lt;/p&gt;'><sup>9</sup></a></p>
+argument). This will increase running time substantially.&lt;/p&gt;'><sup>10</sup></a></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># The case titles are, unfortunately, not translated</span></span>
@@ -482,13 +505,12 @@ package documentation within R or from <a href="https://martigso.github.io/stort
 <h2 id="bibliography">Bibliography<a class="anchor" aria-label="anchor" href="#bibliography"></a>
 </h2>
 <font size="3">
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-Bee:Thi:Alb:17" class="csl-entry">
-Beelen, Kaspar, Timothy Alberdingk Thijm, Christopher Cochrane, Kees
-Halvemaan, Graeme Hirst, Michael Kimmins, Sander Lijbrink, et al. 2017.
-<span>“Digitization of the Canadian Parliamentary Debates.”</span>
-<em>Canadian Journal of Political Science/Revue Canadienne de Science
-Politique</em>, 1–16.
+<span class="nocase">Beelen, Kaspar, Timothy Alberdingk Thijm,
+Christopher Cochrane, et al.</span> 2017. <span>“Digitization of the
+Canadian Parliamentary Debates.”</span> <em>Canadian Journal of
+Political Science/Revue Canadienne de Science Politique</em>, 1–16.
 </div>
 <div id="ref-Eggers2014" class="csl-entry">
 Eggers, Andrew C., and Arthur Spirling. 2014. <span>“Electoral Security
@@ -499,22 +521,20 @@ Studies Quarterly</em> 39 (4): 593–620.
 <div id="ref-Rauh2020" class="csl-entry">
 Rauh, Christian, and Jan Schwalbach. 2020. <span>“<span class="nocase">The ParlSpeech V2 data set: <span>F</span>ull-text
 corpora of 6.3 million parliamentary speeches in the key legislative
-chambers of nine representative democracies</span>.”</span> Harvard
-Dataverse. <a href="https://doi.org/10.7910/DVN/L4OAKN" class="external-link">https://doi.org/10.7910/DVN/L4OAKN</a>.
+chambers of nine representative democracies</span>.”</span> Version V1.
+Harvard Dataverse. <a href="https://doi.org/10.7910/DVN/L4OAKN" class="external-link">https://doi.org/10.7910/DVN/L4OAKN</a>.
 </div>
 <div id="ref-Mat:Pan:Lee:06" class="csl-entry">
 Thomas, Matt, Bo Pang, and Lillian Lee. 2006. <span>“Get Out the Vote:
 Determining Support or Opposition from Congressional Floor-Debate
-Transcripts.”</span> In <em>Proceedings of the 2006 Conference on
-Empirical Methods in Natural Language Processing</em>, 327–35.
-Association for Computational Linguistics.
+Transcripts.”</span> <em>Proceedings of the 2006 Conference on Empirical
+Methods in Natural Language Processing</em>, 327–35.
 </div>
 <div id="ref-Turner-Zwinkels2021" class="csl-entry">
-Turner-Zwinkels, Tomas, Oliver Huwyler, Elena Frech, Philip Manow,
-Stefanie Bailer, Niels D. Goet, and Simon Hug. 2021. <span>“Parliaments
-Day-by-Day: A New Open Source Database to Answer the Question of Who Was
-in What Parliament, Party, and Party-Group, and When.”</span>
-<em>Legislative Studies Quarterly</em>.
+Turner-Zwinkels, Tomas, Oliver Huwyler, Elena Frech, et al. 2021.
+<span>“Parliaments Day-by-Day: A New Open Source Database to Answer the
+Question of Who Was in What Parliament, Party, and Party-Group, and
+When.”</span> <em>Legislative Studies Quarterly</em>.
 </div>
 <div id="ref-wickham2023" class="csl-entry">
 Wickham, Hadley. 2023. <em>Httr2: Perform HTTP Requests and Process the
@@ -535,7 +555,7 @@ Responses</em>. <a href="https://httr2.r-lib.org" class="external-link">https://
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
