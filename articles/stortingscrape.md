@@ -51,22 +51,23 @@ package, before I summarize.
 The Norwegian parliament was comparatively early in granting open access
 to their data through an API when they launched
 [data.stortinget.no](https://data.stortinget.no) in 2012. The general
-purpose of the API is to priovide transparency in the form om raw data,
+purpose of the API is to provide transparency in the form of raw data,
 mirroring the frontend web-page information from
 [stortinget.no](https://stortinget.no). The format of the API has been
-fairly consistent over the time of its existance, but there have been
+fairly consistent over the time of its existence, but there have been
 some small style changes over different versions.[^1] `stortingscrape`
 was built under version $`1.6`$ of the API.
 
 Except for content that is blocked for the public (e.g. debates behind
 closed doors), the API contains all recorded data produced in
 Stortinget. These data include data on individual MPs, transcripts from
-debates, voting results, hearing input, and much more. For a exhaustive
-list of all data sources in the API.[^2] The data available in the API
-can be accessed through XML of JSON format[^3], both of which are
-flexible formats for compressing data in nested lists.
+debates, voting results, hearing input, and much more. For an exhaustive
+list of all data sources in the API, see the list of functions.[^2] The
+data available in the API can be accessed through XML or JSON
+format[^3], both of which are flexible formats for compressing data in
+nested lists.
 
-As an exmple, the raw data input for general information about a single
+As an example, the raw data input for general information about a single
 MP[^4] looks like this:
 
     #> <person>
@@ -113,7 +114,7 @@ however, easily combined for different applications of the data.
 One of the core thoughts behind the workflow of the package is to make
 it easy to combine different parts of the API and to extract the data
 you actually need. To facilitate this, most functions within
-`stortingscrape` are built to work seemlessly with the
+`stortingscrape` are built to work seamlessly with the
 [`apply()`](https://rdrr.io/r/base/apply.html) family or control flow
 constructs in R. Because we do not want to call the API repeatedly,
 functions that are expected to often be ran repeatedly have a
@@ -154,30 +155,37 @@ that whether you want to extract, for instance, a single question found
 on the frontend web page, or all questions for a parliamentary session,
 the package is flexible enough to suit both needs (see the
 [workflow](#workflow) section). It will also enable users to quickly
-retreive data from the frontend web-page.[^7]
+retrieve data from the frontend web-page.[^7]
 
 Because of the interconnectedness of the API’s data, there are some
-overlapping sources of data. For instance, both retreival of MP general
-information
+overlapping sources of data. For instance, MP general information
 ([`get_mp()`](https://martigso.github.io/stortingscrape/reference/get_mp.md)),
-biography
+biographies
 ([`get_mp_bio()`](https://martigso.github.io/stortingscrape/reference/get_mp_bio.md)),
-and all MPs for a session
+and all MPs for a parliamentary period
 ([`get_parlperiod_mps()`](https://martigso.github.io/stortingscrape/reference/get_parlperiod_mps.md))
-have the name of the MP in the API, but only
+all have the names of the MPs in the API, but
+[`get_mp_bio()`](https://martigso.github.io/stortingscrape/reference/get_mp_bio.md)
+does not return them in `stortingscrape`, because these data sources are
+easily merged by the MP’s id (see the [workflow](#workflow) section).
+Note that the same person id is called `mp_id` in most functions,
+`person_id` in
+[`get_speeches()`](https://martigso.github.io/stortingscrape/reference/get_speeches.md)
+and
+[`get_parlperiod_presidency()`](https://martigso.github.io/stortingscrape/reference/get_parlperiod_presidency.md),
+and `id` in
 [`get_mp()`](https://martigso.github.io/stortingscrape/reference/get_mp.md)
-will return MP names in `stortingscrape`, because these two data sources
-are easily merged by the MP’s id (see the [workflow](#workflow)
-section).
+and
+[`get_mp_bio()`](https://martigso.github.io/stortingscrape/reference/get_mp_bio.md).
 
 The scope of `stortingscrape` is almost the entire API of Stortinget,
 with some notable shortcomings. First, there are no functions for
 dynamically updated data sources, such as current speaker lists
 (<https://data.stortinget.no/dokumentasjon-og-hjelp/talerliste/>).
-Second, as mentioned above, duplicated data i avoided whenever possible.
-Third, certain unstandardized image sources – such as publication
-attachment figures – are not supported in the package. And finally,
-publications from the
+Second, as mentioned above, duplicated data is avoided whenever
+possible. Third, certain unstandardized image sources – such as
+publication attachment figures – are not supported in the package. And
+finally, publications from the
 [`get_publication()`](https://martigso.github.io/stortingscrape/reference/get_publication.md)
 function can be retrieved, but are returned as parsed XML (from the
 `xml2` package) because these data are not standardized across different
@@ -228,7 +236,7 @@ treated in the Storting during the early days of June 2021. The case in
 its entirety can be found at
 [here](https://stortinget.no/no/Saker-og-publikasjoner/Saker/Sak/?p=85196).
 You will see the procedure steps from a government proposal, through
-work in the finance committee, to debate and decision. Lets say a
+work in the finance committee, to debate and decision. Let’s say a
 particular proposal under the case caught our eye – for instance, vote
 number 61 from the Labor Party asking the government to propose a plan
 for implementing the International Labor Organization’s core conventions
@@ -236,7 +244,7 @@ to the Human Rights Act (menneskerettighetsloven).
 
 As can be seen from the link to the case itself, we have an ID within
 the URL: “85196”. This is the case ID. We can use the
-[`get_case()`](https://martigso.github.io/stortingscrape/reference/get_case.md)
+[`get_vote()`](https://martigso.github.io/stortingscrape/reference/get_vote.md)
 function from `stortingscrape` to extract all votes on this case:
 
 ``` r
@@ -313,11 +321,11 @@ table(covid_relief_result$party_id,
 #>   Sum  42            83  44 169
 ```
 
-As suspected, the vote was divided between the opposition (A, MDG, R,
-SP, and SV) and government parties (H, KrF, V, and FrP), and was not
-adopted by a thin margin of 2 votes. Of course, this is a minimal
-example, but I will highlight more methods for extracting multiple votes
-below.
+As suspected, the vote was divided between the opposition parties A,
+MDG, R, Sp, and SV on the one side, and the government parties (H, KrF,
+and V) together with FrP on the other, and was not adopted by a thin
+margin of 2 votes. Of course, this is a minimal example, but I will
+highlight more methods for extracting multiple votes below.
 
 ### Sequences of data extraction
 
@@ -343,20 +351,20 @@ through two core functions in the package:
 
 tail(parl_periods[,c("id", "years")])
 #>         id     years
-#> 15 1965-69 1965-1969
-#> 16 1961-65 1961-1965
-#> 17 1958-61 1958-1961
-#> 18 1954-57 1954-1958
-#> 19 1950-53 1950-1954
-#> 20 1945-49 1945-1950
+#> 16 1965-69 1965-1969
+#> 17 1961-65 1961-1965
+#> 18 1958-61 1958-1961
+#> 19 1954-57 1954-1958
+#> 20 1950-53 1950-1954
+#> 21 1945-49 1945-1950
 tail(parl_sessions[,c("id", "years")])
 #>         id     years
-#> 34 1991-92 1991-1992
-#> 35 1990-91 1990-1991
-#> 36 1989-90 1989-1990
-#> 37 1988-89 1988-1989
-#> 38 1987-88 1987-1988
-#> 39 1986-87 1986-1987
+#> 38 1991-92 1991-1992
+#> 39 1990-91 1990-1991
+#> 40 1989-90 1989-1990
+#> 41 1988-89 1988-1989
+#> 42 1987-88 1987-1988
+#> 43 1986-87 1986-1987
 ```
 
 The parliamentary period IDs is mainly used for MP data; Norwegian MPs
@@ -410,9 +418,8 @@ below).
 
 ### Example 2: From cases to MP vote results
 
-Next, I showcase how to get go from cases in a section, through
-extracting a case of interest and vote results, to vote matrices for
-that case.
+Next, I showcase how to go from cases in a session, through extracting a
+case of interest and vote results, to vote matrices for that case.
 
 First, I extract all cases in the 2019-2020 session:
 
@@ -475,7 +482,7 @@ three votes:
 ``` r
 
 table(vote_result$vote, vote_result$party_id,
-      dnn = c("Vote result", "Vote ID")) |>
+      dnn = c("Vote result", "Party")) |>
   prop.table(margin = 2) |>
   round(digits = 2)
 ```
@@ -655,12 +662,12 @@ Responses*. <https://httr2.r-lib.org>.
 
 [^9]: I have not decided if data values should be translated or not. In
     this case, “for” is “for”, “mot” is “against”, and “ikke_tilstede”
-    is “absent”.}
+    is “absent”.
 
 [^10]: I will note that it is possible to extract vote information on
     all cases by either using the
     [`apply()`](https://rdrr.io/r/base/apply.html) family or control
     flow constructs available in R. However, in this case, calling the
-    API 616 (`nrow(cases[["root"]])`) times, will require to pause
-    between calls (with the {`good_manners` argument). This will
-    increase running time substantially.
+    API 614 (`nrow(cases[["root"]])`) times will require pausing between
+    calls (with the `good_manners` argument). This will increase running
+    time substantially.

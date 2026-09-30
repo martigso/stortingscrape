@@ -11,12 +11,11 @@
     (e.g. [`get_mp_bio()`](https://martigso.github.io/stortingscrape/reference/get_mp_bio.md),
     [`get_case()`](https://martigso.github.io/stortingscrape/reference/get_case.md),
     [`get_publication()`](https://martigso.github.io/stortingscrape/reference/get_publication.md))
-    return a named list of results keyed by id. A single id behaves
-    exactly as before, so existing code is unaffected. Individual ids
-    that fail are turned into warnings so a single bad id does not
-    discard the successful ones. In interactive sessions, a progress bar
-    (from the `cli` package) shows the progress when retrieval takes
-    more than a few seconds.
+    return a named list of results keyed by id. Passing a single id
+    works as before. Individual ids that fail are turned into warnings
+    so a single bad id does not discard the successful ones. In
+    interactive sessions, a progress bar (from the `cli` package) shows
+    the progress when retrieval takes more than a few seconds.
   - All API calls now respect [Stortinget’s documented rate limit of 100
     calls per
     minute](https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/).
@@ -45,6 +44,20 @@
     for the rules and `data-raw/speaker_links.R` for the build).
     [`get_speeches()`](https://martigso.github.io/stortingscrape/reference/get_speeches.md)
     adds these links by default.
+  - **Breaking:** misspelled variable names are corrected: `qustion_*`
+    to `question_*` in
+    [`get_question()`](https://martigso.github.io/stortingscrape/reference/get_question.md);
+    `answ_on_belhalf_of*` to `answ_on_behalf_of*` and `sendt_date` to
+    `sent_date` in
+    [`get_question()`](https://martigso.github.io/stortingscrape/reference/get_question.md),
+    [`get_session_questions()`](https://martigso.github.io/stortingscrape/reference/get_session_questions.md),
+    and the `interp0203` dataset; and `$poceedings_steps` to
+    `$proceedings_steps` in
+    [`get_proceedings()`](https://martigso.github.io/stortingscrape/reference/get_proceedings.md).
+  - The `mp_id` argument of
+    [`get_session_mp_speech_activity()`](https://martigso.github.io/stortingscrape/reference/get_session_mp_speech_activity.md)
+    is renamed to `mpid`, as in the other functions. `mp_id` still
+    works, with a deprecation warning.
   - **Breaking:**
     [`get_publication()`](https://martigso.github.io/stortingscrape/reference/get_publication.md)
     now parses publications as XML rather than HTML. The HTML parser
@@ -84,6 +97,53 @@
     failing for votes where a proposal had no delivering MP; the
     proposal variables are now read per proposal, with `NA` for missing
     values.
+  - [`get_speeches()`](https://martigso.github.io/stortingscrape/reference/get_speeches.md)
+    records the time of retrieval in `response_date`, as the transcripts
+    have none of their own.
+  - Fixed
+    [`get_session_questions()`](https://martigso.github.io/stortingscrape/reference/get_session_questions.md)
+    ignoring `status` when given several sessions, and
+    [`get_session_hearings()`](https://martigso.github.io/stortingscrape/reference/get_session_hearings.md)
+    ignoring `cores` for the hearing dates.
+  - With several ids, a failing id in
+    [`get_mp_pic()`](https://martigso.github.io/stortingscrape/reference/get_mp_pic.md)
+    gives a warning rather than stopping the rest.
+  - The `parl_periods` and `parl_sessions` datasets are updated to
+    include the 2025-2029 period and its sessions.
+  - Corrected documentation, including the returned variables of several
+    functions, the dataset descriptions, and examples using the vector
+    of ids; `good_manners` is documented as numeric (seconds, e.g. 0.6).
+  - Added offline tests (testthat) for the transcript parser, date
+    handling, speaker linking, and the vector-of-ids helper.
+  - Fixed getters failing, or misaligning variables, when a hearing has
+    no committee
+    ([`get_session_hearings()`](https://martigso.github.io/stortingscrape/reference/get_session_hearings.md),
+    [`get_hearing_program()`](https://martigso.github.io/stortingscrape/reference/get_hearing_program.md),
+    [`get_hearing_input()`](https://martigso.github.io/stortingscrape/reference/get_hearing_input.md),
+    [`get_written_hearing_input()`](https://martigso.github.io/stortingscrape/reference/get_written_hearing_input.md)),
+    or when a representative has no party or county (the spokespersons
+    in
+    [`get_session_cases()`](https://martigso.github.io/stortingscrape/reference/get_session_cases.md),
+    and
+    [`get_vote()`](https://martigso.github.io/stortingscrape/reference/get_vote.md),
+    [`get_result_vote()`](https://martigso.github.io/stortingscrape/reference/get_result_vote.md),
+    [`get_parlperiod_mps()`](https://martigso.github.io/stortingscrape/reference/get_parlperiod_mps.md),
+    [`get_question()`](https://martigso.github.io/stortingscrape/reference/get_question.md)).
+    These variables are now read per record.
+  - [`get_hearing_input()`](https://martigso.github.io/stortingscrape/reference/get_hearing_input.md)
+    returns a row of `NA` for hearings without input (the API answers
+    with an error), like
+    [`get_written_hearing_input()`](https://martigso.github.io/stortingscrape/reference/get_written_hearing_input.md).
+  - [`get_hearing_program()`](https://martigso.github.io/stortingscrape/reference/get_hearing_program.md)
+    handles programs with a single element, and
+    [`get_proceedings()`](https://martigso.github.io/stortingscrape/reference/get_proceedings.md)
+    compares step numbers as numbers.
+  - [`get_parlperiod_mps()`](https://martigso.github.io/stortingscrape/reference/get_parlperiod_mps.md)
+    no longer prints a message for each period, and
+    [`get_session_cases()`](https://martigso.github.io/stortingscrape/reference/get_session_cases.md)
+    and
+    [`get_session_hearings()`](https://martigso.github.io/stortingscrape/reference/get_session_hearings.md)
+    use one core on Windows, where `mclapply()` cannot use more.
 
 ## stortingscrape 0.4.1
 
@@ -102,26 +162,26 @@ CRAN release: 2025-03-07
 - Major changes
   - [**Stortinget’s API updated their ID scheme for all
     questions**](https://data.stortinget.no/nyhetsoversikt/endring-i-id-er/)
-    - I can not guarantee that it will be possible to convert previously
+    - I cannot guarantee that it will be possible to convert previously
       downloaded data to the new format. The API change did not
-      facilitate this. If you need to append your data, I advice to
-      start from scratch
+      facilitate this. If you need to append your data, I advise
+      starting from scratch
     - I am not happy about this, but I can do nothing
     - [`get_question()`](https://martigso.github.io/stortingscrape/reference/get_question.md)
       has been updated to the new scheme, and the `legacy_id` variable
       added
     - [`get_meeting_agenda()`](https://martigso.github.io/stortingscrape/reference/get_meeting_agenda.md)
-      is updated with `legacy_id` keys
+      is updated with `legacy_question_id` keys
 
 ## stortingscrape 0.3.2
 
 - Major changes
   - Changed
     [`get_mp_pic()`](https://martigso.github.io/stortingscrape/reference/get_mp_pic.md)
-    to utilize the `magick` package instead if `imagr` when
+    to utilize the `magick` package instead of `imager` when
     `show_plot = TRUE`
 - Minor changes
-  - Added color pallette for current political parties in the Storting
+  - Added color palette for current political parties in the Storting
 
 ## stortingscrape 0.3.1
 
@@ -204,13 +264,15 @@ CRAN release: 2024-01-18
 
 CRAN release: 2023-03-23
 
-- Major changes \# \* Fixed an issue with
-  [`get_mp_bio()`](https://martigso.github.io/stortingscrape/reference/get_mp_bio.md),
-  which broke after [an API
-  update](https://data.stortinget.no/nyhetsoversikt/endringer-i-biografidata/).
+- Major changes
+  - Fixed an issue with
+    [`get_mp_bio()`](https://martigso.github.io/stortingscrape/reference/get_mp_bio.md),
+    which broke after [an API
+    update](https://data.stortinget.no/nyhetsoversikt/endringer-i-biografidata/).
   - Fixed [typo
     issue](https://github.com/martigso/stortingscrape/issues/3) –
-    renaming some variables in \`get_session_questions()
+    renaming some variables in
+    [`get_session_questions()`](https://martigso.github.io/stortingscrape/reference/get_session_questions.md)
 - Minor changes
   - Added [pkgdown page](https://martigso.github.io/stortingscrape/) via
     gh-pages

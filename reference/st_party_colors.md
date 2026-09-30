@@ -48,6 +48,10 @@ A vector of party abbreviations and official hex colors
 
   <https://www.sv.no/ressursbanken/grafisk/grafisk-profil/>
 
+- Uavhengig (independent):
+
+  Black; no official color
+
 - Venstre (Liberal Party):
 
   <https://www.venstre.no/organisasjon/visuell-identitet/>
@@ -62,7 +66,8 @@ parties.
 ``` r
 if (FALSE) { # \dontrun{
 
-barplot(table(get_parlperiod_mps(parl_periods$id[1])$party_id), col = st_party_colors)
+seats <- table(get_parlperiod_mps(parl_periods$id[1])$party_id)
+barplot(seats, col = st_party_colors[names(seats)])
 
 } # }
 ```

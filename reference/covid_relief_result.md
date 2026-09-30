@@ -1,6 +1,6 @@
-# Vote id 85196 results
+# Vote id 17689 results
 
-A dataset containing vote matrix on vote id 17689
+A dataset containing the vote matrix on vote id 17689
 
 ## Usage
 
@@ -39,6 +39,7 @@ A data frame with 8 columns and 169 rows
 - permanent_sub_for:
 
   Id of the MP originally holding the seat, if the substitute is
+  permanent
 
 - sub_for:
 

@@ -15,7 +15,7 @@ A list with four elements
 
 - \$root:
 
-  main data on the MP
+  main data on the cases
 
 - \$topics:
 
@@ -32,6 +32,10 @@ A list with four elements
 - Further description::
 
   [get_session_cases](https://martigso.github.io/stortingscrape/reference/get_session_cases.md)
+
+The dataset was retrieved with an earlier version of the package;
+[get_session_cases](https://martigso.github.io/stortingscrape/reference/get_session_cases.md)
+now returns `$spokespersons` as a data frame.
 
 ## Source
 

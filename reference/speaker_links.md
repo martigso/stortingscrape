@@ -18,7 +18,7 @@ speaker_links
 
 ## Format
 
-A data frame with 4 columns and 8195 rows
+A data frame with 4 columns and 8098 rows
 
 - speaker_name:
 
@@ -71,8 +71,7 @@ There are no manual corrections: names that cannot be resolved this way
 have `linked_person_id` `NA`.
 
 The links are made from names only and do not use the `person_id` given
-in the transcripts from 2016-2017 onward, which is sometimes wrong in
-hearings and committee meetings.
+in the transcripts from 2016-2017 onward, which is sometimes wrong.
 
 Ministers and their periods in office come from a list of ministers from
 1945 to January 2024, supplemented by the cabinet posts in

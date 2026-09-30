@@ -14,11 +14,12 @@ get_mp_bio(mpid = NA, good_manners = 0)
 - mpid:
 
   Character string, or a vector of strings, indicating the id of the MP
-  to retrieve.
+  to retrieve. With several ids, the result is a named list of the
+  results below, keyed by MP id.
 
 - good_manners:
 
-  Integer. Seconds delay between calls when making multiple calls to the
+  Numeric. Seconds delay between calls when making multiple calls to the
   same function. Note that the Stortinget API is limited to 100 calls
   per minute (see
   <https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/>).
@@ -68,8 +69,8 @@ A list with ten data frames:
     |                           |                                          |
     |---------------------------|------------------------------------------|
     |                           |                                          |
-    | **seniority_aar**         | Number of years in parliament            |
-    | **seniority_dager**       | Number of extra days (addition to years) |
+    | **seniority_years**       | Number of years in parliament            |
+    | **seniority_days**        | Number of extra days (addition to years) |
     | **county_of_birth**       | Birth county of the MP                   |
     | **municipality_of_birth** | Birth municipality of the MP             |
     | **eulogy_date**           | Eulogy date of the MP, when applicable   |
@@ -98,16 +99,16 @@ A list with ten data frames:
 
 7.  **\$parl_periods** (parliamentary periods the MP has held a seat)
 
-    |                    |                                                    |
-    |--------------------|----------------------------------------------------|
-    |                    |                                                    |
-    | **from_date**      | Date MP held seat from                             |
-    | **county**         | County the MP represented                          |
-    | **party_id**       | Party id for the MP's party                        |
-    | **rep_number**     | Representative number (within the whol parliament) |
-    | **parl_period_id** | Id of the parliamentary period                     |
-    | **to_date**        | Date MP held a seat to                             |
-    | **type**           | Type of representation                             |
+    |                    |                                                     |
+    |--------------------|-----------------------------------------------------|
+    |                    |                                                     |
+    | **from_date**      | Date MP held seat from                              |
+    | **county**         | County the MP represented                           |
+    | **party_id**       | Party id for the MP's party                         |
+    | **rep_number**     | Representative number (within the whole parliament) |
+    | **parl_period_id** | Id of the parliamentary period                      |
+    | **to_date**        | Date MP held a seat to                              |
+    | **type**           | Type of representation                              |
 
 8.  **\$parl_positions** (parliamentary positions held by the MP)
 
@@ -141,23 +142,19 @@ A list with ten data frames:
 
 10. **\$other_positions** (other positions held outside parliament)
 
-    |  |  |
-    |----|----|
-    |  |  |
-    | **several_periods_text** | Text description if the vocation was held for several periods (removed from API) |
-    | **from_year** | Year MP held vocation from |
-    | **from_year_sorting** | **Not described in API** (removed from API) |
-    | **from_year_unknown** | Logical indication for whether the start year is unknown |
-    | **max_to_year** | The last possible time the MP held the position (removed from API) |
-    | **note** | Note for position |
-    | **min_to_year** | The earliest possible time the MP held the position (removed from API) |
-    | **level** | **Not described in API** |
-    | **organization** | Organization holding the position |
-    | **place** | Place of the position |
-    | **to_year** | Year MP held position to |
-    | **to_year_unknown** | Logical indication for whether the end year is unknown |
-    | **type** | Position type |
-    | **position** | Position name/description |
+|  |  |
+|----|----|
+|  |  |
+| **from_year** | Year MP held vocation from |
+| **from_year_unknown** | Logical indication for whether the start year is unknown |
+| **note** | Note for position |
+| **level** | **Not described in API** |
+| **organization** | Organization holding the position |
+| **place** | Place of the position |
+| **to_year** | Year MP held position to |
+| **to_year_unknown** | Logical indication for whether the end year is unknown |
+| **type** | Position type |
+| **position** | Position name/description |
 
 ## See also
 

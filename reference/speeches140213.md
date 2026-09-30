@@ -12,9 +12,13 @@ speeches140213
 
 ## Format
 
-A data frame with 26 columns and 48 rows (see
+A data frame with 27 columns and 48 rows (see
 [get_speeches](https://martigso.github.io/stortingscrape/reference/get_speeches.md)
 for details)
+
+- response_date:
+
+  Date and time of retrieval
 
 - publication_id:
 

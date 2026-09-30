@@ -5,25 +5,25 @@
 - [`cases`](https://martigso.github.io/stortingscrape/reference/cases.md)
   : Storting cases in the 2019-2020 session
 - [`covid_relief`](https://martigso.github.io/stortingscrape/reference/covid_relief.md)
-  : Vote id 85196
+  : Votes on case id 85196
 - [`covid_relief_result`](https://martigso.github.io/stortingscrape/reference/covid_relief_result.md)
-  : Vote id 85196 results
+  : Vote id 17689 results
 - [`get_all_committees()`](https://martigso.github.io/stortingscrape/reference/get_all_committees.md)
   : Parliamentary committees over all sessions
 - [`get_all_parties()`](https://martigso.github.io/stortingscrape/reference/get_all_parties.md)
   : All parliamentary parties
 - [`get_case()`](https://martigso.github.io/stortingscrape/reference/get_case.md)
-  : Retreive a parliamentary case
+  : Retrieve a parliamentary case
 - [`get_counties()`](https://martigso.github.io/stortingscrape/reference/get_counties.md)
   : Get list of electoral districts
 - [`get_decision_votes()`](https://martigso.github.io/stortingscrape/reference/get_decision_votes.md)
-  : Retreive vote decision for a specified vote
+  : Retrieve vote decision for a specified vote
 - [`get_hearing_input()`](https://martigso.github.io/stortingscrape/reference/get_hearing_input.md)
   : Retrieve the hearing input for a specified hearing
 - [`get_hearing_program()`](https://martigso.github.io/stortingscrape/reference/get_hearing_program.md)
   : Retrieve the hearing program for a specified hearing
 - [`get_meeting_agenda()`](https://martigso.github.io/stortingscrape/reference/get_meeting_agenda.md)
-  : Retreive agenda for a specified meeting
+  : Retrieve agenda for a specified meeting
 - [`get_mp()`](https://martigso.github.io/stortingscrape/reference/get_mp.md)
   : Extract information on specific MPs
 - [`get_mp_bio()`](https://martigso.github.io/stortingscrape/reference/get_mp_bio.md)
@@ -41,7 +41,7 @@
 - [`get_proceedings()`](https://martigso.github.io/stortingscrape/reference/get_proceedings.md)
   : All parliamentary proceedings
 - [`get_proposal_votes()`](https://martigso.github.io/stortingscrape/reference/get_proposal_votes.md)
-  : Retreive all votes for a specified vote proposal
+  : Retrieve all proposals for a specified vote
 - [`get_publication()`](https://martigso.github.io/stortingscrape/reference/get_publication.md)
   : Retrieve a specific publication
 - [`get_question()`](https://martigso.github.io/stortingscrape/reference/get_question.md)
@@ -75,11 +75,11 @@
 - [`get_topics()`](https://martigso.github.io/stortingscrape/reference/get_topics.md)
   : Get list of topics and sub-topics for the Norwegian parliament
 - [`get_vote()`](https://martigso.github.io/stortingscrape/reference/get_vote.md)
-  : Retreive votes for a specific case
+  : Retrieve votes for a specific case
 - [`get_written_hearing_input()`](https://martigso.github.io/stortingscrape/reference/get_written_hearing_input.md)
   : Retrieve written input for a specified hearing
 - [`interp0203`](https://martigso.github.io/stortingscrape/reference/interp0203.md)
-  : Interpellations from the 2002-2003
+  : Interpellations from the 2002-2003 session
 - [`mps4549`](https://martigso.github.io/stortingscrape/reference/mps4549.md)
   : Members of parliament from the 1945-1949
 - [`parl_periods`](https://martigso.github.io/stortingscrape/reference/parl_periods.md)

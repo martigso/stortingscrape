@@ -21,12 +21,12 @@ get_session_publications(sessionid = NA, type = "referat", good_manners = 0)
   Character specifying type of publication to download. Available types
   are "referat" (minutes), "innstilling" (proposition), "innberetning"
   (report), "lovvedtak" (law decision), "lovanmerkning" (law note),
-  "dok8" (MP proposal) "dok12" (Constitutional proposal), and
+  "dok8" (MP proposal), "dok12" (Constitutional proposal), and
   "dokumentserie" (document series). Defaults to "referat".
 
 - good_manners:
 
-  Integer. Seconds delay between calls when making multiple calls to the
+  Numeric. Seconds delay between calls when making multiple calls to the
   same function. Note that the Stortinget API is limited to 100 calls
   per minute (see
   <https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/>).

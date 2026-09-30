@@ -20,7 +20,7 @@ get_question(questionid = NA, good_manners = 0)
 
 - good_manners:
 
-  Integer. Seconds delay between calls when making multiple calls to the
+  Numeric. Seconds delay between calls when making multiple calls to the
   same function. Note that the Stortinget API is limited to 100 calls
   per minute (see
   <https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/>).
@@ -32,16 +32,14 @@ A data.frame with the following variables:
 |  |  |
 |----|----|
 |  |  |
-| **response_date** | Date of data retrieval |
-| **version** | Data version from the API |
 | **justification** | Justification for question |
 | **answ_by_id** | Id for answering minister |
 | **answ_by_minister_id** | Id for department of answering minister |
 | **answ_by_minister_title** | Title for department of answering minister |
-| **answ_date** | Date question was asked |
-| **answ_on_belhalf_of** | Id of minister answered on behalf of, when relevant |
-| **answ_on_belhalf_of_minister_id** | Id of department answered on behalf of, when relevant |
-| **answ_on_belhalf_of_minister_title** | Title of department answered on behalf of, when relevant |
+| **answ_date** | Date the question was answered |
+| **answ_on_behalf_of** | Id of minister answered on behalf of, when relevant |
+| **answ_on_behalf_of_minister_id** | Id of department answered on behalf of, when relevant |
+| **answ_on_behalf_of_minister_title** | Title of department answered on behalf of, when relevant |
 | **agenda_number** | Agenda number in meeting |
 | **moved_to** | Date moved to |
 | **id** | Question id |
@@ -49,14 +47,20 @@ A data.frame with the following variables:
 | **correct_person_id** | Not documented in API |
 | **correct_person_minister_id** | Not documented in API |
 | **correct_person_minister_title** | Not documented in API |
-| **sendt_date** | Date question was sent |
+| **sent_date** | Date question was sent |
 | **session_id** | Session id |
 | **question_text** | Full question text |
+| **response_date** | Date of data retrieval |
+| **version** | Data version from the API |
 | **question_from_id** | Id of MP asking the question |
-| **qustion_number** | Question number |
-| **qustion_to_id** | Id of minister the question was asked to |
-| **qustion_to_minister_id** | Department id of minister the question was asked to |
-| **qustion_to_minister_title** | Department title of minister the question was asked to |
+| **question_from_county_id** | Id of the county of the MP asking the question |
+| **question_from_party_id** | Id of the party of the MP asking the question |
+| **question_from_deputy** | Whether the MP asking the question is a substitute |
+| **question_number** | Question number |
+| **question_to_id** | Id of minister the question was asked to |
+| **question_to_minister_id** | Department id of minister the question was asked to |
+| **question_to_minister_title** | Department title of minister the question was asked to |
+| **status** | Status of the question |
 | **answer_text** | Answer text (often empty) |
 | **title** | Question title |
 | **type** | Question type |
@@ -75,18 +79,10 @@ A data.frame with the following variables:
 if (FALSE) { # \dontrun{
 # An example of a possible workflow
 
-## Retreive sessions
-sessions <- get_parlsessions()
+## Retrieve all interpellations for a particular session
+qsesh <- get_session_questions("2012-2013", q_type = "interpellasjoner")
 
-## Retreive all interpellations for a particular session
-qsesh <- get_session_questions(sessions$id[9], q_type = "interpellasjoner")
-
-## Retreve detailed information on all interpellations in that session
-library(pbmcapply) # for progress bar. never use paralell on scraping
-int1213 <- pbmclapply(qsesh$id, function(x){
-    get_question(x, good_manners = 2)
-}, mc.cores = 1)
-
-quest1213 <- do.call(rbind, int1213)
+## Retrieve detailed information on all interpellations in that session
+int1213 <- get_question(qsesh$id, good_manners = 2)
 } # }
 ```

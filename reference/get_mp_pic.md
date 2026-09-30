@@ -30,18 +30,19 @@ get_mp_pic(mpid = NA, size = "middels",
 - show_plot:
 
   Logical. FALSE (default) if no plot should be produced and TRUE if
-  plot should be produced. Requires the "imager" package.
+  plot should be produced. Requires the "magick" package.
 
 - good_manners:
 
-  Integer. Seconds delay between calls when making multiple calls to the
+  Numeric. Seconds delay between calls when making multiple calls to the
   same function. Note that the Stortinget API is limited to 100 calls
   per minute (see
   <https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/>).
 
 ## Value
 
-Picture of the requested MP in the preferred size.
+No return value; called for its side effects (saves the picture to
+`destfile` and/or plots it).
 
 ## See also
 

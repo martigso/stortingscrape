@@ -18,7 +18,7 @@ get_parlperiod_presidency(periodid = NA, good_manners = 0)
 
 - good_manners:
 
-  Integer. Seconds delay between calls when making multiple calls to the
+  Numeric. Seconds delay between calls when making multiple calls to the
   same function. Note that the Stortinget API is limited to 100 calls
   per minute (see
   <https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/>).
@@ -51,7 +51,7 @@ A data.frame with the following variables:
 ``` r
 if (FALSE) { # \dontrun{
  
-# Request one MP by id
+# Request the presidency for one period
 get_parlperiod_presidency("2005-2009")
 
 } # }

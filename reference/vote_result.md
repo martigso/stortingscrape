@@ -11,7 +11,8 @@ vote_result
 
 ## Format
 
-A list with one vote per element
+A list with three data frames, one per vote (15404, 15405, and 15406),
+each with 169 rows and the following variables:
 
 - response_date:
 

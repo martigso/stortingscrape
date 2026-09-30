@@ -24,7 +24,7 @@ get_speeches(publicationid = NA, good_manners = 0, link = TRUE)
 
 - good_manners:
 
-  Integer. Seconds delay between calls when making multiple calls to the
+  Numeric. Seconds delay between calls when making multiple calls to the
   same function. Note that the Stortinget API is limited to 100 calls
   per minute (see
   <https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/>).
@@ -43,6 +43,7 @@ A data.frame with the following variables:
 |  |  |
 |----|----|
 |  |  |
+| **response_date** | Date and time of retrieval (the transcripts have no response date of their own) |
 | **publication_id** | Id of the transcript |
 | **session_id** | Id of the parliamentary session (see [get_parlsessions](https://martigso.github.io/stortingscrape/reference/get_parlsessions.md)), from `meeting_date` |
 | **meeting_order** | Order of the meeting within the transcript (some transcripts hold several meetings) |
@@ -56,11 +57,11 @@ A data.frame with the following variables:
 | **speech_order** | Order of the speech element within the transcript |
 | **speech_part** | Order of the speaker within the speech element (usually 1) |
 | **speech_id** | Speech element id (from 2016-2017 onward) |
-| **speech_type** | Type of speech ("hovedinnlegg", "replikk", or "presinnlegg") |
+| **speech_type** | Type of speech ("hovedinnlegg", "replikk", or "presinnlegg"; see details) |
 | **speaker_raw** | Speaker as written in the transcript |
 | **speaker_title** | Title parsed from `speaker_raw` (e.g. "Statsråd", "Presidenten") |
 | **speaker_name** | Name parsed from `speaker_raw` |
-| **speaker_party** | Party parsed from `speaker_raw`, harmonized to the party ids of [get_all_parties](https://martigso.github.io/stortingscrape/reference/get_all_parties.md) |
+| **speaker_party** | Party parsed from `speaker_raw`, as a party id of [get_all_parties](https://martigso.github.io/stortingscrape/reference/get_all_parties.md) (else NA) |
 | **speech_time** | Time stamp parsed from `speaker_raw` (hh:mm:ss) |
 | **person_id** | Id of the speaker (see [get_mp](https://martigso.github.io/stortingscrape/reference/get_mp.md)), when given in the transcript |
 | **linked_person_id** | Id of the speaker, linked from `speaker_name` (with `link = TRUE`) |
@@ -76,6 +77,10 @@ Some speech elements in the transcripts hold more than one speaker (e.g.
 a question and an answer in a hearing). These are split into one row per
 speaker; `speech_order` identifies the speech element and `speech_part`
 the speaker within it.
+
+The transcripts before about 2005 mostly do not say whether a speech is
+a main speech ("hovedinnlegg") or a reply ("replikk"); `speech_type` is
+then `NA`, except for the president's remarks ("presinnlegg").
 
 The meeting date is given both in the meeting heading (weekday, day,
 month, and, from 2007 onward, year) and in the publication id, and both

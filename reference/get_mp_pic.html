@@ -62,16 +62,16 @@
 
 
 <dt id="arg-show-plot">show_plot<a class="anchor" aria-label="anchor" href="#arg-show-plot"></a></dt>
-<dd><p>Logical. FALSE (default) if no plot should be produced and TRUE if plot should be produced. Requires the "imager" package.</p></dd>
+<dd><p>Logical. FALSE (default) if no plot should be produced and TRUE if plot should be produced. Requires the "magick" package.</p></dd>
 
 
 <dt id="arg-good-manners">good_manners<a class="anchor" aria-label="anchor" href="#arg-good-manners"></a></dt>
-<dd><p>Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see <a href="https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/" class="external-link">https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/</a>).</p></dd>
+<dd><p>Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see <a href="https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/" class="external-link">https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/</a>).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Picture of the requested MP in the preferred size.</p>
+    <p>No return value; called for its side effects (saves the picture to <code>destfile</code> and/or plots it).</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

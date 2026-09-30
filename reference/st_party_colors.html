@@ -73,6 +73,9 @@
 <dt>Sosialistisk Venstreparti (Socialist Left Party)</dt>
 <dd><p><a href="https://www.sv.no/ressursbanken/grafisk/grafisk-profil/" class="external-link">https://www.sv.no/ressursbanken/grafisk/grafisk-profil/</a></p></dd>
 
+<dt>Uavhengig (independent)</dt>
+<dd><p>Black; no official color</p></dd>
+
 <dt>Venstre (Liberal Party)</dt>
 <dd><p><a href="https://www.venstre.no/organisasjon/visuell-identitet/" class="external-link">https://www.venstre.no/organisasjon/visuell-identitet/</a></p></dd>
 
@@ -87,7 +90,8 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html" class="external-link">barplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="fu"><a href="get_parlperiod_mps.html">get_parlperiod_mps</a></span><span class="op">(</span><span class="va">parl_periods</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">$</span><span class="va">party_id</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">st_party_colors</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">seats</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="fu"><a href="get_parlperiod_mps.html">get_parlperiod_mps</a></span><span class="op">(</span><span class="va">parl_periods</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">$</span><span class="va">party_id</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html" class="external-link">barplot</a></span><span class="op">(</span><span class="va">seats</span>, col <span class="op">=</span> <span class="va">st_party_colors</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">seats</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>

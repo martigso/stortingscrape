@@ -19,14 +19,15 @@ get_session_hearings(sessionid = NA, good_manners = 0, cores = 1)
 
 - good_manners:
 
-  Integer. Seconds delay between calls when making multiple calls to the
+  Numeric. Seconds delay between calls when making multiple calls to the
   same function. Note that the Stortinget API is limited to 100 calls
   per minute (see
   <https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/>).
 
 - cores:
 
-  Integer...
+  Integer. Number of cores (1 by default) to use in structuring the
+  data. More than 1 will not work on Windows.
 
 ## Value
 
@@ -47,7 +48,7 @@ A list with four elements:
     |----|----|
     |  |  |
     | **deadline_date** | Deadline date for hearing |
-    | **status** | Data version from the API |
+    | **status** | Status of the hearing |
     | **hearing_id** | Hearing id |
     | **input_deadline** | Deadline date for input |
     | **written** | Logical indication of whether the input was written |
@@ -58,8 +59,8 @@ A list with four elements:
     | **type** | Type of hearing |
     | **committee_id** | Committee id for committee responsible for hearing |
 
-3.  **\$hearing_case_info** (named list by hearing id with information
-    on the case(s) belonging to the hearing)
+3.  **\$hearing_case_info** (the case(s) belonging to each hearing, by
+    hearing id)
 
     |                      |                                        |
     |----------------------|----------------------------------------|
@@ -71,8 +72,8 @@ A list with four elements:
     | **case_publication** | URL for front end web-page publication |
     | **case_title**       | Full title for case                    |
 
-4.  **\$hearing_date** (named list by hearing id with date(s) the
-    hearing was held)
+4.  **\$hearing_date** (the date(s) and place(s) each hearing was held,
+    by hearing id)
 
     |                |                            |
     |----------------|----------------------------|

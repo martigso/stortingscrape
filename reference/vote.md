@@ -1,6 +1,6 @@
 # Meta data on votes of case id 78686
 
-A dataset containing vote infomation on case id 78686 in *Stortinget*
+A dataset containing vote information on case id 78686 in *Stortinget*
 
 ## Usage
 
@@ -10,7 +10,7 @@ vote
 
 ## Format
 
-A list with three elements (votes)
+A data frame with 22 columns and 3 rows (one per vote)
 
 - response_date:
 
@@ -103,4 +103,4 @@ A list with three elements (votes)
 
 ## Source
 
-<https://data.stortinget.no/eksport/voteringsresultat?voteringid=15404>
+<https://data.stortinget.no/eksport/voteringer?sakid=78686>

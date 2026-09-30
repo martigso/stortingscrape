@@ -1,4 +1,4 @@
-# Interpellations from the 2002-2003
+# Interpellations from the 2002-2003 session
 
 A dataset containing all interpellations in the 2002-2003 parliamentary
 session in *Stortinget*
@@ -37,15 +37,15 @@ A data frame with 26 columns and 22 rows
 
   Date answer was given
 
-- answ_on_belhalf_of:
+- answ_on_behalf_of:
 
   Answer given on behalf of
 
-- answ_on_belhalf_of_minister_id:
+- answ_on_behalf_of_minister_id:
 
   Department id of minister given answer on behalf of
 
-- answ_on_belhalf_of_minister_title:
+- answ_on_behalf_of_minister_title:
 
   Department title of minister given answer on behalf of
 
@@ -77,7 +77,7 @@ A data frame with 26 columns and 22 rows
 
   Not documented in API
 
-- sendt_date:
+- sent_date:
 
   Date the question was sent
 
@@ -89,33 +89,33 @@ A data frame with 26 columns and 22 rows
 
   Question from MP id
 
-- qustion_number:
+- question_number:
 
   Question number within session
 
-- qustion_to_id:
+- question_to_id:
 
   Question directed to minister id
 
-- qustion_to_minister_id:
+- question_to_minister_id:
 
   Question directed to minister department id
 
-- qustion_to_minister_title:
+- question_to_minister_title:
 
   Question directed to minister department title
 
-- type:
+- status:
 
-  Question type
+  Question status
 
 - title:
 
   Question title
 
-- status:
+- type:
 
-  Question status
+  Question type
 
 ## Source
 

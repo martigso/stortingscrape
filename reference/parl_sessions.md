@@ -10,7 +10,8 @@ parl_sessions
 
 ## Format
 
-A data frame with 6 columns and 36 rows
+A data frame with 6 columns and 43 rows (including sessions announced
+ahead of time)
 
 - response_date:
 
@@ -26,7 +27,7 @@ A data frame with 6 columns and 36 rows
 
 - id:
 
-  Id of for session (used for other functions)
+  Id of the session (used by other functions)
 
 - to:
 

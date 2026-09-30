@@ -18,9 +18,11 @@ get_topics(keep_sub_topics = TRUE)
 
 ## Value
 
-A list with two elements:
+With `keep_sub_topics = TRUE` (default), a list with two elements. With
+`keep_sub_topics = FALSE`, only the main topics, as a data.frame with
+the variables of `$main_topics` below.
 
-1.  **\$topics** (All topics)
+1.  **\$topics** (sub-topics, with the id of their main topic)
 
     |                   |                                                         |
     |-------------------|---------------------------------------------------------|
@@ -32,8 +34,7 @@ A list with two elements:
     | **id**            | Id of topic                                             |
     | **name**          | Name of topic                                           |
 
-2.  **\$main_topics** (exclusively main topics, if keep_sub_topics =
-    TRUE)
+2.  **\$main_topics** (main topics)
 
     |                   |                                                         |
     |-------------------|---------------------------------------------------------|

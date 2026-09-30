@@ -17,9 +17,9 @@ get_session_questions(sessionid = NA, q_type = NA, status = NA, good_manners = 0
 
 - q_type:
 
-  Character string indicating type of question to retrieve. Options are
-  "interpellasjoner" (interpellations), "sporretimesporsmal" (oral
-  questions), or "skriftligesporsmal" (written questions).
+  Character string indicating type of question to retrieve (required).
+  Options are "interpellasjoner" (interpellations), "sporretimesporsmal"
+  (oral questions), or "skriftligesporsmal" (written questions).
 
 - status:
 
@@ -30,7 +30,7 @@ get_session_questions(sessionid = NA, q_type = NA, status = NA, good_manners = 0
 
 - good_manners:
 
-  Integer. Seconds delay between calls when making multiple calls to the
+  Numeric. Seconds delay between calls when making multiple calls to the
   same function. Note that the Stortinget API is limited to 100 calls
   per minute (see
   <https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/>).
@@ -48,9 +48,9 @@ A data.frame with the following variables:
 | **answ_by_minister_id** | Department id of answering minister |
 | **answ_by_minister_title** | Department title of answering minister |
 | **answ_date** | Date answer was given |
-| **answ_on_belhalf_of** | Answer given on behalf of |
-| **answ_on_belhalf_of_minister_id** | Department id of minister given answer on behalf of |
-| **answ_on_belhalf_of_minister_title** | Department title of minister given answer on behalf of |
+| **answ_on_behalf_of** | Answer given on behalf of |
+| **answ_on_behalf_of_minister_id** | Department id of minister given answer on behalf of |
+| **answ_on_behalf_of_minister_title** | Department title of minister given answer on behalf of |
 | **topic_ids** | Id of relevant topics for question |
 | **moved_to** | Question moved to |
 | **asked_by_other_id** | MP id, if question was not asked by the questioning MP |
@@ -58,7 +58,7 @@ A data.frame with the following variables:
 | **correct_person** | Not documented in API |
 | **correct_person_minister_id** | Not documented in API |
 | **correct_person_minister_title** | Not documented in API |
-| **sendt_date** | Date the question was sent |
+| **sent_date** | Date the question was sent |
 | **session_id** | Session id |
 | **question_from_id** | Question from MP id |
 | **question_number** | Question number within session |

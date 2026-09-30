@@ -10,13 +10,14 @@
 Source:
 [`inst/CITATION`](https://github.com/martigso/stortingscrape/blob/master/inst/CITATION)
 
-Søyland M (2024). “stortingscrape: An R package for accessing data from
-the Norwegian parliament.” *URL:
-https://martigso.github.io/stortingscrape/articles/stortingscrape.html*.
+Søyland M (2026). *stortingscrape: An R package for accessing data from
+the Norwegian parliament*. R package version 0.5.0,
+<https://martigso.github.io/stortingscrape/articles/stortingscrape.html>.
 
-    @Article{,
+    @Manual{,
       title = {stortingscrape: An R package for accessing data from the Norwegian parliament},
       author = {Martin Søyland},
-      journal = {{URL: https://martigso.github.io/stortingscrape/articles/stortingscrape.html}},
-      year = {2024},
+      year = {2026},
+      note = {R package version 0.5.0},
+      url = {https://martigso.github.io/stortingscrape/articles/stortingscrape.html},
     }

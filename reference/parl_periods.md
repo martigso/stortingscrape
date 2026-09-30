@@ -10,7 +10,7 @@ parl_periods
 
 ## Format
 
-A data frame with 12 columns and 150 rows
+A data frame with 6 columns and 21 rows
 
 - response_date:
 
@@ -22,15 +22,15 @@ A data frame with 12 columns and 150 rows
 
 - from:
 
-  Date session started
+  Date period started
 
 - id:
 
-  Id of for session (used for other functions)
+  Id of the period (used by other functions)
 
 - to:
 
-  Date session ended
+  Date period ended
 
 - years:
 

@@ -7,7 +7,7 @@ session and onwards.
 ## Usage
 
 ``` r
-get_session_mp_speech_activity(sessionid = NA, mp_id = NA, good_manners = 0)
+get_session_mp_speech_activity(sessionid = NA, mpid = NA, good_manners = 0, mp_id = NULL)
 ```
 
 ## Arguments
@@ -17,7 +17,7 @@ get_session_mp_speech_activity(sessionid = NA, mp_id = NA, good_manners = 0)
   Character string, or a vector of strings, indicating the session to
   retrieve speeches from.
 
-- mp_id:
+- mpid:
 
   Character string, or a vector of strings, for the MP to retrieve all
   speeches of in a given session. With several sessions and/or MPs, all
@@ -25,10 +25,14 @@ get_session_mp_speech_activity(sessionid = NA, mp_id = NA, good_manners = 0)
 
 - good_manners:
 
-  Integer. Seconds delay between calls when making multiple calls to the
+  Numeric. Seconds delay between calls when making multiple calls to the
   same function. Note that the Stortinget API is limited to 100 calls
   per minute (see
   <https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/>).
+
+- mp_id:
+
+  Deprecated; use `mpid`.
 
 ## Value
 
@@ -45,7 +49,7 @@ A data.frame with the following variables:
 | **meeting_id**         | Meeting id                                       |
 | **speech_start_time**  | Start time of speech                             |
 | **speech_type**        | Type of speech                                   |
-| **speech_length_secs** | Lenght of speech in seconds                      |
+| **speech_length_secs** | Length of speech in seconds                      |
 
 ## See also
 

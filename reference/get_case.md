@@ -1,4 +1,4 @@
-# Retreive a parliamentary case
+# Retrieve a parliamentary case
 
 A function for retrieving single parliamentary case by id.
 
@@ -13,11 +13,12 @@ get_case(caseid = NA, good_manners = 0)
 - caseid:
 
   Character string, or a vector of strings, indicating the id of the
-  case to request
+  case to request. With several ids, the result is a named list of the
+  results below, keyed by case id.
 
 - good_manners:
 
-  Integer. Seconds delay between calls when making multiple calls to the
+  Numeric. Seconds delay between calls when making multiple calls to the
   same function. Note that the Stortinget API is limited to 100 calls
   per minute (see
   <https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/>).
@@ -121,16 +122,13 @@ if (FALSE) { # \dontrun{
 case <- get_case("30233")
 case
 
-# Get multiple cases
-cases <- lapply(c("30233", "30362", "30234", "30236"), get_case, good_manners = 2)
-cases_root <- lapply(cases, function(x) x$root)
-cases_root <- do.call(rbind, cases_root)
+# Get multiple cases (a list keyed by case id)
+cases <- get_case(c("30233", "30362", "30234", "30236"), good_manners = 2)
+cases_root <- do.call(rbind, lapply(cases, function(x) x$root))
 cases_root
 
-cases_keywords <- lapply(1:nrow(cases_root), function(x){
-  tmp <- cases[[x]]$keywords
-  tmp$case_id <- cases_root$id[x]
-  return(tmp)
+cases_keywords <- lapply(names(cases), function(id){
+  data.frame(case_id = id, cases[[id]]$keywords)
 })
 cases_keywords <- do.call(rbind, cases_keywords)
 cases_keywords

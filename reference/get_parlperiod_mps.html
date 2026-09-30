@@ -56,7 +56,7 @@
 
 
 <dt id="arg-good-manners">good_manners<a class="anchor" aria-label="anchor" href="#arg-good-manners"></a></dt>
-<dd><p>Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see <a href="https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/" class="external-link">https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/</a>).</p></dd>
+<dd><p>Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see <a href="https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/" class="external-link">https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/</a>).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -72,13 +72,11 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Request one MP by id</span></span></span>
+<span class="r-in"><span><span class="co"># Request MPs from one period</span></span></span>
 <span class="r-in"><span><span class="fu">get_parlperiod_mps</span><span class="op">(</span><span class="st">"2005-2009"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Request MPs from several periods by id</span></span></span>
-<span class="r-in"><span><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1961-65"</span>, <span class="st">"1997-01"</span>, <span class="st">"2009-2013"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">mps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">ids</span>, <span class="va">get_parlperiod_mps</span>, good_manners <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">mps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">mps</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Request MPs from several periods</span></span></span>
+<span class="r-in"><span><span class="va">mps</span> <span class="op">&lt;-</span> <span class="fu">get_parlperiod_mps</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1961-65"</span>, <span class="st">"1997-2001"</span>, <span class="st">"2009-2013"</span><span class="op">)</span>, good_manners <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>

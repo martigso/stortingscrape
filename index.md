@@ -59,7 +59,7 @@ parl_sessions |> # sessions data are built into the package
   head()         # but can also be retrieved with `get_parlsessions()`
 
 
-qsesh <- get_session_questions(parl_sessions$id[4], q_type = "interpellasjoner")
+qsesh <- get_session_questions("2012-2013", q_type = "interpellasjoner")
 
 int1213 <- get_question(qsesh$id, good_manners = 2)
 
@@ -115,8 +115,8 @@ here.](https://martigso.github.io/stortingscrape/functions.html)
 
 Please use the following citation when using the package in research:
 
-> Søyland M (2024). “stortingscrape: An R package for accessing data
-> from the Norwegian parliament.” URL:
+> Søyland M (2026). *stortingscrape: An R package for accessing data
+> from the Norwegian parliament*. R package version 0.5.0,
 > <https://martigso.github.io/stortingscrape/articles/stortingscrape.html>.
 
 This can, as with all R-packages, also be generated using the `citation`

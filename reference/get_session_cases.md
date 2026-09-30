@@ -19,7 +19,7 @@ get_session_cases(sessionid = NA, good_manners = 0, cores = 1)
 
 - good_manners:
 
-  Integer. Seconds delay between calls when making multiple calls to the
+  Numeric. Seconds delay between calls when making multiple calls to the
   same function. Note that the Stortinget API is limited to 100 calls
   per minute (see
   <https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/>).
@@ -27,13 +27,13 @@ get_session_cases(sessionid = NA, good_manners = 0, cores = 1)
 - cores:
 
   Integer. Number of cores (1 by default) to use in structuring the
-  data. More than 1 will not work on windows
+  data. More than 1 will not work on Windows.
 
 ## Value
 
-A data.frame with the following variables:
+A list with four elements:
 
-1.  **\$root** (main data on the MP)
+1.  **\$root** (main data on the cases)
 
     |                        |                                    |
     |------------------------|------------------------------------|
@@ -97,6 +97,6 @@ A data.frame with the following variables:
 
 if (FALSE) { # \dontrun{
 s0506 <- get_session_cases("2005-2006")
-head(s0506)
+head(s0506$root)
 } # }
 ```

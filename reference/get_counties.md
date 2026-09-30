@@ -32,7 +32,7 @@ A data frame with the following variables:
 
 ``` r
 if (FALSE) { # \dontrun{ 
-# Request one MP by id
+# Request current counties
 get_counties()
 
 # With historical counties

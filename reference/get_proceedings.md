@@ -21,7 +21,7 @@ A list with three dataframes:
     | **response_date** | Date of data retrieval    |
     | **version**       | Data version from the API |
 
-2.  \$proceedings (description of main proceeding categories)
+2.  **\$proceedings** (description of main proceeding categories)
 
     |          |                    |
     |----------|--------------------|
@@ -29,8 +29,8 @@ A list with three dataframes:
     | **id**   | Id of proceeding   |
     | **name** | Name of proceeding |
 
-3.  \$poceedings_steps (description of proceeding steps within each main
-    category)
+3.  **\$proceedings_steps** (description of proceeding steps within each
+    main category)
 
     |                 |                                            |
     |-----------------|--------------------------------------------|

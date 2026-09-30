@@ -52,7 +52,7 @@
 
 
 <dt id="arg-good-manners">good_manners<a class="anchor" aria-label="anchor" href="#arg-good-manners"></a></dt>
-<dd><p>Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see <a href="https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/" class="external-link">https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/</a>).</p></dd>
+<dd><p>Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see <a href="https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/" class="external-link">https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/</a>).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -70,11 +70,7 @@
 <span class="r-in"><span><span class="fu">get_mp</span><span class="op">(</span><span class="st">"AAMH"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Request several MPs by id</span></span></span>
-<span class="r-in"><span><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AAMH"</span>, <span class="st">"AMSK"</span>, <span class="st">"MAAA"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">mps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">ids</span>, <span class="va">get_mp</span>, good_manners <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">mps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">mps</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mps</span> <span class="op">&lt;-</span> <span class="fu">get_mp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AAMH"</span>, <span class="st">"AMSK"</span>, <span class="st">"MAAA"</span><span class="op">)</span>, good_manners <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

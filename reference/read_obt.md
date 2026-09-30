@@ -34,7 +34,7 @@ A data frame with the following variables:
 ``` r
 
 if (FALSE) { # \dontrun{
-sample_text <- read_obt("./inst/extdata/obt_sample.txt")
+sample_text <- read_obt(system.file("extdata", "obt_sample.txt", package = "stortingscrape"))
 head(sample_text)
 } # }
 ```
