@@ -5,8 +5,9 @@
 #' 
 #' @usage get_session_mp_speech_activity(sessionid = NA, mp_id = NA, good_manners = 0)
 #' 
-#' @param sessionid Character string indicating the session to retrieve speeches from.
-#' @param mp_id Character string for the MP to retreive all speeches of in a given session.
+#' @param sessionid Character string, or a vector of strings, indicating the session to retrieve speeches from.
+#' @param mp_id Character string, or a vector of strings, for the MP to retrieve all speeches of in a given session.
+#' With several sessions and/or MPs, all combinations are retrieved and bound together.
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame with the following variables:
@@ -16,6 +17,7 @@
 #'    | **response_date**      | Date of data retrieval                           |
 #'    | **version**            | Data version from the API                        |
 #'    | **session_id**         | Session id                                       |
+#'    | **mp_id**              | Id of the MP                                     |
 #'    | **agenda_case_number** | Number indicating the agenda number for the case |
 #'    | **meeting_id**         | Meeting id                                       |
 #'    | **speech_start_time**  | Start time of speech                             |
@@ -43,6 +45,12 @@
 
 
 get_session_mp_speech_activity <- function(sessionid = NA, mp_id = NA, good_manners = 0){
+
+  if(length(sessionid) > 1)
+    return(fetch_multi(sessionid, get_session_mp_speech_activity, good_manners, mp_id = mp_id))
+
+  if(length(mp_id) > 1)
+    return(fetch_multi(mp_id, function(id, good_manners) get_session_mp_speech_activity(sessionid, id, good_manners), good_manners))
   
   url <- paste0("https://data.stortinget.no/eksport/representanttaleaktiviteter?personid=", mp_id, "&sesjonid=", sessionid)
   
@@ -55,6 +63,7 @@ get_session_mp_speech_activity <- function(sessionid = NA, mp_id = NA, good_mann
     tmp2 <- data.frame(response_date = tmp |> html_elements("representant_tale_aktivitet_oversikt > respons_dato_tid") |> html_text(),
                        version = tmp |> html_elements("representant_tale_aktivitet_oversikt > versjon") |> html_text(),
                        session_id = tmp |> html_elements("representant_tale_aktivitet_oversikt > sesjon_id") |> html_text(),
+                       mp_id = mp_id,
                        agenda_case_number = NA,
                        meeting_id = NA,
                        speech_start_time = NA,
@@ -67,6 +76,7 @@ get_session_mp_speech_activity <- function(sessionid = NA, mp_id = NA, good_mann
     tmp2 <- data.frame(response_date = tmp |> html_elements("representant_tale_aktivitet_oversikt > respons_dato_tid") |> html_text(),
                        version = tmp |> html_elements("representant_tale_aktivitet_oversikt > versjon") |> html_text(),
                        session_id = tmp |> html_elements("representant_tale_aktivitet_oversikt > sesjon_id") |> html_text(),
+                       mp_id = mp_id,
                        agenda_case_number = tmp |> html_elements("representant_tale_aktivitet > dagsorden_sak_nummer") |> html_text(),
                        meeting_id = tmp |> html_elements("representant_tale_aktivitet > mote_id") |> html_text(),
                        speech_start_time = tmp |> html_elements("representant_tale_aktivitet > tale_start_tid") |> html_text(),

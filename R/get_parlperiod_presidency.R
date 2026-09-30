@@ -20,7 +20,8 @@
 #'    | **person_id**     | Id of the presidency member            |
 #'    | **to_date**       | Presidency member to date              |
 #'    | **position**      | Presidency position                    |
-#' 
+#'    | **period_id**     | Id of the parliamentary period         |
+#'
 #' @seealso [get_mp] [get_mp_bio]
 #' 
 #' 
@@ -53,7 +54,9 @@ get_parlperiod_presidency <- function(periodid = NA, good_manners = 0){
                     person_id = tmp |> html_elements("medlem > person_id") |> html_text(),
                     to_date = tmp |> html_elements("medlem > til_dato") |> html_text(),
                     position = tmp |> html_elements("medlem > verv") |> html_text())
-  
+
+  tmp$period_id <- rep(periodid, nrow(tmp))
+
   Sys.sleep(good_manners)
   
   return(tmp)

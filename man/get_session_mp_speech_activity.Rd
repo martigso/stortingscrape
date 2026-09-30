@@ -7,9 +7,10 @@
 get_session_mp_speech_activity(sessionid = NA, mp_id = NA, good_manners = 0)
 }
 \arguments{
-\item{sessionid}{Character string indicating the session to retrieve speeches from.}
+\item{sessionid}{Character string, or a vector of strings, indicating the session to retrieve speeches from.}
 
-\item{mp_id}{Character string for the MP to retreive all speeches of in a given session.}
+\item{mp_id}{Character string, or a vector of strings, for the MP to retrieve all speeches of in a given session.
+With several sessions and/or MPs, all combinations are retrieved and bound together.}
 
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
@@ -19,6 +20,7 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{response_date} \tab Date of data retrieval \cr
    \strong{version} \tab Data version from the API \cr
    \strong{session_id} \tab Session id \cr
+   \strong{mp_id} \tab Id of the MP \cr
    \strong{agenda_case_number} \tab Number indicating the agenda number for the case \cr
    \strong{meeting_id} \tab Meeting id \cr
    \strong{speech_start_time} \tab Start time of speech \cr

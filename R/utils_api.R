@@ -128,15 +128,26 @@ api_get <- function(url, as = "html") {
 #' @noRd
 fetch_multi <- function(ids, .f, good_manners = 0, .combine = rbind, ...) {
 
-  out <- lapply(ids, function(id) {
-    tryCatch(
-      .f(id, ..., good_manners = good_manners),
+  out <- vector("list", length(ids))
+
+  # Only in interactive sessions (cli would otherwise also print the bar in knitted
+  # documents and logs), and only when retrieval takes more than a few seconds
+  show_progress <- interactive()
+
+  if(show_progress) cli::cli_progress_bar("Retrieving", total = length(ids))
+
+  for(i in seq_along(ids)) {
+    out[i] <- list(tryCatch(
+      .f(ids[i], ..., good_manners = good_manners),
       error = function(e) {
-        warning("id '", id, "' failed: ", conditionMessage(e), call. = FALSE)
+        warning("id '", ids[i], "' failed: ", conditionMessage(e), call. = FALSE)
         NULL
       }
-    )
-  })
+    ))
+    if(show_progress) cli::cli_progress_update()
+  }
+
+  if(show_progress) cli::cli_progress_done()
 
   names(out) <- ids
 

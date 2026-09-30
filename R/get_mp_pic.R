@@ -6,9 +6,9 @@
 #'            destfile = NA, show_plot = FALSE, 
 #'            good_manners = 0)
 #' 
-#' @param mpid Character string indicating the id of the MP to retrieve.
+#' @param mpid Character string, or a vector of strings, indicating the id of the MP to retrieve.
 #' @param size Character string size of the picture. Accepts values "lite" (small), "middels" (medium -- default), and "stort" (big).
-#' @param destfile Character string specifying where to save the picture
+#' @param destfile Character string specifying where to save the picture. With several ids, one destfile per id.
 #' @param show_plot Logical. FALSE (default) if no plot should be produced and TRUE if plot should be produced. Requires the "imager" package.
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
@@ -21,11 +21,10 @@
 #' # Request one MP by id
 #' get_mp_pic(mpid = "AAMH", destfile = "~/Pictures/AAMH.jpeg", show_plot = TRUE, size = "stort")
 #' 
-#' # With good manners for multiple calls
-#' lapply(c("AAMH", "CIH", "TKF"), function(x){
-#'   get_mp_pic(mpid = x, destfile = paste0("~/Pictures/", x), 
-#'   show_plot = TRUE, size = "stort", good_manners = 2)
-#'   })
+#' # Several MPs, one file each, with good manners
+#' ids <- c("AAMH", "CIH", "TKF")
+#' get_mp_pic(mpid = ids, destfile = paste0("~/Pictures/", ids, ".jpeg"),
+#'            size = "stort", good_manners = 2)
 #' }
 #' 
 #' @import httr2 rvest
@@ -35,6 +34,16 @@
 #' 
 get_mp_pic <- function(mpid = NA, size = "middels", 
                        destfile = NA, show_plot = FALSE, good_manners = 0){
+
+  if(length(mpid) > 1) {
+    if(length(destfile) != length(mpid) && !identical(destfile, NA))
+      stop("Give one destfile per mpid.", call. = FALSE)
+    destfile <- rep_len(destfile, length(mpid))
+    for(i in seq_along(mpid)) {
+      get_mp_pic(mpid[i], size = size, destfile = destfile[i], show_plot = show_plot, good_manners = good_manners)
+    }
+    return(invisible(NULL))
+  }
   
   url <- paste0("https://data.stortinget.no/eksport/personbilde?personid=", 
                 mpid, 

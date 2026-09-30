@@ -23,6 +23,7 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{person_id} \tab Id of the presidency member \cr
    \strong{to_date} \tab Presidency member to date \cr
    \strong{position} \tab Presidency position \cr
+   \strong{period_id} \tab Id of the parliamentary period \cr
 }
 }
 \description{

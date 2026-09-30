@@ -52,7 +52,7 @@ get_written_hearing_input <- function(hearingid = NA, good_manners = 0){
     
     tmp2 <- data.frame(response_date              = NA,
                        version                    = NA,
-                       hearing_id                 = NA,
+                       hearing_id                 = hearingid,
                        hearing_type               = NA,
                        committee_id               = NA,
                        hearing_input_date         = NA,

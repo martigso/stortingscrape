@@ -71,24 +71,29 @@ get_proposal_votes <- function(voteid = NA, good_manners = 0){
     names(tmp2$proposal_by_parties) <- tmp2$proposal_vote$proposal_id
     
   } else {
+
+    # Fields are read per proposal, so a field missing from one proposal (e.g. no
+    # delivering MP) gives NA rather than shifting the other proposals' values
+    proposals <- tmp |> html_elements("voteringsforslag")
+
+    field <- function(xpath) proposals |> html_element(xpath = xpath) |> html_text()
+
     tmp2 <- list(
       proposal_vote = data.frame(response_date = tmp |> html_elements("voteringsforslag_oversikt > respons_dato_tid") |> html_text(),
                                  version = tmp |> html_elements("voteringsforslag_oversikt > versjon") |> html_text(),
                                  vote_id = tmp |> html_elements("voteringsforslag_oversikt > votering_id") |> html_text(),
-                                 proposal_designation = tmp |> html_elements("voteringsforslag > forslag_betegnelse") |> html_text(),
-                                 proposal_designation_short = tmp |> html_elements("voteringsforslag > forslag_betegnelse_kort") |> html_text(),
-                                 proposal_id = tmp |> html_elements("voteringsforslag > forslag_id") |> html_text(),
-                                 proposal_delivered_by_mp = tmp |> html_elements("voteringsforslag > forslag_levert_av_representant > id") |> html_text(),
-                                 proposal_on_behalf_of_text = tmp |> html_elements("voteringsforslag > forslag_paa_vegne_av_tekst") |> html_text(),
-                                 proposal_sortingnumber = tmp |> html_elements("voteringsforslag > forslag_sorteringsnummer") |> html_text(),
-                                 proposal_text = tmp |> html_elements("voteringsforslag > forslag_tekst") |> html_text(),
-                                 proposal_type = tmp |> html_elements("voteringsforslag > forslag_type") |> html_text()),
-      proposal_by_parties = tmp |> html_elements("forslag_levert_av_parti_liste"))
-    
-    tmp2$proposal_by_parties <- lapply(tmp2$proposal_by_parties, function(x){
-      x |> html_elements("parti > id") |> html_text()
-    })
-    
+                                 proposal_designation = field("./forslag_betegnelse"),
+                                 proposal_designation_short = field("./forslag_betegnelse_kort"),
+                                 proposal_id = field("./forslag_id"),
+                                 proposal_delivered_by_mp = field("./forslag_levert_av_representant/id"),
+                                 proposal_on_behalf_of_text = field("./forslag_paa_vegne_av_tekst"),
+                                 proposal_sortingnumber = field("./forslag_sorteringsnummer"),
+                                 proposal_text = field("./forslag_tekst"),
+                                 proposal_type = field("./forslag_type")),
+      proposal_by_parties = lapply(proposals, function(x){
+        x |> html_elements(xpath = "./forslag_levert_av_parti_liste/parti/id") |> html_text()
+      }))
+
     names(tmp2$proposal_by_parties) <- tmp2$proposal_vote$proposal_id
     
   }

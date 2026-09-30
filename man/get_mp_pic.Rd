@@ -9,11 +9,11 @@ get_mp_pic(mpid = NA, size = "middels",
            good_manners = 0)
 }
 \arguments{
-\item{mpid}{Character string indicating the id of the MP to retrieve.}
+\item{mpid}{Character string, or a vector of strings, indicating the id of the MP to retrieve.}
 
 \item{size}{Character string size of the picture. Accepts values "lite" (small), "middels" (medium -- default), and "stort" (big).}
 
-\item{destfile}{Character string specifying where to save the picture}
+\item{destfile}{Character string specifying where to save the picture. With several ids, one destfile per id.}
 
 \item{show_plot}{Logical. FALSE (default) if no plot should be produced and TRUE if plot should be produced. Requires the "imager" package.}
 
@@ -30,11 +30,10 @@ A function for retrieving Norwegian MP pictures by id.
 # Request one MP by id
 get_mp_pic(mpid = "AAMH", destfile = "~/Pictures/AAMH.jpeg", show_plot = TRUE, size = "stort")
 
-# With good manners for multiple calls
-lapply(c("AAMH", "CIH", "TKF"), function(x){
-  get_mp_pic(mpid = x, destfile = paste0("~/Pictures/", x), 
-  show_plot = TRUE, size = "stort", good_manners = 2)
-  })
+# Several MPs, one file each, with good manners
+ids <- c("AAMH", "CIH", "TKF")
+get_mp_pic(mpid = ids, destfile = paste0("~/Pictures/", ids, ".jpeg"),
+           size = "stort", good_manners = 2)
 }
 
 }

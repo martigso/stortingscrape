@@ -4,7 +4,8 @@
 #' 
 #' @usage get_session_hearings(sessionid = NA, good_manners = 0, cores = 1)
 #' 
-#' @param sessionid Character string indicating the id of the parliamentary session to retrieve.
+#' @param sessionid Character string, or a vector of strings, indicating the id of the parliamentary session to retrieve.
+#' With several ids, the result is a named list of the results below, keyed by session id.
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' @param cores Integer...
 #' 
@@ -75,6 +76,9 @@
 
 
 get_session_hearings <- function(sessionid = NA, good_manners = 0, cores = 1){
+
+  if(length(sessionid) > 1)
+    return(fetch_multi(sessionid, get_session_hearings, good_manners, .combine = NULL, cores = cores))
   
   url <- paste0("https://data.stortinget.no/eksport/horinger?sesjonid=", sessionid)
   
