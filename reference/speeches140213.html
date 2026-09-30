@@ -48,7 +48,7 @@ on 13 February 2014 (publication id "s140213"), as returned by <a href="get_spee
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>A data frame with 23 columns and 48 rows (see <a href="get_speeches.html">get_speeches</a> for details)</p>
+    <p>A data frame with 26 columns and 48 rows (see <a href="get_speeches.html">get_speeches</a> for details)</p>
 <dl><dt>publication_id</dt>
 <dd><p>Id of the transcript</p></dd>
 
@@ -109,11 +109,20 @@ on 13 February 2014 (publication id "s140213"), as returned by <a href="get_spee
 <dt>person_id</dt>
 <dd><p>Id of the speaker, when given in the transcript</p></dd>
 
+<dt>linked_person_id</dt>
+<dd><p>Id of the speaker, linked from <code>speaker_name</code> (see <a href="speaker_links.html">speaker_links</a>)</p></dd>
+
+<dt>link_method</dt>
+<dd><p>How <code>linked_person_id</code> was linked</p></dd>
+
 <dt>chair_name</dt>
 <dd><p>Name of the sitting chair</p></dd>
 
 <dt>chair_id</dt>
 <dd><p>Id of the sitting chair, when given in the transcript</p></dd>
+
+<dt>chair_linked_id</dt>
+<dd><p>Id of the sitting chair, linked from <code>chair_name</code></p></dd>
 
 <dt>text</dt>
 <dd><p>Speech text, one line per paragraph</p></dd>

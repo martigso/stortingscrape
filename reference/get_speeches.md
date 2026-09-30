@@ -10,7 +10,7 @@ Committee are all published as transcripts.
 ## Usage
 
 ``` r
-get_speeches(publicationid = NA, good_manners = 0)
+get_speeches(publicationid = NA, good_manners = 0, link = TRUE)
 ```
 
 ## Arguments
@@ -28,6 +28,13 @@ get_speeches(publicationid = NA, good_manners = 0)
   same function. Note that the Stortinget API is limited to 100 calls
   per minute (see
   <https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/>).
+
+- link:
+
+  Logical. Whether to add person ids linked from the names of speakers
+  and chairs (see
+  [speaker_links](https://martigso.github.io/stortingscrape/reference/speaker_links.md)).
+  Defaults to `TRUE`.
 
 ## Value
 
@@ -56,8 +63,11 @@ A data.frame with the following variables:
 | **speaker_party** | Party parsed from `speaker_raw`, harmonized to the party ids of [get_all_parties](https://martigso.github.io/stortingscrape/reference/get_all_parties.md) |
 | **speech_time** | Time stamp parsed from `speaker_raw` (hh:mm:ss) |
 | **person_id** | Id of the speaker (see [get_mp](https://martigso.github.io/stortingscrape/reference/get_mp.md)), when given in the transcript |
+| **linked_person_id** | Id of the speaker, linked from `speaker_name` (with `link = TRUE`) |
+| **link_method** | How `linked_person_id` was linked (with `link = TRUE`; see [speaker_links](https://martigso.github.io/stortingscrape/reference/speaker_links.md)) |
 | **chair_name** | Name of the sitting chair (president or meeting leader) |
 | **chair_id** | Id of the sitting chair, when given in the transcript |
+| **chair_linked_id** | Id of the sitting chair, linked from `chair_name` (with `link = TRUE`) |
 | **text** | Speech text, one line per paragraph |
 
 ## Details
@@ -80,9 +90,17 @@ always correct: speeches are sometimes tagged with the id of another
 person than the one named in `speaker_raw`. A numeric suffix that some
 of these ids carry (e.g. "ARK_775612110") is removed. The raw speaker
 string is always kept in `speaker_raw`; `speaker_title`, `speaker_name`,
-`speaker_party`, and `speech_time` are parsed from it. See
+`speaker_party`, and `speech_time` are parsed from it.
+
+With `link = TRUE` (the default), person ids linked from the names of
+the speakers and chairs are added from the
 [speaker_links](https://martigso.github.io/stortingscrape/reference/speaker_links.md)
-for person ids linked from the names.
+dataset (`linked_person_id`, `link_method`, and `chair_linked_id`), also
+for transcripts before 2016-2017. These links are made by the package,
+not given by the API (`person_id` is kept as the API gives it), and they
+only cover the sessions in
+[speaker_links](https://martigso.github.io/stortingscrape/reference/speaker_links.md);
+for later sessions, the linked ids are `NA`.
 
 The sitting chair (president or meeting leader) is tracked through the
 transcript: the chair named at the start of each meeting, updated at the
@@ -95,6 +113,7 @@ carry, e.g. "OLET_62710109", is removed).
 
 ## See also
 
+[speaker_links](https://martigso.github.io/stortingscrape/reference/speaker_links.md)
 [get_publication](https://martigso.github.io/stortingscrape/reference/get_publication.md)
 [get_session_publications](https://martigso.github.io/stortingscrape/reference/get_session_publications.md)
 [get_session_meetings](https://martigso.github.io/stortingscrape/reference/get_session_meetings.md)
@@ -105,7 +124,10 @@ carry, e.g. "OLET_62710109", is removed).
 ``` r
 
 if (FALSE) { # \dontrun{
-speeches <- get_speeches("refs-202425-06-12")
-head(speeches[, c("speech_type", "speaker_name", "speaker_party", "person_id")])
+speeches <- get_speeches("s140213")
+head(speeches[, c("speech_type", "speaker_name", "person_id", "linked_person_id")])
+
+# Without the linked ids
+speeches <- get_speeches("s140213", link = FALSE)
 } # }
 ```

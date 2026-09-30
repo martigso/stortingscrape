@@ -6,7 +6,8 @@
   - The single-id data-retrieving functions now accept a **vector of
     ids**. Passing several ids (e.g. `get_question(c(id1, id2))`)
     retrieves them all in one call: functions returning a `data.frame`
-    bind the rows together, while functions returning a list
+    bind the rows together (with plain row names, as the ids are in the
+    data), while functions returning a list
     (e.g. [`get_mp_bio()`](https://martigso.github.io/stortingscrape/reference/get_mp_bio.md),
     [`get_case()`](https://martigso.github.io/stortingscrape/reference/get_case.md),
     [`get_publication()`](https://martigso.github.io/stortingscrape/reference/get_publication.md))
@@ -29,17 +30,19 @@
     change. The raw speaker string is kept alongside the parsed title,
     name, party, and time stamp. Speech elements holding several
     speakers are split into one row per speaker, and the sitting chair
-    (president or meeting leader) is tracked through each transcript.
-    The example dataset `speeches140213` holds the output for one
+    (president or meeting leader) is tracked through each transcript. By
+    default (`link = TRUE`), it also adds person ids linked from the
+    speaker and chair names (see `speaker_links`), including for
+    transcripts before 2016-2017, where the API gives no ids. The
+    example dataset `speeches140213` holds the output for one
     transcript.
   - New dataset `speaker_links`: person ids for the speakers and chairs
     in all debate transcripts from 1998-99 onward, linked from their
     names by session (see
     [`?speaker_links`](https://martigso.github.io/stortingscrape/reference/speaker_links.md)
-    for the rules and `data-raw/speaker_links.R` for the build). Join it
-    to the output of
+    for the rules and `data-raw/speaker_links.R` for the build).
     [`get_speeches()`](https://martigso.github.io/stortingscrape/reference/get_speeches.md)
-    by name and session.
+    adds these links by default.
   - **Breaking:**
     [`get_publication()`](https://martigso.github.io/stortingscrape/reference/get_publication.md)
     now parses publications as XML rather than HTML. The HTML parser

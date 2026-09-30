@@ -505,60 +505,58 @@ meeting on 13 February 2014:</p>
 <span><span class="co">#&gt; 4            4  presinnlegg            &lt;NA&gt;          &lt;NA&gt; Olemic Thommessen</span></span>
 <span><span class="co">#&gt; 5            5  presinnlegg            &lt;NA&gt;          &lt;NA&gt; Olemic Thommessen</span></span>
 <span><span class="co">#&gt; 6            6 hovedinnlegg Ruth Mari Grung             A Olemic Thommessen</span></span></code></pre></div>
-<p>Note that the speakers are only identified by their names. The API
-gives person ids for the speakers from the 2016-2017 session onward, but
-not before, and the ids it gives are not always correct:</p>
+<p>Note that the API only identifies the speakers by name in this
+transcript. The API gives person ids for the speakers
+(<code>person_id</code>) from the 2016-2017 session onward, but not
+before, and the ids it gives are not always correct:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span>api_id <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">speeches140213</span><span class="op">$</span><span class="va">person_id</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; api_id</span></span>
 <span><span class="co">#&gt; FALSE </span></span>
 <span><span class="co">#&gt;    48</span></span></code></pre></div>
-<p>To link the speakers to the rest of the API, the package includes the
-<code>speaker_links</code> dataset. It links the names of speakers and
-chairs in all transcripts from the 1998-99 session onward to person ids,
-by session. The links are made from the names alone, and names that
-cannot be linked with certainty are left as <code>NA</code> (see
-<code><a href="../reference/speaker_links.html">?speaker_links</a></code> for the rules). The dataset is merged with
-the speeches by name and session:</p>
+<p>To link the speakers to the rest of the API,
+<code><a href="../reference/get_speeches.html">get_speeches()</a></code> therefore also adds person ids linked from
+the names of the speakers (<code>linked_person_id</code>) and of the
+chair (<code>chair_linked_id</code>). These come from the
+<code>speaker_links</code> dataset in the package, which links the names
+of speakers and chairs in all transcripts from the 1998-99 session
+onward to person ids, by session. The links are made from the names
+alone, and names that cannot be linked with certainty are left as
+<code>NA</code> (see <code><a href="../reference/speaker_links.html">?speaker_links</a></code> for the rules):</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">speeches140213</span>, <span class="va">speaker_links</span>,</span>
-<span>                  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"speaker_name"</span>, <span class="st">"session_id"</span><span class="op">)</span>, all.x <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">speeches</span><span class="op">$</span><span class="va">speech_order</span><span class="op">)</span>, <span class="op">]</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">speeches</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">speeches</span><span class="op">$</span><span class="va">speaker_name</span><span class="op">)</span>,</span>
-<span>              <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"speaker_name"</span>, <span class="st">"speaker_party"</span>, <span class="st">"linked_person_id"</span>, <span class="st">"link_method"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">speeches140213</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">speeches140213</span><span class="op">$</span><span class="va">speaker_name</span><span class="op">)</span>,</span>
+<span>                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"speaker_name"</span>, <span class="st">"speaker_party"</span>, <span class="st">"linked_person_id"</span>, <span class="st">"link_method"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          speaker_name speaker_party linked_person_id           link_method</span></span>
-<span><span class="co">#&gt; 18      Kjersti Toppe            Sp              KJT         full name, mp</span></span>
-<span><span class="co">#&gt; 25    Ruth Mari Grung             A              RUG first + last name, mp</span></span>
-<span><span class="co">#&gt; 28 Sveinung Stensland             H             SVES         full name, mp</span></span>
-<span><span class="co">#&gt; 17   Karianne O. Tung             A              KAT         full name, mp</span></span>
+<span><span class="co">#&gt; 2       Kjersti Toppe            Sp              KJT         full name, mp</span></span>
+<span><span class="co">#&gt; 6     Ruth Mari Grung             A              RUG first + last name, mp</span></span>
+<span><span class="co">#&gt; 9  Sveinung Stensland             H             SVES         full name, mp</span></span>
+<span><span class="co">#&gt; 10   Karianne O. Tung             A              KAT         full name, mp</span></span>
 <span><span class="co">#&gt; 11   Harald T. Nesvik           FrP              HTN         full name, mp</span></span>
-<span><span class="co">#&gt; 19      Kjersti Toppe            Sp              KJT         full name, mp</span></span></code></pre></div>
+<span><span class="co">#&gt; 12      Kjersti Toppe            Sp              KJT         full name, mp</span></span></code></pre></div>
 <p>All speeches with a named speaker are linked, except the two by
 Else-May Botten, whose name at the time differs from the name registered
 in the API. Speeches by the president (<code>presinnlegg</code>) have no
 speaker name in the older transcripts:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span>speech_type <span class="op">=</span> <span class="va">speeches</span><span class="op">$</span><span class="va">speech_type</span>, linked <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">speeches</span><span class="op">$</span><span class="va">linked_person_id</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span>speech_type <span class="op">=</span> <span class="va">speeches140213</span><span class="op">$</span><span class="va">speech_type</span>,</span>
+<span>      linked <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">speeches140213</span><span class="op">$</span><span class="va">linked_person_id</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;               linked</span></span>
 <span><span class="co">#&gt; speech_type    FALSE TRUE</span></span>
 <span><span class="co">#&gt;   hovedinnlegg     2   29</span></span>
 <span><span class="co">#&gt;   presinnlegg     16    0</span></span>
 <span><span class="co">#&gt;   replikk          0    1</span></span></code></pre></div>
-<p>However, the sitting chair is given in <code>chair_name</code>, which
-is linked in the same way:</p>
+<p>However, the sitting chair is given in <code>chair_name</code>, and
+linked in <code>chair_linked_id</code>:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">chairs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">speeches140213</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"speech_order"</span>, <span class="st">"session_id"</span>, <span class="st">"chair_name"</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>                <span class="va">speaker_links</span>,</span>
-<span>                by.x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chair_name"</span>, <span class="st">"session_id"</span><span class="op">)</span>,</span>
-<span>                by.y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"speaker_name"</span>, <span class="st">"session_id"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">chairs</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chair_name"</span>, <span class="st">"linked_person_id"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          chair_name linked_person_id</span></span>
-<span><span class="co">#&gt; 1 Olemic Thommessen             OLET</span></span></code></pre></div>
-<p>With the person ids in place, the speeches are easily combined with
-the MP data in the package, such as <code><a href="../reference/get_mp.html">get_mp()</a></code>,
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">speeches140213</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chair_name"</span>, <span class="st">"chair_linked_id"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          chair_name chair_linked_id</span></span>
+<span><span class="co">#&gt; 1 Olemic Thommessen            OLET</span></span></code></pre></div>
+<p>The linked ids are made by the package rather than given by the API,
+and only cover the sessions in <code>speaker_links</code>. Setting
+<code>link = FALSE</code> returns the speeches without them, and
+<code>speaker_links</code> can then be merged with the speeches by name
+and session. With the person ids in place, the speeches are easily
+combined with the MP data in the package, such as <code><a href="../reference/get_mp.html">get_mp()</a></code>,
 <code><a href="../reference/get_mp_bio.html">get_mp_bio()</a></code>, and <code><a href="../reference/get_parlperiod_mps.html">get_parlperiod_mps()</a></code>.</p>
 </div>
 </div>

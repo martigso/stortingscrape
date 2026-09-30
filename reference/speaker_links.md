@@ -3,9 +3,11 @@
 A crosswalk from the names of speakers and chairs, as written in the
 debate transcripts (see
 [get_speeches](https://martigso.github.io/stortingscrape/reference/get_speeches.md)),
-to person ids, by parliamentary session. Join it to the output of
+to person ids, by parliamentary session.
 [get_speeches](https://martigso.github.io/stortingscrape/reference/get_speeches.md)
-by `speaker_name` and `session_id` (speakers) or by `chair_name` and
+adds these links to its output by default (`link = TRUE`). With
+`link = FALSE`, the dataset can be joined to the output by
+`speaker_name` and `session_id` (speakers) or by `chair_name` and
 `session_id` (chairs).
 
 ## Usage
@@ -92,7 +94,7 @@ from the API.
 ``` r
 if (FALSE) { # \dontrun{
 
-speeches <- get_speeches("refs-202425-06-12")
+speeches <- get_speeches("s140213", link = FALSE)
 
 speeches <- merge(speeches, speaker_links, by = c("speaker_name", "session_id"), all.x = TRUE)
 

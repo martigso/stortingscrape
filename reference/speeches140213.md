@@ -12,7 +12,7 @@ speeches140213
 
 ## Format
 
-A data frame with 23 columns and 48 rows (see
+A data frame with 26 columns and 48 rows (see
 [get_speeches](https://martigso.github.io/stortingscrape/reference/get_speeches.md)
 for details)
 
@@ -96,6 +96,15 @@ for details)
 
   Id of the speaker, when given in the transcript
 
+- linked_person_id:
+
+  Id of the speaker, linked from `speaker_name` (see
+  [speaker_links](https://martigso.github.io/stortingscrape/reference/speaker_links.md))
+
+- link_method:
+
+  How `linked_person_id` was linked
+
 - chair_name:
 
   Name of the sitting chair
@@ -103,6 +112,10 @@ for details)
 - chair_id:
 
   Id of the sitting chair, when given in the transcript
+
+- chair_linked_id:
+
+  Id of the sitting chair, linked from `chair_name`
 
 - text:
 

@@ -505,9 +505,10 @@ head(speeches140213[, c("speech_order", "speech_type", "speaker_name",
 #> 6            6 hovedinnlegg Ruth Mari Grung             A Olemic Thommessen
 ```
 
-Note that the speakers are only identified by their names. The API gives
-person ids for the speakers from the 2016-2017 session onward, but not
-before, and the ids it gives are not always correct:
+Note that the API only identifies the speakers by name in this
+transcript. The API gives person ids for the speakers (`person_id`) from
+the 2016-2017 session onward, but not before, and the ids it gives are
+not always correct:
 
 ``` r
 
@@ -517,31 +518,29 @@ table(api_id = !is.na(speeches140213$person_id))
 #>    48
 ```
 
-To link the speakers to the rest of the API, the package includes the
-`speaker_links` dataset. It links the names of speakers and chairs in
-all transcripts from the 1998-99 session onward to person ids, by
-session. The links are made from the names alone, and names that cannot
-be linked with certainty are left as `NA` (see
+To link the speakers to the rest of the API,
+[`get_speeches()`](https://martigso.github.io/stortingscrape/reference/get_speeches.md)
+therefore also adds person ids linked from the names of the speakers
+(`linked_person_id`) and of the chair (`chair_linked_id`). These come
+from the `speaker_links` dataset in the package, which links the names
+of speakers and chairs in all transcripts from the 1998-99 session
+onward to person ids, by session. The links are made from the names
+alone, and names that cannot be linked with certainty are left as `NA`
+(see
 [`?speaker_links`](https://martigso.github.io/stortingscrape/reference/speaker_links.md)
-for the rules). The dataset is merged with the speeches by name and
-session:
+for the rules):
 
 ``` r
 
-speeches <- merge(speeches140213, speaker_links,
-                  by = c("speaker_name", "session_id"), all.x = TRUE)
-
-speeches <- speeches[order(speeches$speech_order), ]
-
-head(speeches[!is.na(speeches$speaker_name),
-              c("speaker_name", "speaker_party", "linked_person_id", "link_method")])
+head(speeches140213[!is.na(speeches140213$speaker_name),
+                    c("speaker_name", "speaker_party", "linked_person_id", "link_method")])
 #>          speaker_name speaker_party linked_person_id           link_method
-#> 18      Kjersti Toppe            Sp              KJT         full name, mp
-#> 25    Ruth Mari Grung             A              RUG first + last name, mp
-#> 28 Sveinung Stensland             H             SVES         full name, mp
-#> 17   Karianne O. Tung             A              KAT         full name, mp
+#> 2       Kjersti Toppe            Sp              KJT         full name, mp
+#> 6     Ruth Mari Grung             A              RUG first + last name, mp
+#> 9  Sveinung Stensland             H             SVES         full name, mp
+#> 10   Karianne O. Tung             A              KAT         full name, mp
 #> 11   Harald T. Nesvik           FrP              HTN         full name, mp
-#> 19      Kjersti Toppe            Sp              KJT         full name, mp
+#> 12      Kjersti Toppe            Sp              KJT         full name, mp
 ```
 
 All speeches with a named speaker are linked, except the two by Else-May
@@ -551,7 +550,8 @@ the older transcripts:
 
 ``` r
 
-table(speech_type = speeches$speech_type, linked = !is.na(speeches$linked_person_id))
+table(speech_type = speeches140213$speech_type,
+      linked = !is.na(speeches140213$linked_person_id))
 #>               linked
 #> speech_type    FALSE TRUE
 #>   hovedinnlegg     2   29
@@ -559,23 +559,22 @@ table(speech_type = speeches$speech_type, linked = !is.na(speeches$linked_person
 #>   replikk          0    1
 ```
 
-However, the sitting chair is given in `chair_name`, which is linked in
-the same way:
+However, the sitting chair is given in `chair_name`, and linked in
+`chair_linked_id`:
 
 ``` r
 
-chairs <- merge(speeches140213[, c("speech_order", "session_id", "chair_name")],
-                speaker_links,
-                by.x = c("chair_name", "session_id"),
-                by.y = c("speaker_name", "session_id"))
-
-unique(chairs[, c("chair_name", "linked_person_id")])
-#>          chair_name linked_person_id
-#> 1 Olemic Thommessen             OLET
+unique(speeches140213[, c("chair_name", "chair_linked_id")])
+#>          chair_name chair_linked_id
+#> 1 Olemic Thommessen            OLET
 ```
 
-With the person ids in place, the speeches are easily combined with the
-MP data in the package, such as
+The linked ids are made by the package rather than given by the API, and
+only cover the sessions in `speaker_links`. Setting `link = FALSE`
+returns the speeches without them, and `speaker_links` can then be
+merged with the speeches by name and session. With the person ids in
+place, the speeches are easily combined with the MP data in the package,
+such as
 [`get_mp()`](https://martigso.github.io/stortingscrape/reference/get_mp.md),
 [`get_mp_bio()`](https://martigso.github.io/stortingscrape/reference/get_mp_bio.md),
 and
