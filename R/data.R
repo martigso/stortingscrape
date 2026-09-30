@@ -307,9 +307,11 @@
 #'    \item{link_method}{How the name was linked: on full name, first and last name, or as a changed name, to an MP roster and/or a minister spell; "ambiguous" when several persons match; "substitute only, no party or title" when not linked for that reason}
 #' }
 #'
-#' @source Built by `data-raw/speaker_links.R` from \url{https://data.stortinget.no/eksport/publikasjon},
-#' \url{https://data.stortinget.no/eksport/representanter}, and a list of ministers and their periods in
-#' office from regjeringen.no, supplemented by \url{https://data.stortinget.no/eksport/kodetbiografi}.
+#' @source Built by `data-raw/speaker_links.R` from the transcripts
+#' (\url{https://data.stortinget.no/dokumentasjon-og-hjelp/publikasjon/}), the MPs of each parliamentary
+#' period (\url{https://data.stortinget.no/dokumentasjon-og-hjelp/representanter/}), and a list of ministers
+#' and their periods in office from regjeringen.no, supplemented by the coded biographies
+#' (\url{https://data.stortinget.no/dokumentasjon-og-hjelp/kodet-personbiografi/}).
 #'
 #' @examples
 #' \dontrun{

@@ -15,9 +15,11 @@ A data frame with 4 columns and 8195 rows
 }
 }
 \source{
-Built by \code{data-raw/speaker_links.R} from \url{https://data.stortinget.no/eksport/publikasjon},
-\url{https://data.stortinget.no/eksport/representanter}, and a list of ministers and their periods in
-office from regjeringen.no, supplemented by \url{https://data.stortinget.no/eksport/kodetbiografi}.
+Built by \code{data-raw/speaker_links.R} from the transcripts
+(\url{https://data.stortinget.no/dokumentasjon-og-hjelp/publikasjon/}), the MPs of each parliamentary
+period (\url{https://data.stortinget.no/dokumentasjon-og-hjelp/representanter/}), and a list of ministers
+and their periods in office from regjeringen.no, supplemented by the coded biographies
+(\url{https://data.stortinget.no/dokumentasjon-og-hjelp/kodet-personbiografi/}).
 }
 \usage{
 speaker_links
