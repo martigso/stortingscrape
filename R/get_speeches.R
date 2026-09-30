@@ -19,7 +19,13 @@
 #' always correct: speeches are sometimes tagged with the id of another person than the one named in
 #' `speaker_raw`. A numeric suffix that some of these ids carry (e.g. "ARK_775612110") is removed. The
 #' raw speaker string is always kept in `speaker_raw`; `speaker_title`, `speaker_name`, `speaker_party`,
-#' and `speech_time` are parsed from it. See [speaker_links] for person ids linked from the names.
+#' and `speech_time` are parsed from it.
+#'
+#' With `link = TRUE` (the default), person ids linked from the names of the speakers and chairs are
+#' added from the [speaker_links] dataset (`linked_person_id`, `link_method`, and `chair_linked_id`),
+#' also for transcripts before 2016-2017. These links are made by the package, not given by the API
+#' (`person_id` is kept as the API gives it), and they only cover the sessions in [speaker_links]; for
+#' later sessions, the linked ids are `NA`.
 #'
 #' The sitting chair (president or meeting leader) is tracked through the transcript: the chair named at
 #' the start of each meeting, updated at the transcript's notes on changes of chair (e.g. "X hadde her
@@ -28,11 +34,13 @@
 #' meeting, and only when the transcript includes it (a numeric suffix that some of these ids carry,
 #' e.g. "OLET_62710109", is removed).
 #'
-#' @usage get_speeches(publicationid = NA, good_manners = 0)
+#' @usage get_speeches(publicationid = NA, good_manners = 0, link = TRUE)
 #'
 #' @param publicationid Character string, or a vector of strings, indicating the id of the transcript to retrieve.
 #' Ids can be found with [get_session_publications] (`type = "referat"`)
 #' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param link Logical. Whether to add person ids linked from the names of speakers and chairs
+#' (see [speaker_links]). Defaults to `TRUE`.
 #'
 #' @return A data.frame with the following variables:
 #'
@@ -58,19 +66,25 @@
 #'    | **speaker_party**   | Party parsed from `speaker_raw`, harmonized to the party ids of [get_all_parties]     |
 #'    | **speech_time**     | Time stamp parsed from `speaker_raw` (hh:mm:ss)                                       |
 #'    | **person_id**       | Id of the speaker (see [get_mp]), when given in the transcript                        |
+#'    | **linked_person_id**| Id of the speaker, linked from `speaker_name` (with `link = TRUE`)                    |
+#'    | **link_method**     | How `linked_person_id` was linked (with `link = TRUE`; see [speaker_links])           |
 #'    | **chair_name**      | Name of the sitting chair (president or meeting leader)                               |
 #'    | **chair_id**        | Id of the sitting chair, when given in the transcript                                 |
+#'    | **chair_linked_id** | Id of the sitting chair, linked from `chair_name` (with `link = TRUE`)                |
 #'    | **text**            | Speech text, one line per paragraph                                                   |
 #'
 #' @md
 #'
-#' @seealso [get_publication] [get_session_publications] [get_session_meetings] [get_case]
+#' @seealso [speaker_links] [get_publication] [get_session_publications] [get_session_meetings] [get_case]
 #'
 #' @examples
 #'
 #' \dontrun{
-#' speeches <- get_speeches("refs-202425-06-12")
-#' head(speeches[, c("speech_type", "speaker_name", "speaker_party", "person_id")])
+#' speeches <- get_speeches("s140213")
+#' head(speeches[, c("speech_type", "speaker_name", "person_id", "linked_person_id")])
+#'
+#' # Without the linked ids
+#' speeches <- get_speeches("s140213", link = FALSE)
 #' }
 #'
 #' @import rvest httr2 stringr
@@ -78,10 +92,10 @@
 #'
 #' @export
 #'
-get_speeches <- function(publicationid = NA, good_manners = 0){
+get_speeches <- function(publicationid = NA, good_manners = 0, link = TRUE){
 
   if(length(publicationid) > 1)
-    return(fetch_multi(publicationid, get_speeches, good_manners))
+    return(fetch_multi(publicationid, get_speeches, good_manners, link = link))
 
   url <- paste0("https://data.stortinget.no/eksport/publikasjon?publikasjonid=", publicationid)
 
@@ -89,9 +103,45 @@ get_speeches <- function(publicationid = NA, good_manners = 0){
 
   tmp2 <- parse_speeches(tmp, publicationid)
 
+  if(link) tmp2 <- link_speakers(tmp2)
+
   Sys.sleep(good_manners)
 
   return(tmp2)
+
+}
+
+#' Add person ids linked from speaker and chair names
+#'
+#' Looks up `speaker_name` and `chair_name` by session in the [speaker_links]
+#' dataset, keeping the order of the rows. Places `linked_person_id` and
+#' `link_method` after `person_id`, and `chair_linked_id` after `chair_id`.
+#'
+#' @param x A data.frame from \code{\link{parse_speeches}}.
+#'
+#' @keywords internal
+#' @noRd
+link_speakers <- function(x) {
+
+  links <- stortingscrape::speaker_links
+
+  key <- paste(links$speaker_name, links$session_id, sep = "\r")
+
+  speaker <- match(paste(x$speaker_name, x$session_id, sep = "\r"), key)
+  speaker[is.na(x$speaker_name)] <- NA
+
+  chair <- match(paste(x$chair_name, x$session_id, sep = "\r"), key)
+  chair[is.na(x$chair_name)] <- NA
+
+  x$linked_person_id <- links$linked_person_id[speaker]
+  x$link_method <- links$link_method[speaker]
+  x$chair_linked_id <- links$linked_person_id[chair]
+
+  cols <- names(x)[!names(x) %in% c("linked_person_id", "link_method", "chair_linked_id")]
+  cols <- append(cols, c("linked_person_id", "link_method"), after = match("person_id", cols))
+  cols <- append(cols, "chair_linked_id", after = match("chair_id", cols))
+
+  x[, cols]
 
 }
 

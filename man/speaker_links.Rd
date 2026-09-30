@@ -27,8 +27,9 @@ speaker_links
 \description{
 A crosswalk from the names of speakers and chairs, as written in the debate
 transcripts (see \link{get_speeches}), to person ids, by parliamentary session.
-Join it to the output of \link{get_speeches} by \code{speaker_name} and \code{session_id}
-(speakers) or by \code{chair_name} and \code{session_id} (chairs).
+\link{get_speeches} adds these links to its output by default (\code{link = TRUE}). With
+\code{link = FALSE}, the dataset can be joined to the output by \code{speaker_name} and
+\code{session_id} (speakers) or by \code{chair_name} and \code{session_id} (chairs).
 }
 \details{
 Names are linked to MPs and substitutes of the session's parliamentary period
@@ -63,7 +64,7 @@ retrieved from the API.
 \examples{
 \dontrun{
 
-speeches <- get_speeches("refs-202425-06-12")
+speeches <- get_speeches("s140213", link = FALSE)
 
 speeches <- merge(speeches, speaker_links, by = c("speaker_name", "session_id"), all.x = TRUE)
 

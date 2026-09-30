@@ -266,8 +266,9 @@
 #'
 #' A crosswalk from the names of speakers and chairs, as written in the debate
 #' transcripts (see [get_speeches]), to person ids, by parliamentary session.
-#' Join it to the output of [get_speeches] by `speaker_name` and `session_id`
-#' (speakers) or by `chair_name` and `session_id` (chairs).
+#' [get_speeches] adds these links to its output by default (`link = TRUE`). With
+#' `link = FALSE`, the dataset can be joined to the output by `speaker_name` and
+#' `session_id` (speakers) or by `chair_name` and `session_id` (chairs).
 #'
 #' Names are linked to MPs and substitutes of the session's parliamentary period
 #' ([get_parlperiod_mps]) and to ministers in office during the session. A name
@@ -316,7 +317,7 @@
 #' @examples
 #' \dontrun{
 #'
-#' speeches <- get_speeches("refs-202425-06-12")
+#' speeches <- get_speeches("s140213", link = FALSE)
 #'
 #' speeches <- merge(speeches, speaker_links, by = c("speaker_name", "session_id"), all.x = TRUE)
 #'
@@ -328,7 +329,7 @@
 #' A dataset containing all speeches in the transcript of the Storting's meeting
 #' on 13 February 2014 (publication id "s140213"), as returned by [get_speeches]
 #'
-#' @format A data frame with 23 columns and 48 rows (see [get_speeches] for details)
+#' @format A data frame with 26 columns and 48 rows (see [get_speeches] for details)
 #'
 #' \describe{
 #'    \item{publication_id}{Id of the transcript}
@@ -351,8 +352,11 @@
 #'    \item{speaker_party}{Party parsed from `speaker_raw`}
 #'    \item{speech_time}{Time stamp parsed from `speaker_raw`}
 #'    \item{person_id}{Id of the speaker, when given in the transcript}
+#'    \item{linked_person_id}{Id of the speaker, linked from `speaker_name` (see [speaker_links])}
+#'    \item{link_method}{How `linked_person_id` was linked}
 #'    \item{chair_name}{Name of the sitting chair}
 #'    \item{chair_id}{Id of the sitting chair, when given in the transcript}
+#'    \item{chair_linked_id}{Id of the sitting chair, linked from `chair_name`}
 #'    \item{text}{Speech text, one line per paragraph}
 #' }
 #'

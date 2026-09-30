@@ -5,7 +5,7 @@
 \alias{speeches140213}
 \title{Speeches in the Storting's meeting on 13 February 2014}
 \format{
-A data frame with 23 columns and 48 rows (see \link{get_speeches} for details)
+A data frame with 26 columns and 48 rows (see \link{get_speeches} for details)
 
 \describe{
 \item{publication_id}{Id of the transcript}
@@ -28,8 +28,11 @@ A data frame with 23 columns and 48 rows (see \link{get_speeches} for details)
 \item{speaker_party}{Party parsed from \code{speaker_raw}}
 \item{speech_time}{Time stamp parsed from \code{speaker_raw}}
 \item{person_id}{Id of the speaker, when given in the transcript}
+\item{linked_person_id}{Id of the speaker, linked from \code{speaker_name} (see \link{speaker_links})}
+\item{link_method}{How \code{linked_person_id} was linked}
 \item{chair_name}{Name of the sitting chair}
 \item{chair_id}{Id of the sitting chair, when given in the transcript}
+\item{chair_linked_id}{Id of the sitting chair, linked from \code{chair_name}}
 \item{text}{Speech text, one line per paragraph}
 }
 }

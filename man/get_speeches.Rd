@@ -4,13 +4,16 @@
 \alias{get_speeches}
 \title{Retrieve the speeches in a debate transcript}
 \usage{
-get_speeches(publicationid = NA, good_manners = 0)
+get_speeches(publicationid = NA, good_manners = 0, link = TRUE)
 }
 \arguments{
 \item{publicationid}{Character string, or a vector of strings, indicating the id of the transcript to retrieve.
 Ids can be found with \link{get_session_publications} (\code{type = "referat"})}
 
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+
+\item{link}{Logical. Whether to add person ids linked from the names of speakers and chairs
+(see \link{speaker_links}). Defaults to \code{TRUE}.}
 }
 \value{
 A data.frame with the following variables:\tabular{ll}{
@@ -35,8 +38,11 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{speaker_party} \tab Party parsed from \code{speaker_raw}, harmonized to the party ids of \link{get_all_parties} \cr
    \strong{speech_time} \tab Time stamp parsed from \code{speaker_raw} (hh:mm:ss) \cr
    \strong{person_id} \tab Id of the speaker (see \link{get_mp}), when given in the transcript \cr
+   \strong{linked_person_id} \tab Id of the speaker, linked from \code{speaker_name} (with \code{link = TRUE}) \cr
+   \strong{link_method} \tab How \code{linked_person_id} was linked (with \code{link = TRUE}; see \link{speaker_links}) \cr
    \strong{chair_name} \tab Name of the sitting chair (president or meeting leader) \cr
    \strong{chair_id} \tab Id of the sitting chair, when given in the transcript \cr
+   \strong{chair_linked_id} \tab Id of the sitting chair, linked from \code{chair_name} (with \code{link = TRUE}) \cr
    \strong{text} \tab Speech text, one line per paragraph \cr
 }
 }
@@ -61,7 +67,13 @@ and not for all speeches (e.g. not for the president or committee chair). Note t
 always correct: speeches are sometimes tagged with the id of another person than the one named in
 \code{speaker_raw}. A numeric suffix that some of these ids carry (e.g. "ARK_775612110") is removed. The
 raw speaker string is always kept in \code{speaker_raw}; \code{speaker_title}, \code{speaker_name}, \code{speaker_party},
-and \code{speech_time} are parsed from it. See \link{speaker_links} for person ids linked from the names.
+and \code{speech_time} are parsed from it.
+
+With \code{link = TRUE} (the default), person ids linked from the names of the speakers and chairs are
+added from the \link{speaker_links} dataset (\code{linked_person_id}, \code{link_method}, and \code{chair_linked_id}),
+also for transcripts before 2016-2017. These links are made by the package, not given by the API
+(\code{person_id} is kept as the API gives it), and they only cover the sessions in \link{speaker_links}; for
+later sessions, the linked ids are \code{NA}.
 
 The sitting chair (president or meeting leader) is tracked through the transcript: the chair named at
 the start of each meeting, updated at the transcript's notes on changes of chair (e.g. "X hadde her
@@ -73,11 +85,14 @@ e.g. "OLET_62710109", is removed).
 \examples{
 
 \dontrun{
-speeches <- get_speeches("refs-202425-06-12")
-head(speeches[, c("speech_type", "speaker_name", "speaker_party", "person_id")])
+speeches <- get_speeches("s140213")
+head(speeches[, c("speech_type", "speaker_name", "person_id", "linked_person_id")])
+
+# Without the linked ids
+speeches <- get_speeches("s140213", link = FALSE)
 }
 
 }
 \seealso{
-\link{get_publication} \link{get_session_publications} \link{get_session_meetings} \link{get_case}
+\link{speaker_links} \link{get_publication} \link{get_session_publications} \link{get_session_meetings} \link{get_case}
 }
