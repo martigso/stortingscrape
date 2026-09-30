@@ -120,7 +120,9 @@ api_get <- function(url, as = "html") {
 #' @param ... Further arguments passed on to \code{.f} on every call (e.g. the
 #'   \code{q_type} argument of \code{\link{get_session_questions}}).
 #'
-#' @return A combined data.frame (default) or a named list of results.
+#' @return A combined data.frame (default) or a named list of results. The row
+#'   names of a combined data.frame are reset (rather than "id.row"), as the ids
+#'   are in the data.
 #'
 #' @keywords internal
 #' @noRd
@@ -140,6 +142,10 @@ fetch_multi <- function(ids, .f, good_manners = 0, .combine = rbind, ...) {
 
   if(is.null(.combine)) return(out)
 
-  do.call(.combine, out)
+  combined <- do.call(.combine, out)
+
+  if(is.data.frame(combined)) rownames(combined) <- NULL
+
+  combined
 
 }
