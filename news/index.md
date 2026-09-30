@@ -14,7 +14,9 @@
     return a named list of results keyed by id. A single id behaves
     exactly as before, so existing code is unaffected. Individual ids
     that fail are turned into warnings so a single bad id does not
-    discard the successful ones.
+    discard the successful ones. In interactive sessions, a progress bar
+    (from the `cli` package) shows the progress when retrieval takes
+    more than a few seconds.
   - All API calls now respect [Stortinget’s documented rate limit of 100
     calls per
     minute](https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/).
@@ -62,6 +64,26 @@
     bucket of 100 refilling at 100 per minute) allowed up to about 200
     calls in the first minute; requests now come in bursts of at most 10
     and then at 90 per minute.
+  - [`get_session_cases()`](https://martigso.github.io/stortingscrape/reference/get_session_cases.md),
+    [`get_session_hearings()`](https://martigso.github.io/stortingscrape/reference/get_session_hearings.md),
+    [`get_session_mp_speech_activity()`](https://martigso.github.io/stortingscrape/reference/get_session_mp_speech_activity.md),
+    and
+    [`get_mp_pic()`](https://martigso.github.io/stortingscrape/reference/get_mp_pic.md)
+    now also accept vectors of ids (for
+    [`get_mp_pic()`](https://martigso.github.io/stortingscrape/reference/get_mp_pic.md),
+    with one `destfile` per id).
+  - [`get_session_mp_speech_activity()`](https://martigso.github.io/stortingscrape/reference/get_session_mp_speech_activity.md)
+    gains an `mp_id` variable, and
+    [`get_parlperiod_presidency()`](https://martigso.github.io/stortingscrape/reference/get_parlperiod_presidency.md)
+    a `period_id` variable, so results for several ids can be told
+    apart.
+  - [`get_written_hearing_input()`](https://martigso.github.io/stortingscrape/reference/get_written_hearing_input.md)
+    keeps the hearing id for hearings without written input.
+  - Fixed
+    [`get_proposal_votes()`](https://martigso.github.io/stortingscrape/reference/get_proposal_votes.md)
+    failing for votes where a proposal had no delivering MP; the
+    proposal variables are now read per proposal, with `NA` for missing
+    values.
 
 ## stortingscrape 0.4.1
 

@@ -39,6 +39,7 @@ A data.frame with the following variables:
 | **person_id**     | Id of the presidency member            |
 | **to_date**       | Presidency member to date              |
 | **position**      | Presidency position                    |
+| **period_id**     | Id of the parliamentary period         |
 
 ## See also
 

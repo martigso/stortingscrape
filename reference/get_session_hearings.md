@@ -13,8 +13,9 @@ get_session_hearings(sessionid = NA, good_manners = 0, cores = 1)
 
 - sessionid:
 
-  Character string indicating the id of the parliamentary session to
-  retrieve.
+  Character string, or a vector of strings, indicating the id of the
+  parliamentary session to retrieve. With several ids, the result is a
+  named list of the results below, keyed by session id.
 
 - good_manners:
 

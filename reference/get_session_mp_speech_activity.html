@@ -51,11 +51,12 @@ Only available from the 2011-2012 session and onwards.</p>
 
 
 <dl><dt id="arg-sessionid">sessionid<a class="anchor" aria-label="anchor" href="#arg-sessionid"></a></dt>
-<dd><p>Character string indicating the session to retrieve speeches from.</p></dd>
+<dd><p>Character string, or a vector of strings, indicating the session to retrieve speeches from.</p></dd>
 
 
 <dt id="arg-mp-id">mp_id<a class="anchor" aria-label="anchor" href="#arg-mp-id"></a></dt>
-<dd><p>Character string for the MP to retreive all speeches of in a given session.</p></dd>
+<dd><p>Character string, or a vector of strings, for the MP to retrieve all speeches of in a given session.
+With several sessions and/or MPs, all combinations are retrieved and bound together.</p></dd>
 
 
 <dt id="arg-good-manners">good_manners<a class="anchor" aria-label="anchor" href="#arg-good-manners"></a></dt>
@@ -64,7 +65,7 @@ Only available from the 2011-2012 session and onwards.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data.frame with the following variables:</p><table class="table table"><tr><td></td><td></td></tr><tr><td><strong>response_date</strong></td><td>Date of data retrieval</td></tr><tr><td><strong>version</strong></td><td>Data version from the API</td></tr><tr><td><strong>session_id</strong></td><td>Session id</td></tr><tr><td><strong>agenda_case_number</strong></td><td>Number indicating the agenda number for the case</td></tr><tr><td><strong>meeting_id</strong></td><td>Meeting id</td></tr><tr><td><strong>speech_start_time</strong></td><td>Start time of speech</td></tr><tr><td><strong>speech_type</strong></td><td>Type of speech</td></tr><tr><td><strong>speech_length_secs</strong></td><td>Lenght of speech in seconds</td></tr></table></div>
+    <p>A data.frame with the following variables:</p><table class="table table"><tr><td></td><td></td></tr><tr><td><strong>response_date</strong></td><td>Date of data retrieval</td></tr><tr><td><strong>version</strong></td><td>Data version from the API</td></tr><tr><td><strong>session_id</strong></td><td>Session id</td></tr><tr><td><strong>mp_id</strong></td><td>Id of the MP</td></tr><tr><td><strong>agenda_case_number</strong></td><td>Number indicating the agenda number for the case</td></tr><tr><td><strong>meeting_id</strong></td><td>Meeting id</td></tr><tr><td><strong>speech_start_time</strong></td><td>Start time of speech</td></tr><tr><td><strong>speech_type</strong></td><td>Type of speech</td></tr><tr><td><strong>speech_length_secs</strong></td><td>Lenght of speech in seconds</td></tr></table></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><a href="get_mp.html">get_mp</a> <a href="get_mp_bio.html">get_mp_bio</a> <a href="get_publication.html">get_publication</a></p></div>

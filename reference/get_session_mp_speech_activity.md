@@ -14,12 +14,14 @@ get_session_mp_speech_activity(sessionid = NA, mp_id = NA, good_manners = 0)
 
 - sessionid:
 
-  Character string indicating the session to retrieve speeches from.
+  Character string, or a vector of strings, indicating the session to
+  retrieve speeches from.
 
 - mp_id:
 
-  Character string for the MP to retreive all speeches of in a given
-  session.
+  Character string, or a vector of strings, for the MP to retrieve all
+  speeches of in a given session. With several sessions and/or MPs, all
+  combinations are retrieved and bound together.
 
 - good_manners:
 
@@ -38,6 +40,7 @@ A data.frame with the following variables:
 | **response_date**      | Date of data retrieval                           |
 | **version**            | Data version from the API                        |
 | **session_id**         | Session id                                       |
+| **mp_id**              | Id of the MP                                     |
 | **agenda_case_number** | Number indicating the agenda number for the case |
 | **meeting_id**         | Meeting id                                       |
 | **speech_start_time**  | Start time of speech                             |
