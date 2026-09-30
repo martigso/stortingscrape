@@ -42,11 +42,13 @@ A data frame with 4 columns and 8195 rows
 
 ## Source
 
-Built by `data-raw/speaker_links.R` from
-<https://data.stortinget.no/eksport/publikasjon>,
-<https://data.stortinget.no/eksport/representanter>, and a list of
-ministers and their periods in office from regjeringen.no, supplemented
-by <https://data.stortinget.no/eksport/kodetbiografi>.
+Built by `data-raw/speaker_links.R` from the transcripts
+(<https://data.stortinget.no/dokumentasjon-og-hjelp/publikasjon/>), the
+MPs of each parliamentary period
+(<https://data.stortinget.no/dokumentasjon-og-hjelp/representanter/>),
+and a list of ministers and their periods in office from regjeringen.no,
+supplemented by the coded biographies
+(<https://data.stortinget.no/dokumentasjon-og-hjelp/kodet-personbiografi/>).
 
 ## Details
 
