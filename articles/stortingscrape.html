@@ -97,7 +97,7 @@ in that they are finished datasets ready for download and have limited
 scope.</p>
 <p>The main goal of <code>stortingscrape</code> is to allow researchers
 to access any data from the Norwegian parliament easily, but also still
-be able to structure the data according to ones need. Most importantly,
+be able to structure the data according to one’s need. Most importantly,
 the package is facilitated for weaving together different parts of the
 data.stortinget.no API.</p>
 <p>I will start this vignette by briefly discussing the openly
@@ -148,7 +148,7 @@ times. This will be discussed further in the next section.</p>
 </h2>
 <p><code>stortingscrape</code> aims to make Norwegian parliamentary data
 easily accessible, while also being flexible enough for tailoring the
-different underlying data sources to ones needs. Indeed, contrary to
+different underlying data sources to one’s needs. Indeed, contrary to
 most open source parliamentary speech data, <code>stortingscrape</code>
 aims at giving the user as much agency as possible in tailoring data for
 specific needs. In addition to user agency, the package is built with a
@@ -227,9 +227,10 @@ Second, as mentioned above, duplicated data i avoided whenever possible.
 Third, certain unstandardized image sources – such as publication
 attachment figures – are not supported in the package. And finally,
 publications from the <code><a href="../reference/get_publication.html">get_publication()</a></code> function can be
-retrieved, but are returned in a parsed XML data format from the
-<code>rvest</code> package because these data are not standardized
-across different publications.</p>
+retrieved, but are returned as parsed XML (from the <code>xml2</code>
+package) because these data are not standardized across different
+publications. The exception is the debate transcripts, where
+<code><a href="../reference/get_speeches.html">get_speeches()</a></code> returns the speeches as a data frame.</p>
 <!-- % The various sources touched by the various functions in `stortingscrape` can -->
 <!-- % best be summarized as a network of interconnected nodes, as shown in figure -->
 <!-- % \ref{fig:flowchart} -->
@@ -256,10 +257,12 @@ extraction of voting data based on vote IDs from the frontend web-page –
 <a href="https://stortinget.no" class="external-link">stortinget.no</a>. Next, I exemplify the
 large set of period and session specific data by retrieving all MPs for
 a specific parliamentary period and all interpellations for a specified
-parliamentary session. Finally, I show how the different functions of
-the <code>stortingscrape</code> package works together – merging data on
-cases with their belonging vote results. Note that the vignette is built
-using the examples in the data folder of the package.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;This is done in order to not call the API each time the
+parliamentary session. Next, I show how the different functions of the
+<code>stortingscrape</code> package works together – merging data on
+cases with their belonging vote results. Finally, I show how to go from
+a debate transcript to speeches with person ids for the speakers. Note
+that the vignette is built using the examples in the data folder of the
+package.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;This is done in order to not call the API each time the
 vignette is built.&lt;/p&gt;"><sup>8</sup></a></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"stortingscrape"</span><span class="op">)</span><span class="op">$</span><span class="va">results</span><span class="op">[</span>,<span class="st">"Item"</span><span class="op">]</span></span>
@@ -349,7 +352,7 @@ below.</p>
 <div class="section level3">
 <h3 id="sequences-of-data-extraction">Sequences of data extraction<a class="anchor" aria-label="anchor" href="#sequences-of-data-extraction"></a>
 </h3>
-<p>Below, I show two examples of sequentially extracting data of
+<p>Below, I show three examples of sequentially extracting data of
 interest.</p>
 <div class="section level4">
 <h4 id="example-1-from-periods-to-interpellations">Example 1: From periods to interpellations<a class="anchor" aria-label="anchor" href="#example-1-from-periods-to-interpellations"></a>
@@ -413,9 +416,10 @@ interpellations from the 2002-2003 session with the
 <span><span class="co">#&gt; [1] 22 26</span></span></code></pre></div>
 <p>Here, we have 22 interpellations over 26 different variables.
 Unfortunately, the API only gives the question and not the answer for
-the different types of question requests. Retrieval of question answers
-is a daunting task, because it is only accessible through the
-unstandardized <code><a href="../reference/get_publication.html">get_publication()</a></code> function.</p>
+the different types of question requests. However, interpellations are
+debated in the Storting’s meetings, so the minister’s answer can be
+found among the speeches in the transcript of the meeting (see Example 3
+below).</p>
 </div>
 </div>
 <div class="section level3">
@@ -478,6 +482,85 @@ three votes:</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span>margin <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="example-3-from-debate-transcripts-to-speakers">Example 3: From debate transcripts to speakers<a class="anchor" aria-label="anchor" href="#example-3-from-debate-transcripts-to-speakers"></a>
+</h3>
+<p>The debate transcripts (publication type “referat”) contain all
+speeches given in the Storting’s meetings, as well as in open hearings
+and in the European Committee. The ids of the transcripts in a session
+can be found with
+<code>get_session_publications(type = "referat")</code>, and
+<code><a href="../reference/get_speeches.html">get_speeches()</a></code> returns the speeches in a transcript as a
+data frame with one row per speech. Here, I use the transcript of the
+meeting on 13 February 2014:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## speeches140213 &lt;- get_speeches("s140213")</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">speeches140213</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"speech_order"</span>, <span class="st">"speech_type"</span>, <span class="st">"speaker_name"</span>,</span>
+<span>                        <span class="st">"speaker_party"</span>, <span class="st">"chair_name"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   speech_order  speech_type    speaker_name speaker_party        chair_name</span></span>
+<span><span class="co">#&gt; 1            1  presinnlegg            &lt;NA&gt;          &lt;NA&gt; Olemic Thommessen</span></span>
+<span><span class="co">#&gt; 2            2 hovedinnlegg   Kjersti Toppe            Sp Olemic Thommessen</span></span>
+<span><span class="co">#&gt; 3            3  presinnlegg            &lt;NA&gt;          &lt;NA&gt; Olemic Thommessen</span></span>
+<span><span class="co">#&gt; 4            4  presinnlegg            &lt;NA&gt;          &lt;NA&gt; Olemic Thommessen</span></span>
+<span><span class="co">#&gt; 5            5  presinnlegg            &lt;NA&gt;          &lt;NA&gt; Olemic Thommessen</span></span>
+<span><span class="co">#&gt; 6            6 hovedinnlegg Ruth Mari Grung             A Olemic Thommessen</span></span></code></pre></div>
+<p>Note that the speakers are only identified by their names. The API
+gives person ids for the speakers from the 2016-2017 session onward, but
+not before, and the ids it gives are not always correct:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span>api_id <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">speeches140213</span><span class="op">$</span><span class="va">person_id</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; api_id</span></span>
+<span><span class="co">#&gt; FALSE </span></span>
+<span><span class="co">#&gt;    48</span></span></code></pre></div>
+<p>To link the speakers to the rest of the API, the package includes the
+<code>speaker_links</code> dataset. It links the names of speakers and
+chairs in all transcripts from the 1998-99 session onward to person ids,
+by session. The links are made from the names alone, and names that
+cannot be linked with certainty are left as <code>NA</code> (see
+<code><a href="../reference/speaker_links.html">?speaker_links</a></code> for the rules). The dataset is merged with
+the speeches by name and session:</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">speeches140213</span>, <span class="va">speaker_links</span>,</span>
+<span>                  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"speaker_name"</span>, <span class="st">"session_id"</span><span class="op">)</span>, all.x <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">speeches</span><span class="op">$</span><span class="va">speech_order</span><span class="op">)</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">speeches</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">speeches</span><span class="op">$</span><span class="va">speaker_name</span><span class="op">)</span>,</span>
+<span>              <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"speaker_name"</span>, <span class="st">"speaker_party"</span>, <span class="st">"linked_person_id"</span>, <span class="st">"link_method"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          speaker_name speaker_party linked_person_id           link_method</span></span>
+<span><span class="co">#&gt; 18      Kjersti Toppe            Sp              KJT         full name, mp</span></span>
+<span><span class="co">#&gt; 25    Ruth Mari Grung             A              RUG first + last name, mp</span></span>
+<span><span class="co">#&gt; 28 Sveinung Stensland             H             SVES         full name, mp</span></span>
+<span><span class="co">#&gt; 17   Karianne O. Tung             A              KAT         full name, mp</span></span>
+<span><span class="co">#&gt; 11   Harald T. Nesvik           FrP              HTN         full name, mp</span></span>
+<span><span class="co">#&gt; 19      Kjersti Toppe            Sp              KJT         full name, mp</span></span></code></pre></div>
+<p>All speeches with a named speaker are linked, except the two by
+Else-May Botten, whose name at the time differs from the name registered
+in the API. Speeches by the president (<code>presinnlegg</code>) have no
+speaker name in the older transcripts:</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span>speech_type <span class="op">=</span> <span class="va">speeches</span><span class="op">$</span><span class="va">speech_type</span>, linked <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">speeches</span><span class="op">$</span><span class="va">linked_person_id</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;               linked</span></span>
+<span><span class="co">#&gt; speech_type    FALSE TRUE</span></span>
+<span><span class="co">#&gt;   hovedinnlegg     2   29</span></span>
+<span><span class="co">#&gt;   presinnlegg     16    0</span></span>
+<span><span class="co">#&gt;   replikk          0    1</span></span></code></pre></div>
+<p>However, the sitting chair is given in <code>chair_name</code>, which
+is linked in the same way:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">chairs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">speeches140213</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"speech_order"</span>, <span class="st">"session_id"</span>, <span class="st">"chair_name"</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>                <span class="va">speaker_links</span>,</span>
+<span>                by.x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chair_name"</span>, <span class="st">"session_id"</span><span class="op">)</span>,</span>
+<span>                by.y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"speaker_name"</span>, <span class="st">"session_id"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">chairs</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chair_name"</span>, <span class="st">"linked_person_id"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          chair_name linked_person_id</span></span>
+<span><span class="co">#&gt; 1 Olemic Thommessen             OLET</span></span></code></pre></div>
+<p>With the person ids in place, the speeches are easily combined with
+the MP data in the package, such as <code><a href="../reference/get_mp.html">get_mp()</a></code>,
+<code><a href="../reference/get_mp_bio.html">get_mp_bio()</a></code>, and <code><a href="../reference/get_parlperiod_mps.html">get_parlperiod_mps()</a></code>.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="sec:summary">Summary<a class="anchor" aria-label="anchor" href="#sec:summary"></a>
@@ -488,7 +571,7 @@ workflow of the <code>stortingscrape</code> package for R. In sum,
 parliament (<em>Stortinget</em>) more accessible through the back-end
 API (<a href="https://data.stortinget.no" class="external-link">data.stortinget.no</a>). One
 core philosophy of the package is to let the user tailor the data to
-ones needs, while at the same time extracting minimal overlapping data.
+one’s needs, while at the same time extracting minimal overlapping data.
 The scope of the package ranges from general data on the parliament
 itself (rules, session info, committees, etc) to data on the parties,
 bibliographies of the MPs, questions, hearings, debates, votes, and

@@ -36,8 +36,8 @@ datasets ready for download and have limited scope.
 
 The main goal of `stortingscrape` is to allow researchers to access any
 data from the Norwegian parliament easily, but also still be able to
-structure the data according to ones need. Most importantly, the package
-is facilitated for weaving together different parts of the
+structure the data according to one’s need. Most importantly, the
+package is facilitated for weaving together different parts of the
 data.stortinget.no API.
 
 I will start this vignette by briefly discussing the openly accessible
@@ -88,7 +88,7 @@ times. This will be discussed further in the next section.
 
 `stortingscrape` aims to make Norwegian parliamentary data easily
 accessible, while also being flexible enough for tailoring the different
-underlying data sources to ones needs. Indeed, contrary to most open
+underlying data sources to one’s needs. Indeed, contrary to most open
 source parliamentary speech data, `stortingscrape` aims at giving the
 user as much agency as possible in tailoring data for specific needs. In
 addition to user agency, the package is built with a core philosophy of
@@ -179,9 +179,11 @@ Third, certain unstandardized image sources – such as publication
 attachment figures – are not supported in the package. And finally,
 publications from the
 [`get_publication()`](https://martigso.github.io/stortingscrape/reference/get_publication.md)
-function can be retrieved, but are returned in a parsed XML data format
-from the `rvest` package because these data are not standardized across
-different publications.
+function can be retrieved, but are returned as parsed XML (from the
+`xml2` package) because these data are not standardized across different
+publications. The exception is the debate transcripts, where
+[`get_speeches()`](https://martigso.github.io/stortingscrape/reference/get_speeches.md)
+returns the speeches as a data frame.
 
 There are three overarching sources of data in `stortingscrape`: 1)
 Parliamentary structure data, 2) MP data, and 3) Parliamentary activity
@@ -201,10 +203,12 @@ voting data based on vote IDs from the frontend web-page –
 [stortinget.no](https://stortinget.no). Next, I exemplify the large set
 of period and session specific data by retrieving all MPs for a specific
 parliamentary period and all interpellations for a specified
-parliamentary session. Finally, I show how the different functions of
-the `stortingscrape` package works together – merging data on cases with
-their belonging vote results. Note that the vignette is built using the
-examples in the data folder of the package.[^8]
+parliamentary session. Next, I show how the different functions of the
+`stortingscrape` package works together – merging data on cases with
+their belonging vote results. Finally, I show how to go from a debate
+transcript to speeches with person ids for the speakers. Note that the
+vignette is built using the examples in the data folder of the
+package.[^8]
 
 ``` r
 
@@ -317,7 +321,8 @@ below.
 
 ### Sequences of data extraction
 
-Below, I show two examples of sequentially extracting data of interest.
+Below, I show three examples of sequentially extracting data of
+interest.
 
 #### Example 1: From periods to interpellations
 
@@ -398,11 +403,10 @@ dim(interp0203)
 
 Here, we have 22 interpellations over 26 different variables.
 Unfortunately, the API only gives the question and not the answer for
-the different types of question requests. Retrieval of question answers
-is a daunting task, because it is only accessible through the
-unstandardized
-[`get_publication()`](https://martigso.github.io/stortingscrape/reference/get_publication.md)
-function.
+the different types of question requests. However, interpellations are
+debated in the Storting’s meetings, so the minister’s answer can be
+found among the speeches in the transcript of the meeting (see Example 3
+below).
 
 ### Example 2: From cases to MP vote results
 
@@ -476,6 +480,107 @@ table(vote_result$vote, vote_result$party_id,
   round(digits = 2)
 ```
 
+### Example 3: From debate transcripts to speakers
+
+The debate transcripts (publication type “referat”) contain all speeches
+given in the Storting’s meetings, as well as in open hearings and in the
+European Committee. The ids of the transcripts in a session can be found
+with `get_session_publications(type = "referat")`, and
+[`get_speeches()`](https://martigso.github.io/stortingscrape/reference/get_speeches.md)
+returns the speeches in a transcript as a data frame with one row per
+speech. Here, I use the transcript of the meeting on 13 February 2014:
+
+``` r
+
+## speeches140213 <- get_speeches("s140213")
+
+head(speeches140213[, c("speech_order", "speech_type", "speaker_name",
+                        "speaker_party", "chair_name")])
+#>   speech_order  speech_type    speaker_name speaker_party        chair_name
+#> 1            1  presinnlegg            <NA>          <NA> Olemic Thommessen
+#> 2            2 hovedinnlegg   Kjersti Toppe            Sp Olemic Thommessen
+#> 3            3  presinnlegg            <NA>          <NA> Olemic Thommessen
+#> 4            4  presinnlegg            <NA>          <NA> Olemic Thommessen
+#> 5            5  presinnlegg            <NA>          <NA> Olemic Thommessen
+#> 6            6 hovedinnlegg Ruth Mari Grung             A Olemic Thommessen
+```
+
+Note that the speakers are only identified by their names. The API gives
+person ids for the speakers from the 2016-2017 session onward, but not
+before, and the ids it gives are not always correct:
+
+``` r
+
+table(api_id = !is.na(speeches140213$person_id))
+#> api_id
+#> FALSE 
+#>    48
+```
+
+To link the speakers to the rest of the API, the package includes the
+`speaker_links` dataset. It links the names of speakers and chairs in
+all transcripts from the 1998-99 session onward to person ids, by
+session. The links are made from the names alone, and names that cannot
+be linked with certainty are left as `NA` (see
+[`?speaker_links`](https://martigso.github.io/stortingscrape/reference/speaker_links.md)
+for the rules). The dataset is merged with the speeches by name and
+session:
+
+``` r
+
+speeches <- merge(speeches140213, speaker_links,
+                  by = c("speaker_name", "session_id"), all.x = TRUE)
+
+speeches <- speeches[order(speeches$speech_order), ]
+
+head(speeches[!is.na(speeches$speaker_name),
+              c("speaker_name", "speaker_party", "linked_person_id", "link_method")])
+#>          speaker_name speaker_party linked_person_id           link_method
+#> 18      Kjersti Toppe            Sp              KJT         full name, mp
+#> 25    Ruth Mari Grung             A              RUG first + last name, mp
+#> 28 Sveinung Stensland             H             SVES         full name, mp
+#> 17   Karianne O. Tung             A              KAT         full name, mp
+#> 11   Harald T. Nesvik           FrP              HTN         full name, mp
+#> 19      Kjersti Toppe            Sp              KJT         full name, mp
+```
+
+All speeches with a named speaker are linked, except the two by Else-May
+Botten, whose name at the time differs from the name registered in the
+API. Speeches by the president (`presinnlegg`) have no speaker name in
+the older transcripts:
+
+``` r
+
+table(speech_type = speeches$speech_type, linked = !is.na(speeches$linked_person_id))
+#>               linked
+#> speech_type    FALSE TRUE
+#>   hovedinnlegg     2   29
+#>   presinnlegg     16    0
+#>   replikk          0    1
+```
+
+However, the sitting chair is given in `chair_name`, which is linked in
+the same way:
+
+``` r
+
+chairs <- merge(speeches140213[, c("speech_order", "session_id", "chair_name")],
+                speaker_links,
+                by.x = c("chair_name", "session_id"),
+                by.y = c("speaker_name", "session_id"))
+
+unique(chairs[, c("chair_name", "linked_person_id")])
+#>          chair_name linked_person_id
+#> 1 Olemic Thommessen             OLET
+```
+
+With the person ids in place, the speeches are easily combined with the
+MP data in the package, such as
+[`get_mp()`](https://martigso.github.io/stortingscrape/reference/get_mp.md),
+[`get_mp_bio()`](https://martigso.github.io/stortingscrape/reference/get_mp_bio.md),
+and
+[`get_parlperiod_mps()`](https://martigso.github.io/stortingscrape/reference/get_parlperiod_mps.md).
+
 ## Summary
 
 In this vignette, I have presented the philosophy, scope, usage, and
@@ -483,7 +588,7 @@ workflow of the `stortingscrape` package for R. In sum, `stortingscrape`
 makes retrieving data from the Norwegian parliament (*Stortinget*) more
 accessible through the back-end API
 ([data.stortinget.no](https://data.stortinget.no)). One core philosophy
-of the package is to let the user tailor the data to ones needs, while
+of the package is to let the user tailor the data to one’s needs, while
 at the same time extracting minimal overlapping data. The scope of the
 package ranges from general data on the parliament itself (rules,
 session info, committees, etc) to data on the parties, bibliographies of

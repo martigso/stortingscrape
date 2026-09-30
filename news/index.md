@@ -21,12 +21,44 @@
     `429 Too Many Requests` responses are retried (respecting the
     `Retry-After` header). The `good_manners` argument remains available
     for additional polite pacing.
+  - New function
+    [`get_speeches()`](https://martigso.github.io/stortingscrape/reference/get_speeches.md)
+    returns the speeches of a debate transcript (publication type
+    “referat”) as a data frame, one row per speech, with the same
+    variables for transcripts before and after the 2016-2017 format
+    change. The raw speaker string is kept alongside the parsed title,
+    name, party, and time stamp. Speech elements holding several
+    speakers are split into one row per speaker, and the sitting chair
+    (president or meeting leader) is tracked through each transcript.
+    The example dataset `speeches140213` holds the output for one
+    transcript.
+  - New dataset `speaker_links`: person ids for the speakers and chairs
+    in all debate transcripts from 1998-99 onward, linked from their
+    names by session (see
+    [`?speaker_links`](https://martigso.github.io/stortingscrape/reference/speaker_links.md)
+    for the rules and `data-raw/speaker_links.R` for the build). Join it
+    to the output of
+    [`get_speeches()`](https://martigso.github.io/stortingscrape/reference/get_speeches.md)
+    by name and session.
+  - **Breaking:**
+    [`get_publication()`](https://martigso.github.io/stortingscrape/reference/get_publication.md)
+    now parses publications as XML rather than HTML. The HTML parser
+    lowercased all element and attribute names (e.g. `personID` became
+    `personid`) and split up nested paragraphs. Element names are now
+    case sensitive: publications from 2016-2017 onward use capitalized
+    names, so selectors such as `html_elements(pub, "replikk")` must
+    become `html_elements(pub, "Replikk")`.
 - Minor changes
   - The shared `httr2` request pipeline was refactored into internal
     helpers (`api_perform()`, `api_get()`), removing roughly a thousand
     lines of duplicated boilerplate across the data-retrieving functions
     with no change to their returned output.
   - Minimum `httr2` version is now 1.1.0.
+  - The rate limit is now enforced over any 60-second window. The
+    throttle’s token bucket starts full, so the previous setting (a
+    bucket of 100 refilling at 100 per minute) allowed up to about 200
+    calls in the first minute; requests now come in bursts of at most 10
+    and then at 90 per minute.
 
 ## stortingscrape 0.4.1
 

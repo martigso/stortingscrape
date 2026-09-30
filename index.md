@@ -10,8 +10,8 @@ questions, hearings, debates, votes, and more.
 
 The main goal of `stortingscrape` is to allow researchers to access any
 data from the Norwegian parliament easily, but also still be able to
-structure the data according to ones need. Most importantly, the package
-is facilitated for weaving together different parts of the
+structure the data according to one’s need. Most importantly, the
+package is facilitated for weaving together different parts of the
 data.stortinget.no API.
 
 ## Installation
@@ -23,7 +23,7 @@ not be done more than once or twice a year.
 ### CRAN (stable version)
 
 The latest stable version of the `stortingscrape` package can be
-installed from by running CRAN:
+installed from CRAN:
 
 ``` r
 
@@ -44,6 +44,11 @@ library(stortingscrape)
 
 ## Usage examples
 
+The functions retrieving data by id also take a vector of ids. Functions
+returning a data frame bind the results together, while functions
+returning a list return a named list keyed by id. The package keeps the
+calls within the API’s limit of 100 calls per minute.
+
 Request all interpellations for a parliamentary session:
 
 ``` r
@@ -56,17 +61,7 @@ parl_sessions |> # sessions data are built into the package
 
 qsesh <- get_session_questions(parl_sessions$id[4], q_type = "interpellasjoner")
 
-int1213 <- list()
-
-for(i in qsesh$id) {
-  
-  message("Getting ", i)
-  
-  int1213[[i]] <- get_question(i, good_manners = 2)
-
-}
-
-int1213 <- do.call(rbind, int1213)
+int1213 <- get_question(qsesh$id, good_manners = 2)
 
 head(int1213)
 ```
@@ -81,7 +76,7 @@ parl_periods # parliamentary periods (4 years) are built into the package,
 
 mps <- get_parlperiod_mps(parl_periods$id[1], substitute = TRUE)
 
-mps_bios <- lapply(mps$mp_id, get_mp_bio, good_manners = 2)
+mps_bios <- get_mp_bio(mps$mp_id, good_manners = 2)
 
 # Expand by all periods the MP has been in parliament
 mps_periods <- lapply(mps_bios, function(x){

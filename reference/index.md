@@ -70,6 +70,8 @@
   : Retrieve publications of a type in a parliamentary session
 - [`get_session_questions()`](https://martigso.github.io/stortingscrape/reference/get_session_questions.md)
   : Parliamentary questions in a session
+- [`get_speeches()`](https://martigso.github.io/stortingscrape/reference/get_speeches.md)
+  : Retrieve the speeches in a debate transcript
 - [`get_topics()`](https://martigso.github.io/stortingscrape/reference/get_topics.md)
   : Get list of topics and sub-topics for the Norwegian parliament
 - [`get_vote()`](https://martigso.github.io/stortingscrape/reference/get_vote.md)
@@ -86,6 +88,10 @@
   : Parliamentary sessions
 - [`read_obt()`](https://martigso.github.io/stortingscrape/reference/read_obt.md)
   : Read Oslo-Bergen-Tagger processed files into R
+- [`speaker_links`](https://martigso.github.io/stortingscrape/reference/speaker_links.md)
+  : Person ids for speakers and chairs in debate transcripts
+- [`speeches140213`](https://martigso.github.io/stortingscrape/reference/speeches140213.md)
+  : Speeches in the Storting's meeting on 13 February 2014
 - [`st_party_colors`](https://martigso.github.io/stortingscrape/reference/st_party_colors.md)
   : Color palette for parties in the Storting
 - [`vote`](https://martigso.github.io/stortingscrape/reference/vote.md)
