@@ -61,8 +61,6 @@ get_mp <- function(mpid = NA, good_manners = 0){
                     id = tmp |> html_elements("id") |> html_text(),
                     gender = tmp |> html_elements("kjoenn") |> html_text())
   
-  message(paste0(mpid, " (", tmp$first_name, " ", tmp$last_name, ") done."))
-  
   Sys.sleep(good_manners)
   
   return(tmp)
