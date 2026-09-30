@@ -5,7 +5,7 @@
 #' @usage get_session_decisions(sessionid = NA, good_manners = 0)
 #' 
 #' @param sessionid Character string, or a vector of strings, indicating the id of the session to retrieve decisions from
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame with the following variables:
 #' 
@@ -50,21 +50,21 @@ get_session_decisions <- function(sessionid = NA, good_manners = 0){
   
   tmp <- api_get(url)
   
-  tmp2 <- data.frame(response_date = tmp %>% html_elements("stortingsvedtak_oversikt > respons_dato_tid") %>% html_text(),
-                     version = tmp %>% html_elements("stortingsvedtak_oversikt > versjon") %>% html_text(),
-                     session_id = tmp %>% html_elements("stortingsvedtak_oversikt > sesjon_id") %>% html_text(),
-                     decision_id = tmp %>% html_elements("stortingsvedtak > id") %>% html_text(),
-                     case_id = tmp %>% html_elements("stortingsvedtak > sak_id") %>% html_text(),
-                     case_link_url = tmp %>% html_elements("stortingsvedtak > sak_lenke_url") %>% html_text(),
-                     decision_date = tmp %>% html_elements("stortingsvedtak > stortingsvedtak_dato_tid") %>% html_text(),
-                     decision_link_url = tmp %>% html_elements("stortingsvedtak > stortingsvedtak_lenke_url") %>% html_text(),
-                     decision_number = tmp %>% html_elements("stortingsvedtak > stortingsvedtak_nummer") %>% html_text(),
-                     decision_text = tmp %>% html_elements("stortingsvedtak > stortingsvedtak_tekst") %>% html_text(),
-                     decision_title = tmp %>% html_elements("stortingsvedtak > stortingsvedtak_tittel") %>% html_text())
+  tmp2 <- data.frame(response_date = tmp |> html_elements("stortingsvedtak_oversikt > respons_dato_tid") |> html_text(),
+                     version = tmp |> html_elements("stortingsvedtak_oversikt > versjon") |> html_text(),
+                     session_id = tmp |> html_elements("stortingsvedtak_oversikt > sesjon_id") |> html_text(),
+                     decision_id = tmp |> html_elements("stortingsvedtak > id") |> html_text(),
+                     case_id = tmp |> html_elements("stortingsvedtak > sak_id") |> html_text(),
+                     case_link_url = tmp |> html_elements("stortingsvedtak > sak_lenke_url") |> html_text(),
+                     decision_date = tmp |> html_elements("stortingsvedtak > stortingsvedtak_dato_tid") |> html_text(),
+                     decision_link_url = tmp |> html_elements("stortingsvedtak > stortingsvedtak_lenke_url") |> html_text(),
+                     decision_number = tmp |> html_elements("stortingsvedtak > stortingsvedtak_nummer") |> html_text(),
+                     decision_text = tmp |> html_elements("stortingsvedtak > stortingsvedtak_tekst") |> html_text(),
+                     decision_title = tmp |> html_elements("stortingsvedtak > stortingsvedtak_tittel") |> html_text())
   
-  decision_type_id <- lapply(tmp %>% html_elements("stortingsvedtak > stortingsvedtak_type"), function(x){
+  decision_type_id <- lapply(tmp |> html_elements("stortingsvedtak > stortingsvedtak_type"), function(x){
     
-    tmp_id <- x %>% html_elements("id") %>% html_text()
+    tmp_id <- x |> html_elements("id") |> html_text()
     
     if(identical(tmp_id, character())){
       tmp_id <- NA
@@ -74,9 +74,9 @@ get_session_decisions <- function(sessionid = NA, good_manners = 0){
     
   })
 
-  decision_type_name <- lapply(tmp %>% html_elements("stortingsvedtak > stortingsvedtak_type"), function(x){
+  decision_type_name <- lapply(tmp |> html_elements("stortingsvedtak > stortingsvedtak_type"), function(x){
     
-    tmp_id <- x %>% html_elements("navn") %>% html_text()
+    tmp_id <- x |> html_elements("navn") |> html_text()
     
     if(identical(tmp_id, character())){
       tmp_id <- NA

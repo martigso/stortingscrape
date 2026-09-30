@@ -9,7 +9,7 @@ get_publication(publicationid = NA, good_manners = 0)
 \arguments{
 \item{publicationid}{Character string, or a vector of strings, indicating the id of the publication to retrieve}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+\item{good_manners}{Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 A raw xml_document

@@ -5,7 +5,8 @@
 #' @usage get_mp_bio(mpid = NA, good_manners = 0)
 #' 
 #' @param mpid Character string, or a vector of strings, indicating the id of the MP to retrieve.
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' With several ids, the result is a named list of the results below, keyed by MP id.
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #'
 #' @return A list with ten data frames:
 #' 
@@ -46,8 +47,8 @@
 #'  
 #'    |                           |                                           |
 #'    |:--------------------------|:------------------------------------------|
-#'    | **seniority_aar**         | Number of years in parliament             |
-#'    | **seniority_dager**       | Number of extra days (addition to years)  |
+#'    | **seniority_years**       | Number of years in parliament             |
+#'    | **seniority_days**        | Number of extra days (addition to years)  |
 #'    | **county_of_birth**       | Birth county of the MP                    |
 #'    | **municipality_of_birth** | Birth municipality of the MP              |
 #'    | **eulogy_date**           | Eulogy date of the MP, when applicable    |
@@ -79,7 +80,7 @@
 #'    | **from_date**      | Date MP held seat from                             |
 #'    | **county**         | County the MP represented                          |
 #'    | **party_id**       | Party id for the MP's party                        |
-#'    | **rep_number**     | Representative number (within the whol parliament) |
+#'    | **rep_number**     | Representative number (within the whole parliament)|
 #'    | **parl_period_id** | Id of the parliamentary period                     |
 #'    | **to_date**        | Date MP held a seat to                             |
 #'    | **type**           | Type of representation                             |
@@ -111,17 +112,13 @@
 #'    | **to_year_unknown**      | Logical indication for whether the end year is unknown        |
 #'    | **type**                 | Vocation type (10 = education, 20 = work)                     |
 #'    
-#' 1. **$other_positions** (other positions held outside parliament)
+#' 10. **$other_positions** (other positions held outside parliament)
 #' 
 #'    |                          |                                                                                  |
 #'    |:-------------------------|----------------------------------------------------------------------------------|
-#'    | **several_periods_text** | Text description if the vocation was held for several periods (removed from API) |
 #'    | **from_year**            | Year MP held vocation from                                                       |
-#'    | **from_year_sorting**    | __Not described in API__ (removed from API)                                      |
 #'    | **from_year_unknown**    | Logical indication for whether the start year is unknown                         |
-#'    | **max_to_year**          | The last possible time the MP held the position (removed from API)               |
 #'    | **note**                 | Note for position                                                                |
-#'    | **min_to_year**          | The earliest possible time the MP held the position (removed from API)           |
 #'    | **level**                | __Not described in API__                                                         |
 #'    | **organization**         | Organization holding the position                                                |
 #'    | **place**                | Place of the position                                                            |

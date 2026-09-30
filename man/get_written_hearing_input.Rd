@@ -9,10 +9,10 @@ get_written_hearing_input(hearingid = NA, good_manners = 0)
 \arguments{
 \item{hearingid}{Character string, or a vector of strings, indicating the id of the hearing to retrieve.}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+\item{good_manners}{Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
-A data.frame the following variables:\tabular{ll}{
+A data.frame with the following variables:\tabular{ll}{
     \tab  \cr
    \strong{response_date} \tab Date of data retrieval \cr
    \strong{version} \tab Data version from the API \cr

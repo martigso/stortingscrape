@@ -6,13 +6,13 @@
 #' 
 #' @param sessionid Character string, or a vector of strings, indicating the id of the parliamentary session to retrieve.
 #' With several ids, the result is a named list of the results below, keyed by session id.
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' @param cores Integer. Number of cores (1 by default) to use in structuring the data. 
-#' More than 1 will not work on windows
+#' More than 1 will not work on Windows.
 #' 
-#' @return A data.frame with the following variables:
+#' @return A list with four elements:
 #' 
-#' 1. **$root** (main data on the MP)
+#' 1. **$root** (main data on the cases)
 #' 
 #'    |                        |                                    |
 #'    |:-----------------------|:-----------------------------------|
@@ -70,16 +70,20 @@
 #' 
 #' \dontrun{
 #' s0506 <- get_session_cases("2005-2006")
-#' head(s0506)
+#' head(s0506$root)
 #' }
 #' 
-#' @import rvest parallel httr2
+#' @import rvest httr2
+#' @importFrom parallel mclapply
 #' @export
 #' 
 get_session_cases <- function(sessionid = NA, good_manners = 0, cores = 1){
 
   if(length(sessionid) > 1)
     return(fetch_multi(sessionid, get_session_cases, good_manners, .combine = NULL, cores = cores))
+
+  # mclapply() cannot use more than one core on Windows
+  if(.Platform$OS.type == "windows") cores <- 1
   
   url <- paste0("https://data.stortinget.no/eksport/saker?sesjonid=", sessionid)
   
@@ -180,39 +184,19 @@ get_session_cases <- function(sessionid = NA, good_manners = 0, cores = 1){
   
   # Case spokesperson
   tmp2$spokespersons <- mclapply((tmp |> html_elements("saker_oversikt > saker_liste > sak > saksordfoerer_liste")), function(x){
-    
-    
-    if(identical((x |> html_elements("representant > id") |> html_text()), character())) {
-      rep_id <- NA
-    } else {
-      rep_id <- x |> html_elements("representant > id") |> html_text()
+
+    # Read per spokesperson: one without a county or party gives NA rather than shifting the others
+    reps <- x |> html_elements(xpath = "./representant")
+
+    if(length(reps) == 0) {
+      return(data.frame(rep_id = NA, county_id = NA, party_id = NA, rep_sub = NA))
     }
-    
-    if(identical((x |> html_elements("representant > fylke > id") |> html_text()), character())) {
-      county_id <- NA
-    } else {
-      county_id <- x |> html_elements("representant > fylke > id") |> html_text()
-    }
-    
-    if(identical((x |> html_elements("representant > parti > id") |> html_text()), character())) {
-      party_id <- NA
-    } else {
-      party_id <- x |> html_elements("representant > parti > id") |> html_text()
-    }
-    
-    if(identical((x |> html_elements("representant > vara_representant") |> html_text()), character())) {
-      rep_sub <- NA
-    } else {
-      rep_sub <- x |> html_elements("representant > vara_representant") |> html_text()
-    }
-    
-    
-    
-    data.frame(rep_id,  
-               county_id,
-               party_id,
-               rep_sub)
-    
+
+    data.frame(rep_id = reps |> html_element(xpath = "./id") |> html_text(),
+               county_id = reps |> html_element(xpath = "./fylke/id") |> html_text(),
+               party_id = reps |> html_element(xpath = "./parti/id") |> html_text(),
+               rep_sub = reps |> html_element(xpath = "./vara_representant") |> html_text())
+
   }, mc.cores = cores)
   
   names(tmp2$spokespersons) <- tmp2$root$id

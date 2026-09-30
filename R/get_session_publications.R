@@ -7,9 +7,9 @@
 #' @param sessionid Character string, or a vector of strings, indicating the id of the session to retrieve publications from.
 #' @param type Character specifying type of publication to download. Available types are "referat" (minutes), 
 #' "innstilling" (proposition), "innberetning" (report), "lovvedtak" (law decision), "lovanmerkning" (law note),
-#' "dok8" (MP proposal) "dok12" (Constitutional proposal), and "dokumentserie" (document series). 
+#' "dok8" (MP proposal), "dok12" (Constitutional proposal), and "dokumentserie" (document series). 
 #' Defaults to "referat".
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame with the following variables:
 #' 

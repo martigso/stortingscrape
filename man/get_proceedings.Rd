@@ -15,13 +15,13 @@ A list with three dataframes:
    \strong{version} \tab Data version from the API \cr
 }
 
-\item $proceedings (description of main proceeding categories)\tabular{ll}{
+\item \strong{$proceedings} (description of main proceeding categories)\tabular{ll}{
     \tab  \cr
    \strong{id} \tab Id of proceeding \cr
    \strong{name} \tab Name of proceeding \cr
 }
 
-\item $poceedings_steps (description of proceeding steps within each main category)\tabular{ll}{
+\item \strong{$proceedings_steps} (description of proceeding steps within each main category)\tabular{ll}{
     \tab  \cr
    \strong{id} \tab Id of proceeding step \cr
    \strong{name} \tab Name of proceeding step \cr

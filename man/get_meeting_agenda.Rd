@@ -2,14 +2,14 @@
 % Please edit documentation in R/get_meeting_agenda.R
 \name{get_meeting_agenda}
 \alias{get_meeting_agenda}
-\title{Retreive agenda for a specified meeting}
+\title{Retrieve agenda for a specified meeting}
 \usage{
 get_meeting_agenda(meetingid = NA, good_manners = 0)
 }
 \arguments{
 \item{meetingid}{Character string, or a vector of strings, indicating the id of the meeting to retrieve the agenda from}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+\item{good_manners}{Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 A data.frame with the following variables:\tabular{ll}{
@@ -27,7 +27,7 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{footnote} \tab Footnote for the case \cr
    \strong{proposition_id} \tab If relevant, belonging proposition id \cr
    \strong{committee_id} \tab If relevant, id of the responsible committee \cr
-   \strong{legacy_question_id} \tab Legacy question id, only used for mathing with old data (pre 10.12.2024) \cr
+   \strong{legacy_question_id} \tab Legacy question id, only used for matching with old data (pre 10.12.2024) \cr
    \strong{loose_proposals} \tab Whether there are loose proposals to the case \cr
    \strong{case_id} \tab Id of the case \cr
    \strong{question_hour_type} \tab If relevant, type of question hour \cr

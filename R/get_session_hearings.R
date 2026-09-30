@@ -6,8 +6,9 @@
 #' 
 #' @param sessionid Character string, or a vector of strings, indicating the id of the parliamentary session to retrieve.
 #' With several ids, the result is a named list of the results below, keyed by session id.
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
-#' @param cores Integer...
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param cores Integer. Number of cores (1 by default) to use in structuring the data.
+#' More than 1 will not work on Windows.
 #' 
 #' @return A list with four elements:
 #' 
@@ -24,7 +25,7 @@
 #'    |                          |                                                     |
 #'    |:-------------------------|:----------------------------------------------------|
 #'    | **deadline_date**        | Deadline date for hearing                           |
-#'    | **status**               | Data version from the API                           |
+#'    | **status**               | Status of the hearing                               |
 #'    | **hearing_id**           | Hearing id                                          |
 #'    | **input_deadline**       | Deadline date for input                             |
 #'    | **written**              | Logical indication of whether the input was written |
@@ -35,7 +36,7 @@
 #'    | **type**                 | Type of hearing                                     |
 #'    | **committee_id**         | Committee id for committee responsible for hearing  |
 #'    
-#' 3. **$hearing_case_info** (named list by hearing id with information on the case(s) belonging to the hearing)
+#' 3. **$hearing_case_info** (the case(s) belonging to each hearing, by hearing id)
 #' 
 #'    |                      |                                        |
 #'    |:---------------------|:---------------------------------------|
@@ -46,7 +47,7 @@
 #'    | **case_publication** | URL for front end web-page publication |
 #'    | **case_title**       | Full title for case                    |
 #'    
-#' 4. **$hearing_date** (named list by hearing id with date(s) the hearing was held)
+#' 4. **$hearing_date** (the date(s) and place(s) each hearing was held, by hearing id)
 #' 
 #'    |                      |                            |
 #'    |:---------------------|:---------------------------|
@@ -69,7 +70,8 @@
 #' }
 #' 
 #' 
-#' @import rvest parallel httr2
+#' @import rvest httr2
+#' @importFrom parallel mclapply
 #' @export
 #' 
 
@@ -79,6 +81,9 @@ get_session_hearings <- function(sessionid = NA, good_manners = 0, cores = 1){
 
   if(length(sessionid) > 1)
     return(fetch_multi(sessionid, get_session_hearings, good_manners, .combine = NULL, cores = cores))
+
+  # mclapply() cannot use more than one core on Windows
+  if(.Platform$OS.type == "windows") cores <- 1
   
   url <- paste0("https://data.stortinget.no/eksport/horinger?sesjonid=", sessionid)
   
@@ -102,7 +107,8 @@ get_session_hearings <- function(sessionid = NA, good_manners = 0, cores = 1){
       status_pub = tmp |> html_elements("horing > status") |> html_text(),
       status_info_text = tmp |> html_elements("horing > status_info_tekst") |> html_text(),
       type = tmp |> html_elements("horing > type") |> html_text(),
-      committee_id = tmp |> html_elements("horing > komite > id") |> html_text()
+      # Read per hearing: a hearing without a committee gives NA rather than a shorter column
+      committee_id = tmp |> html_elements("horing") |> html_element("komite > id") |> html_text()
     ))
   
   tmp2$hearing_case_info <- mclapply(tmp |> html_elements("horing_sak_info_liste"), function(x){
@@ -125,7 +131,7 @@ get_session_hearings <- function(sessionid = NA, good_manners = 0, cores = 1){
   tmp2$hearing_date <- mclapply(tmp |> html_elements("horingstidspunkt_liste"), function(x){
     data.frame(place = x |> html_elements("horingstidspunkt > sted") |> html_text(),
                date = x |> html_elements("horingstidspunkt > tidspunkt") |> html_text())
-  })
+  }, mc.cores = cores)
   
   names(tmp2$hearing_date) <- tmp2$hearing$hearing_id
   

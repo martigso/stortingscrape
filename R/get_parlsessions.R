@@ -11,7 +11,7 @@
 #'    | **response_date** | Date of data retrieval                        |
 #'    | **version**       | Data version from the API                     |
 #'    | **from**          | Date session started                          |
-#'    | **id**            | Id of for session (used for other functions)  |
+#'    | **id**            | Id of the session (used by other functions)   |
 #'    | **to**            | Date session ended                            |
 #'    | **years**         | From year to year in full format              |
 #'    

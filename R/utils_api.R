@@ -82,7 +82,7 @@ api_get <- function(url, as = "html") {
 
   resp <- api_request(url)
 
-  if(resp_content_type(resp) != "text/xml") {
+  if(!identical(resp_content_type(resp), "text/xml")) {
     stop(
       paste0(
         "Response of ",
@@ -113,7 +113,7 @@ api_get <- function(url, as = "html") {
 #'
 #' @param ids Vector of ids.
 #' @param .f The single-id getter to apply (e.g. \code{get_question}).
-#' @param good_manners Integer. Seconds delay between calls, passed through to \code{.f}.
+#' @param good_manners Numeric. Seconds delay between calls, passed through to \code{.f}.
 #' @param .combine Function used to combine the per-id results, or \code{NULL} to
 #'   return the raw list (for getters that return a list of data frames). Defaults
 #'   to \code{rbind}, which silently drops \code{NULL} results from failed ids.

@@ -4,7 +4,7 @@ Title: Access Data from the Norwegian Parliament API
 Version: 0.5.0
 Authors@R: person(given = "Martin", 
                   family = "Søyland", 
-                  email = "martin.soyland@stv.uio.no",
+                  email = "martin.soyland@uis.no",
                   comment = c(ORCID = "0000-0002-2463-8469"),
                   role = c("aut", "cre"))
 Description: Functions for retrieving general and specific data from the Norwegian Parliament,
@@ -15,9 +15,10 @@ BugReports: https://github.com/martigso/stortingscrape/issues
 Depends: R (>= 4.2.0)
 Encoding: UTF-8
 Imports: rvest, httr2 (>= 1.1.0), parallel, stringr, xml2, cli
-Suggests: magick, rmarkdown, knitr, pscl
+Suggests: magick, rmarkdown, knitr, pscl, testthat (>= 3.0.0)
 License: GPL (>= 3)
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 LazyData: true
 Config/roxygen2/version: 8.0.0
+Config/testthat/edition: 3

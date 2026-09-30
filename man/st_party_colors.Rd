@@ -17,6 +17,7 @@ A vector of party abbreviations and official hex colors
 \item{Rødt (Red Party)}{\url{https://roedt.no/grafisk-materiell}}
 \item{Senterpartiet (Centre Party)}{\url{https://profil.senterpartiet.no/point/no/senterpartietbc/component/default/24406}}
 \item{Sosialistisk Venstreparti (Socialist Left Party)}{\url{https://www.sv.no/ressursbanken/grafisk/grafisk-profil/}}
+\item{Uavhengig (independent)}{Black; no official color}
 \item{Venstre (Liberal Party)}{\url{https://www.venstre.no/organisasjon/visuell-identitet/}}
 }
 }
@@ -32,7 +33,8 @@ A color palette for all (current) parties in the Storting
 \examples{
 \dontrun{
 
-barplot(table(get_parlperiod_mps(parl_periods$id[1])$party_id), col = st_party_colors)
+seats <- table(get_parlperiod_mps(parl_periods$id[1])$party_id)
+barplot(seats, col = st_party_colors[names(seats)])
 
 }
 }

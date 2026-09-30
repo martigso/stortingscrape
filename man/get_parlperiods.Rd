@@ -11,9 +11,9 @@ A data.frame with the following variables:\tabular{ll}{
     \tab  \cr
    \strong{response_date} \tab Date of data retrieval \cr
    \strong{version} \tab Data version from the API \cr
-   \strong{from} \tab Date session started \cr
-   \strong{id} \tab Id of for session (used for other functions) \cr
-   \strong{to} \tab Date session ended \cr
+   \strong{from} \tab Date period started \cr
+   \strong{id} \tab Id of the period (used by other functions) \cr
+   \strong{to} \tab Date period ended \cr
    \strong{years} \tab From year to year in full format \cr
 }
 }

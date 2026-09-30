@@ -24,7 +24,7 @@
 #' 
 #' @examples
 #' \dontrun{ 
-#' # Request one MP by id
+#' # Request current counties
 #' get_counties()
 #' 
 #' # With historical counties

@@ -4,15 +4,17 @@
 \alias{get_session_mp_speech_activity}
 \title{Retrieve all speech activity from one MP for a given session}
 \usage{
-get_session_mp_speech_activity(sessionid = NA, mp_id = NA, good_manners = 0)
+get_session_mp_speech_activity(sessionid = NA, mpid = NA, good_manners = 0, mp_id = NULL)
 }
 \arguments{
 \item{sessionid}{Character string, or a vector of strings, indicating the session to retrieve speeches from.}
 
-\item{mp_id}{Character string, or a vector of strings, for the MP to retrieve all speeches of in a given session.
+\item{mpid}{Character string, or a vector of strings, for the MP to retrieve all speeches of in a given session.
 With several sessions and/or MPs, all combinations are retrieved and bound together.}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+\item{good_manners}{Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+
+\item{mp_id}{Deprecated; use \code{mpid}.}
 }
 \value{
 A data.frame with the following variables:\tabular{ll}{
@@ -25,7 +27,7 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{meeting_id} \tab Meeting id \cr
    \strong{speech_start_time} \tab Start time of speech \cr
    \strong{speech_type} \tab Type of speech \cr
-   \strong{speech_length_secs} \tab Lenght of speech in seconds \cr
+   \strong{speech_length_secs} \tab Length of speech in seconds \cr
 }
 }
 \description{

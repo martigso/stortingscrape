@@ -6,7 +6,7 @@
 #' 
 #' @param periodid Character string, or a vector of strings, indicating the id of the parliamentary period to retrieve.
 #' @param substitute Logical. Whether or not to include substitute MPs.
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame with the following variables:
 #'    |                   |                                        |
@@ -33,13 +33,11 @@
 #' 
 #' \dontrun{
 #' 
-#' # Request one MP by id
+#' # Request MPs from one period
 #' get_parlperiod_mps("2005-2009")
 #' 
-#' # Request MPs from several periods by id
-#' ids <- c("1961-65", "1997-01", "2009-2013")
-#' mps <- lapply(ids, get_parlperiod_mps, good_manners = 2)
-#' mps <- do.call(rbind, mps)
+#' # Request MPs from several periods
+#' mps <- get_parlperiod_mps(c("1961-65", "1997-2001", "2009-2013"), good_manners = 2)
 #' 
 #' }
 #' 
@@ -78,12 +76,10 @@ get_parlperiod_mps <- function(periodid = NA, substitute = FALSE, good_manners =
                     firstname = tmp |> html_elements("representanter_liste > representant > fornavn") |> html_text(),
                     mp_id = tmp |> html_elements("representanter_liste > representant > id") |> html_text(),
                     gender = tmp |> html_elements("representanter_liste > representant > kjoenn") |> html_text(),
-                    county_id = tmp |> html_elements("representanter_liste > representant > fylke > id") |> html_text(),
-                    party_id = tmp |> html_elements("representanter_liste > representant > parti > id") |> html_text(),
+                    county_id = tmp |> html_elements("representanter_liste > representant") |> html_element(xpath = "./fylke/id") |> html_text(),
+                    party_id = tmp |> html_elements("representanter_liste > representant") |> html_element(xpath = "./parti/id") |> html_text(),
                     substitute_mp = tmp |> html_elements("representanter_liste > representant > vara_representant") |> html_text(),
                     period_id = tmp |> html_elements("stortingsperiode_id") |> html_text())
-  
-  message(periodid, " done")
   
   Sys.sleep(good_manners)
   

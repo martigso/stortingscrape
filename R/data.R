@@ -6,17 +6,20 @@
 #' @format A list with four elements 
 #'  
 #' \describe{
-#'  \item{$root}{main data on the MP}
+#'  \item{$root}{main data on the cases}
 #'  \item{$topics}{named list by case id}
 #'  \item{$proposers}{named list by case id}
 #'  \item{$spokespersons}{named list by case id}
 #'  \item{Further description:}{[get_session_cases]}
 #' }
+#'
+#' The dataset was retrieved with an earlier version of the package; [get_session_cases] now returns
+#' `$spokespersons` as a data frame.
 #'   
 #' @source \url{https://data.stortinget.no/eksport/saker?sesjonid=2019-2020}
 "cases"
 
-#' Vote id 85196
+#' Votes on case id 85196
 #'
 #' A dataset containing all vote information on case id 85196
 #'
@@ -50,9 +53,9 @@
 #' @source \url{https://data.stortinget.no/eksport/voteringer?sakid=85196}
 "covid_relief"
 
-#' Vote id 85196 results
+#' Vote id 17689 results
 #'
-#' A dataset containing vote matrix on vote id 17689
+#' A dataset containing the vote matrix on vote id 17689
 #'
 #' @format A data frame with 8 columns and 169 rows
 #'  
@@ -63,14 +66,14 @@
 #'    \item{mp_id}{MP id}
 #'    \item{party_id}{Party id}
 #'    \item{vote}{Vote: for, mot (against), ikke_tilstede (absent)}
-#'    \item{permanent_sub_for}{Id of the MP originally holding the seat, if the substitute is }
+#'    \item{permanent_sub_for}{Id of the MP originally holding the seat, if the substitute is permanent}
 #'    \item{sub_for}{Id of the MP originally holding the seat}
 #' }  
 #' 
 #' @source \url{https://data.stortinget.no/eksport/voteringsresultat?voteringid=17689}
 "covid_relief_result"
 
-#' Interpellations from the 2002-2003 
+#' Interpellations from the 2002-2003 session
 #'
 #' A dataset containing all interpellations in the 2002-2003 parliamentary session in
 #' *Stortinget*
@@ -84,9 +87,9 @@
 #'    \item{answ_by_minister_id}{Department id of answering minister}
 #'    \item{answ_by_minister_title}{Department title of answering minister}
 #'    \item{answ_date}{Date answer was given}
-#'    \item{answ_on_belhalf_of}{Answer given on behalf of}
-#'    \item{answ_on_belhalf_of_minister_id}{Department id of minister given answer on behalf of}
-#'    \item{answ_on_belhalf_of_minister_title}{Department title of minister given answer on behalf of}
+#'    \item{answ_on_behalf_of}{Answer given on behalf of}
+#'    \item{answ_on_behalf_of_minister_id}{Department id of minister given answer on behalf of}
+#'    \item{answ_on_behalf_of_minister_title}{Department title of minister given answer on behalf of}
 #'    \item{topic_ids}{Id of relevant topics for question}
 #'    \item{moved_to}{Question moved to}
 #'    \item{asked_by_other_id}{MP id, if question was not asked by the questioning MP}
@@ -94,16 +97,16 @@
 #'    \item{correct_person}{Not documented in API}
 #'    \item{correct_person_minister_id}{Not documented in API}
 #'    \item{correct_person_minister_title}{Not documented in API}
-#'    \item{sendt_date}{Date the question was sent}
+#'    \item{sent_date}{Date the question was sent}
 #'    \item{session_id}{Session id}
 #'    \item{question_from_id}{Question from MP id}
-#'    \item{qustion_number}{Question number within session}
-#'    \item{qustion_to_id}{Question directed to minister id}
-#'    \item{qustion_to_minister_id}{Question directed to minister department id}
-#'    \item{qustion_to_minister_title}{Question directed to minister department title}
-#'    \item{type}{Question type}
-#'    \item{title}{Question title}
+#'    \item{question_number}{Question number within session}
+#'    \item{question_to_id}{Question directed to minister id}
+#'    \item{question_to_minister_id}{Question directed to minister department id}
+#'    \item{question_to_minister_title}{Question directed to minister department title}
 #'    \item{status}{Question status}
+#'    \item{title}{Question title}
+#'    \item{type}{Question type}
 #' }  
 #' 
 #' @source \url{https://data.stortinget.no/eksport/interpellasjoner?sesjonid=2002-2003}
@@ -139,14 +142,14 @@
 #' A dataset containing all parliamentary periods in
 #' *Stortinget*
 #'
-#' @format A data frame with 12 columns and 150 rows
+#' @format A data frame with 6 columns and 21 rows
 #'  
 #' \describe{
 #'    \item{response_date}{Date of data retrieval}
 #'    \item{version}{Data version from the API}
-#'    \item{from}{Date session started}
-#'    \item{id}{Id of for session (used for other functions)}
-#'    \item{to}{Date session ended}
+#'    \item{from}{Date period started}
+#'    \item{id}{Id of the period (used by other functions)}
+#'    \item{to}{Date period ended}
 #'    \item{years}{From year to year in full format}
 #' }  
 #' 
@@ -158,13 +161,13 @@
 #' A dataset containing all parliamentary sessions in
 #' *Stortinget*
 #'
-#' @format A data frame with 6 columns and 36 rows
+#' @format A data frame with 6 columns and 43 rows (including sessions announced ahead of time)
 #'  
 #' \describe{
 #'    \item{response_date}{Date of data retrieval}
 #'    \item{version}{Data version from the API}
 #'    \item{from}{Date session started}
-#'    \item{id}{Id of for session (used for other functions)}
+#'    \item{id}{Id of the session (used by other functions)}
 #'    \item{to}{Date session ended}
 #'    \item{years}{From year to year in full format}
 #' }  
@@ -177,7 +180,8 @@
 #' A dataset containing all personal votes for votes 
 #' 15404, 15405, and 15406 in *Stortinget*
 #'
-#' @format A list with one vote per element
+#' @format A list with three data frames, one per vote (15404, 15405, and 15406), each with 169 rows and
+#' the following variables:
 #'  
 #' \describe{
 #'    \item{response_date}{Date of data retrieval}
@@ -198,10 +202,10 @@
 
 #' Meta data on votes of case id 78686
 #'
-#' A dataset containing vote infomation on case id
+#' A dataset containing vote information on case id
 #' 78686 in *Stortinget*
 #'
-#' @format A list with three elements (votes)
+#' @format A data frame with 22 columns and 3 rows (one per vote)
 #'  
 #' \describe{
 #'    \item{response_date}{Date of data retrieval}
@@ -228,8 +232,7 @@
 #'    \item{vote_datetime}{Date and time of vote}
 #' }
 #' 
-#' @source 
-#'   \url{https://data.stortinget.no/eksport/voteringsresultat?voteringid=15404}
+#' @source \url{https://data.stortinget.no/eksport/voteringer?sakid=78686}
 "vote"
 
 #' Color palette for parties in the Storting
@@ -249,6 +252,7 @@
 #'    \item{Rødt (Red Party)}{\url{https://roedt.no/grafisk-materiell}}
 #'    \item{Senterpartiet (Centre Party)}{\url{https://profil.senterpartiet.no/point/no/senterpartietbc/component/default/24406}}
 #'    \item{Sosialistisk Venstreparti (Socialist Left Party)}{\url{https://www.sv.no/ressursbanken/grafisk/grafisk-profil/}}
+#'    \item{Uavhengig (independent)}{Black; no official color}
 #'    \item{Venstre (Liberal Party)}{\url{https://www.venstre.no/organisasjon/visuell-identitet/}}
 #' }
 #' 
@@ -257,7 +261,8 @@
 #' @examples 
 #' \dontrun{
 #' 
-#' barplot(table(get_parlperiod_mps(parl_periods$id[1])$party_id), col = st_party_colors)
+#' seats <- table(get_parlperiod_mps(parl_periods$id[1])$party_id)
+#' barplot(seats, col = st_party_colors[names(seats)])
 #' 
 #' }
 "st_party_colors" 
@@ -284,8 +289,7 @@
 #' and some changed names) have `linked_person_id` `NA`.
 #'
 #' The links are made from names only and do not use the `person_id` given in
-#' the transcripts from 2016-2017 onward, which is sometimes wrong in hearings
-#' and committee meetings.
+#' the transcripts from 2016-2017 onward, which is sometimes wrong.
 #'
 #' Ministers and their periods in office come from a list of ministers from 1945
 #' to January 2024, supplemented by the cabinet posts in [get_mp_bio] for
@@ -299,7 +303,7 @@
 #' Four listed transcripts (s031205, s050526k, s602081, o006051) could not be
 #' retrieved from the API.
 #'
-#' @format A data frame with 4 columns and 8195 rows
+#' @format A data frame with 4 columns and 8098 rows
 #'
 #' \describe{
 #'    \item{speaker_name}{Name as written in the transcripts (`speaker_name` or `chair_name` in [get_speeches])}
@@ -329,9 +333,10 @@
 #' A dataset containing all speeches in the transcript of the Storting's meeting
 #' on 13 February 2014 (publication id "s140213"), as returned by [get_speeches]
 #'
-#' @format A data frame with 26 columns and 48 rows (see [get_speeches] for details)
+#' @format A data frame with 27 columns and 48 rows (see [get_speeches] for details)
 #'
 #' \describe{
+#'    \item{response_date}{Date and time of retrieval}
 #'    \item{publication_id}{Id of the transcript}
 #'    \item{session_id}{Id of the parliamentary session}
 #'    \item{meeting_order}{Order of the meeting within the transcript}

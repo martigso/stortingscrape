@@ -10,9 +10,10 @@ get_session_hearings(sessionid = NA, good_manners = 0, cores = 1)
 \item{sessionid}{Character string, or a vector of strings, indicating the id of the parliamentary session to retrieve.
 With several ids, the result is a named list of the results below, keyed by session id.}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+\item{good_manners}{Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 
-\item{cores}{Integer...}
+\item{cores}{Integer. Number of cores (1 by default) to use in structuring the data.
+More than 1 will not work on Windows.}
 }
 \value{
 A list with four elements:
@@ -27,7 +28,7 @@ A list with four elements:
 \item \strong{$hearing} (main data on the hearing)\tabular{ll}{
     \tab  \cr
    \strong{deadline_date} \tab Deadline date for hearing \cr
-   \strong{status} \tab Data version from the API \cr
+   \strong{status} \tab Status of the hearing \cr
    \strong{hearing_id} \tab Hearing id \cr
    \strong{input_deadline} \tab Deadline date for input \cr
    \strong{written} \tab Logical indication of whether the input was written \cr
@@ -39,7 +40,7 @@ A list with four elements:
    \strong{committee_id} \tab Committee id for committee responsible for hearing \cr
 }
 
-\item \strong{$hearing_case_info} (named list by hearing id with information on the case(s) belonging to the hearing)\tabular{ll}{
+\item \strong{$hearing_case_info} (the case(s) belonging to each hearing, by hearing id)\tabular{ll}{
     \tab  \cr
    \strong{hearing_id} \tab Hearing id \cr
    \strong{case_reference} \tab Text reference for case \cr
@@ -49,7 +50,7 @@ A list with four elements:
    \strong{case_title} \tab Full title for case \cr
 }
 
-\item \strong{$hearing_date} (named list by hearing id with date(s) the hearing was held)\tabular{ll}{
+\item \strong{$hearing_date} (the date(s) and place(s) each hearing was held, by hearing id)\tabular{ll}{
     \tab  \cr
    \strong{hearing_id} \tab Hearing id \cr
    \strong{date} \tab Date of hearing \cr

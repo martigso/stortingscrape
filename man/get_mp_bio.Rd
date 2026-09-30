@@ -7,9 +7,10 @@
 get_mp_bio(mpid = NA, good_manners = 0)
 }
 \arguments{
-\item{mpid}{Character string, or a vector of strings, indicating the id of the MP to retrieve.}
+\item{mpid}{Character string, or a vector of strings, indicating the id of the MP to retrieve.
+With several ids, the result is a named list of the results below, keyed by MP id.}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+\item{good_manners}{Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 A list with ten data frames:
@@ -46,8 +47,8 @@ A list with ten data frames:
 
 \item \strong{$personalia} (the MP's personalia)\tabular{ll}{
     \tab  \cr
-   \strong{seniority_aar} \tab Number of years in parliament \cr
-   \strong{seniority_dager} \tab Number of extra days (addition to years) \cr
+   \strong{seniority_years} \tab Number of years in parliament \cr
+   \strong{seniority_days} \tab Number of extra days (addition to years) \cr
    \strong{county_of_birth} \tab Birth county of the MP \cr
    \strong{municipality_of_birth} \tab Birth municipality of the MP \cr
    \strong{eulogy_date} \tab Eulogy date of the MP, when applicable \cr
@@ -76,7 +77,7 @@ A list with ten data frames:
    \strong{from_date} \tab Date MP held seat from \cr
    \strong{county} \tab County the MP represented \cr
    \strong{party_id} \tab Party id for the MP's party \cr
-   \strong{rep_number} \tab Representative number (within the whol parliament) \cr
+   \strong{rep_number} \tab Representative number (within the whole parliament) \cr
    \strong{parl_period_id} \tab Id of the parliamentary period \cr
    \strong{to_date} \tab Date MP held a seat to \cr
    \strong{type} \tab Type of representation \cr
@@ -107,15 +108,12 @@ A list with ten data frames:
    \strong{type} \tab Vocation type (10 = education, 20 = work) \cr
 }
 
-\item \strong{$other_positions} (other positions held outside parliament)\tabular{ll}{
+\item \strong{$other_positions} (other positions held outside parliament)
+}\tabular{ll}{
     \tab  \cr
-   \strong{several_periods_text} \tab Text description if the vocation was held for several periods (removed from API) \cr
    \strong{from_year} \tab Year MP held vocation from \cr
-   \strong{from_year_sorting} \tab \strong{Not described in API} (removed from API) \cr
    \strong{from_year_unknown} \tab Logical indication for whether the start year is unknown \cr
-   \strong{max_to_year} \tab The last possible time the MP held the position (removed from API) \cr
    \strong{note} \tab Note for position \cr
-   \strong{min_to_year} \tab The earliest possible time the MP held the position (removed from API) \cr
    \strong{level} \tab \strong{Not described in API} \cr
    \strong{organization} \tab Organization holding the position \cr
    \strong{place} \tab Place of the position \cr
@@ -123,8 +121,6 @@ A list with ten data frames:
    \strong{to_year_unknown} \tab Logical indication for whether the end year is unknown \cr
    \strong{type} \tab Position type \cr
    \strong{position} \tab Position name/description \cr
-}
-
 }
 }
 \description{

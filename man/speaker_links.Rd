@@ -5,7 +5,7 @@
 \alias{speaker_links}
 \title{Person ids for speakers and chairs in debate transcripts}
 \format{
-A data frame with 4 columns and 8195 rows
+A data frame with 4 columns and 8098 rows
 
 \describe{
 \item{speaker_name}{Name as written in the transcripts (\code{speaker_name} or \code{chair_name} in \link{get_speeches})}
@@ -46,8 +46,7 @@ that cannot be resolved this way (e.g. witnesses in hearings, misspelled names,
 and some changed names) have \code{linked_person_id} \code{NA}.
 
 The links are made from names only and do not use the \code{person_id} given in
-the transcripts from 2016-2017 onward, which is sometimes wrong in hearings
-and committee meetings.
+the transcripts from 2016-2017 onward, which is sometimes wrong.
 
 Ministers and their periods in office come from a list of ministers from 1945
 to January 2024, supplemented by the cabinet posts in \link{get_mp_bio} for

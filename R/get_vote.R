@@ -1,11 +1,11 @@
-#' Retreive votes for a specific case
+#' Retrieve votes for a specific case
 #' 
 #' A function for retrieving all votes from a case. Vote data are only available from the 2011-2012 session
 #' 
 #' @usage get_vote(caseid = NA, good_manners = 0)
 #' 
 #' @param caseid Character string, or a vector of strings, indicating the id of the case to request all votes from
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame with the following variables:
 #' 
@@ -28,7 +28,6 @@
 #'    | **president_party_id**    | Party of the sitting president                                           |
 #'    | **adopted**               | Logical indication of whether the proposal voted on was adopted          |
 #'    | **vote_id**               | Id of vote                                                               |
-#'    | **vote_method**           | Voting method                                                            |
 #'    | **vote_result_type**      | Result type (enstemmig_vedtatt = unanimously adopted)                    |
 #'    | **vote_result_type_text** | See __vote_result_type__                                                 |
 #'    | **vote_topic**            | Description of the proposal voted upon                                   |
@@ -36,7 +35,7 @@
 #' 
 #' @md
 #' 
-#' @seealso [get_decision_votes] [get_proposal_votes] [get_vote] [get_session_cases] [get_case]
+#' @seealso [get_decision_votes] [get_proposal_votes] [get_session_cases] [get_case]
 #' 
 #' @examples 
 #' 
@@ -100,7 +99,7 @@ get_vote <- function(caseid = NA, good_manners = 0){
                      meeting_map_number    = tmp |> html_elements("sak_votering > mote_kart_nummer") |> html_text(),
                      personal_vote         = tmp |> html_elements("sak_votering > personlig_votering") |> html_text(),
                      president_id          = tmp |> html_elements("sak_votering > president > id") |> html_text(),
-                     president_party_id    = tmp |> html_elements("sak_votering > president > parti > id") |> html_text(),
+                     president_party_id    = tmp |> html_elements("sak_votering") |> html_element(xpath = "./president/parti/id") |> html_text(),
                      adopted               = tmp |> html_elements("sak_votering > vedtatt") |> html_text(),
                      vote_id               = tmp |> html_elements("sak_votering > votering_id") |> html_text(),
                      # vote_method           = tmp |> html_elements("sak_votering > votering_metode") |> html_text(),

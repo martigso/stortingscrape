@@ -5,7 +5,7 @@
 \alias{vote}
 \title{Meta data on votes of case id 78686}
 \format{
-A list with three elements (votes)
+A data frame with 22 columns and 3 rows (one per vote)
 
 \describe{
 \item{response_date}{Date of data retrieval}
@@ -33,13 +33,13 @@ A list with three elements (votes)
 }
 }
 \source{
-\url{https://data.stortinget.no/eksport/voteringsresultat?voteringid=15404}
+\url{https://data.stortinget.no/eksport/voteringer?sakid=78686}
 }
 \usage{
 vote
 }
 \description{
-A dataset containing vote infomation on case id
+A dataset containing vote information on case id
 78686 in \emph{Stortinget}
 }
 \keyword{datasets}

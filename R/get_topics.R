@@ -6,9 +6,10 @@
 #' 
 #' @param keep_sub_topics Logical. Whether to keep sub-topics (default) for all main topics or not.
 #' 
-#' @return A list with two elements:
+#' @return With `keep_sub_topics = TRUE` (default), a list with two elements. With `keep_sub_topics = FALSE`,
+#' only the main topics, as a data.frame with the variables of `$main_topics` below.
 #' 
-#' 1. **$topics** (All topics)
+#' 1. **$topics** (sub-topics, with the id of their main topic)
 #' 
 #'    |                   |                                                         |
 #'    |:------------------|:--------------------------------------------------------|
@@ -19,7 +20,7 @@
 #'    | **id**            | Id of topic                                             |
 #'    | **name**          | Name of topic                                           |
 #'    
-#' 2. **$main_topics** (exclusively main topics, if keep_sub_topics = TRUE)
+#' 2. **$main_topics** (main topics)
 #' 
 #'    |                   |                                                         |
 #'    |:------------------|:--------------------------------------------------------|

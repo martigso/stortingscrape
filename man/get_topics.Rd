@@ -10,9 +10,10 @@ get_topics(keep_sub_topics = TRUE)
 \item{keep_sub_topics}{Logical. Whether to keep sub-topics (default) for all main topics or not.}
 }
 \value{
-A list with two elements:
+With \code{keep_sub_topics = TRUE} (default), a list with two elements. With \code{keep_sub_topics = FALSE},
+only the main topics, as a data.frame with the variables of \verb{$main_topics} below.
 \enumerate{
-\item \strong{$topics} (All topics)\tabular{ll}{
+\item \strong{$topics} (sub-topics, with the id of their main topic)\tabular{ll}{
     \tab  \cr
    \strong{response_date} \tab Date of data retrieval \cr
    \strong{version} \tab Data version from the API \cr
@@ -22,7 +23,7 @@ A list with two elements:
    \strong{name} \tab Name of topic \cr
 }
 
-\item \strong{$main_topics} (exclusively main topics, if keep_sub_topics = TRUE)\tabular{ll}{
+\item \strong{$main_topics} (main topics)\tabular{ll}{
     \tab  \cr
    \strong{response_date} \tab Date of data retrieval \cr
    \strong{version} \tab Data version from the API \cr

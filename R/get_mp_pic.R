@@ -9,10 +9,10 @@
 #' @param mpid Character string, or a vector of strings, indicating the id of the MP to retrieve.
 #' @param size Character string size of the picture. Accepts values "lite" (small), "middels" (medium -- default), and "stort" (big).
 #' @param destfile Character string specifying where to save the picture. With several ids, one destfile per id.
-#' @param show_plot Logical. FALSE (default) if no plot should be produced and TRUE if plot should be produced. Requires the "imager" package.
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param show_plot Logical. FALSE (default) if no plot should be produced and TRUE if plot should be produced. Requires the "magick" package.
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
-#' @return Picture of the requested MP in the preferred size.
+#' @return No return value; called for its side effects (saves the picture to `destfile` and/or plots it).
 #' 
 #' @seealso [get_mp] [get_parlperiod_mps] [get_mp_bio]
 #' 
@@ -40,7 +40,10 @@ get_mp_pic <- function(mpid = NA, size = "middels",
       stop("Give one destfile per mpid.", call. = FALSE)
     destfile <- rep_len(destfile, length(mpid))
     for(i in seq_along(mpid)) {
-      get_mp_pic(mpid[i], size = size, destfile = destfile[i], show_plot = show_plot, good_manners = good_manners)
+      tryCatch(
+        get_mp_pic(mpid[i], size = size, destfile = destfile[i], show_plot = show_plot, good_manners = good_manners),
+        error = function(e) warning("id '", mpid[i], "' failed: ", conditionMessage(e), call. = FALSE)
+      )
     }
     return(invisible(NULL))
   }
@@ -50,23 +53,9 @@ get_mp_pic <- function(mpid = NA, size = "middels",
                 "&storrelse=", 
                 size)
   
-  resp <- api_perform(url)
-
-  if(resp$status_code != 200) {
-    stop(
-      paste0(
-        "Response of ", 
-        url, 
-        " is '", 
-        resp |> resp_status_desc(),
-        "' (",
-        resp$status_code,
-        ")."
-      ), 
-      call. = FALSE)
-  }
+  resp <- api_request(url)
   
-  if(resp_content_type(resp) != "image/jpeg") {
+  if(!identical(resp_content_type(resp), "image/jpeg")) {
     stop(
       paste0(
         "Response of ", 

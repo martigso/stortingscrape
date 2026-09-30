@@ -3,7 +3,7 @@
 \docType{data}
 \name{covid_relief}
 \alias{covid_relief}
-\title{Vote id 85196}
+\title{Votes on case id 85196}
 \format{
 A data frame with 22 columns and 71 rows
 

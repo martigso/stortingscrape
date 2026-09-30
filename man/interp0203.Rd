@@ -3,7 +3,7 @@
 \docType{data}
 \name{interp0203}
 \alias{interp0203}
-\title{Interpellations from the 2002-2003}
+\title{Interpellations from the 2002-2003 session}
 \format{
 A data frame with 26 columns and 22 rows
 
@@ -14,9 +14,9 @@ A data frame with 26 columns and 22 rows
 \item{answ_by_minister_id}{Department id of answering minister}
 \item{answ_by_minister_title}{Department title of answering minister}
 \item{answ_date}{Date answer was given}
-\item{answ_on_belhalf_of}{Answer given on behalf of}
-\item{answ_on_belhalf_of_minister_id}{Department id of minister given answer on behalf of}
-\item{answ_on_belhalf_of_minister_title}{Department title of minister given answer on behalf of}
+\item{answ_on_behalf_of}{Answer given on behalf of}
+\item{answ_on_behalf_of_minister_id}{Department id of minister given answer on behalf of}
+\item{answ_on_behalf_of_minister_title}{Department title of minister given answer on behalf of}
 \item{topic_ids}{Id of relevant topics for question}
 \item{moved_to}{Question moved to}
 \item{asked_by_other_id}{MP id, if question was not asked by the questioning MP}
@@ -24,16 +24,16 @@ A data frame with 26 columns and 22 rows
 \item{correct_person}{Not documented in API}
 \item{correct_person_minister_id}{Not documented in API}
 \item{correct_person_minister_title}{Not documented in API}
-\item{sendt_date}{Date the question was sent}
+\item{sent_date}{Date the question was sent}
 \item{session_id}{Session id}
 \item{question_from_id}{Question from MP id}
-\item{qustion_number}{Question number within session}
-\item{qustion_to_id}{Question directed to minister id}
-\item{qustion_to_minister_id}{Question directed to minister department id}
-\item{qustion_to_minister_title}{Question directed to minister department title}
-\item{type}{Question type}
-\item{title}{Question title}
+\item{question_number}{Question number within session}
+\item{question_to_id}{Question directed to minister id}
+\item{question_to_minister_id}{Question directed to minister department id}
+\item{question_to_minister_title}{Question directed to minister department title}
 \item{status}{Question status}
+\item{title}{Question title}
+\item{type}{Question type}
 }
 }
 \source{

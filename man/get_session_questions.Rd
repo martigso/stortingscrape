@@ -9,13 +9,13 @@ get_session_questions(sessionid = NA, q_type = NA, status = NA, good_manners = 0
 \arguments{
 \item{sessionid}{Character string, or a vector of strings, indicating the id of the session to retrieve questions from}
 
-\item{q_type}{Character string indicating type of question to retrieve.
+\item{q_type}{Character string indicating type of question to retrieve (required).
 Options are "interpellasjoner" (interpellations), "sporretimesporsmal" (oral questions), or "skriftligesporsmal" (written questions).}
 
 \item{status}{Character string question status extraction. Possible values are NA (extract all questions), "til_behandling" (pending questions),
 "trukket" (withdrawn questions), "bortfalt" (lapsed questions), or "alle" (all questions)}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+\item{good_manners}{Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 A data.frame with the following variables:\tabular{ll}{
@@ -26,9 +26,9 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{answ_by_minister_id} \tab Department id of answering minister \cr
    \strong{answ_by_minister_title} \tab Department title of answering minister \cr
    \strong{answ_date} \tab Date answer was given \cr
-   \strong{answ_on_belhalf_of} \tab Answer given on behalf of \cr
-   \strong{answ_on_belhalf_of_minister_id} \tab Department id of minister given answer on behalf of \cr
-   \strong{answ_on_belhalf_of_minister_title} \tab Department title of minister given answer on behalf of \cr
+   \strong{answ_on_behalf_of} \tab Answer given on behalf of \cr
+   \strong{answ_on_behalf_of_minister_id} \tab Department id of minister given answer on behalf of \cr
+   \strong{answ_on_behalf_of_minister_title} \tab Department title of minister given answer on behalf of \cr
    \strong{topic_ids} \tab Id of relevant topics for question \cr
    \strong{moved_to} \tab Question moved to \cr
    \strong{asked_by_other_id} \tab MP id, if question was not asked by the questioning MP \cr
@@ -36,7 +36,7 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{correct_person} \tab Not documented in API \cr
    \strong{correct_person_minister_id} \tab Not documented in API \cr
    \strong{correct_person_minister_title} \tab Not documented in API \cr
-   \strong{sendt_date} \tab Date the question was sent \cr
+   \strong{sent_date} \tab Date the question was sent \cr
    \strong{session_id} \tab Session id \cr
    \strong{question_from_id} \tab Question from MP id \cr
    \strong{question_number} \tab Question number within session \cr

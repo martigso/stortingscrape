@@ -5,7 +5,7 @@
 #' @usage get_parlperiod_presidency(periodid = NA, good_manners = 0)
 #' 
 #' @param periodid Character string, or a vector of strings, indicating the id of the parliamentary period to retrieve.
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame with the following variables:
 #' 
@@ -28,7 +28,7 @@
 #' @examples
 #' \dontrun{
 #'  
-#' # Request one MP by id
+#' # Request the presidency for one period
 #' get_parlperiod_presidency("2005-2009")
 #' 
 #' }

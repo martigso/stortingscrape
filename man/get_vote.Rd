@@ -2,14 +2,14 @@
 % Please edit documentation in R/get_vote.R
 \name{get_vote}
 \alias{get_vote}
-\title{Retreive votes for a specific case}
+\title{Retrieve votes for a specific case}
 \usage{
 get_vote(caseid = NA, good_manners = 0)
 }
 \arguments{
 \item{caseid}{Character string, or a vector of strings, indicating the id of the case to request all votes from}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+\item{good_manners}{Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 A data.frame with the following variables:\tabular{ll}{
@@ -31,7 +31,6 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{president_party_id} \tab Party of the sitting president \cr
    \strong{adopted} \tab Logical indication of whether the proposal voted on was adopted \cr
    \strong{vote_id} \tab Id of vote \cr
-   \strong{vote_method} \tab Voting method \cr
    \strong{vote_result_type} \tab Result type (enstemmig_vedtatt = unanimously adopted) \cr
    \strong{vote_result_type_text} \tab See \strong{vote_result_type} \cr
    \strong{vote_topic} \tab Description of the proposal voted upon \cr
@@ -52,5 +51,5 @@ get_vote(63033)
  
 }
 \seealso{
-\link{get_decision_votes} \link{get_proposal_votes} \link{get_vote} \link{get_session_cases} \link{get_case}
+\link{get_decision_votes} \link{get_proposal_votes} \link{get_session_cases} \link{get_case}
 }

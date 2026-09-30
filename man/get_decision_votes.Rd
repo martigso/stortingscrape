@@ -2,14 +2,14 @@
 % Please edit documentation in R/get_decision_votes.R
 \name{get_decision_votes}
 \alias{get_decision_votes}
-\title{Retreive vote decision for a specified vote}
+\title{Retrieve vote decision for a specified vote}
 \usage{
 get_decision_votes(voteid = NA, good_manners = 0)
 }
 \arguments{
 \item{voteid}{Character string, or a vector of strings, indicating the id of the vote to retrieve decisions from}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+\item{good_manners}{Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 A data.frame with the following variables:\tabular{ll}{

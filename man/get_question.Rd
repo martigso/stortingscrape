@@ -9,21 +9,19 @@ get_question(questionid = NA, good_manners = 0)
 \arguments{
 \item{questionid}{Character string, or a vector of strings, indicating the id of the question to retrieve}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+\item{good_manners}{Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 A data.frame with the following variables:\tabular{ll}{
     \tab  \cr
-   \strong{response_date} \tab Date of data retrieval \cr
-   \strong{version} \tab Data version from the API \cr
    \strong{justification} \tab Justification for question \cr
    \strong{answ_by_id} \tab Id for answering minister \cr
    \strong{answ_by_minister_id} \tab Id for department of answering minister \cr
    \strong{answ_by_minister_title} \tab Title for department of answering minister \cr
-   \strong{answ_date} \tab Date question was asked \cr
-   \strong{answ_on_belhalf_of} \tab Id of minister answered on behalf of, when relevant \cr
-   \strong{answ_on_belhalf_of_minister_id} \tab Id of department answered on behalf of, when relevant \cr
-   \strong{answ_on_belhalf_of_minister_title} \tab Title of department answered on behalf of, when relevant \cr
+   \strong{answ_date} \tab Date the question was answered \cr
+   \strong{answ_on_behalf_of} \tab Id of minister answered on behalf of, when relevant \cr
+   \strong{answ_on_behalf_of_minister_id} \tab Id of department answered on behalf of, when relevant \cr
+   \strong{answ_on_behalf_of_minister_title} \tab Title of department answered on behalf of, when relevant \cr
    \strong{agenda_number} \tab Agenda number in meeting \cr
    \strong{moved_to} \tab Date moved to \cr
    \strong{id} \tab Question id \cr
@@ -31,14 +29,20 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{correct_person_id} \tab Not documented in API \cr
    \strong{correct_person_minister_id} \tab Not documented in API \cr
    \strong{correct_person_minister_title} \tab Not documented in API \cr
-   \strong{sendt_date} \tab Date question was sent \cr
+   \strong{sent_date} \tab Date question was sent \cr
    \strong{session_id} \tab Session id \cr
    \strong{question_text} \tab Full question text \cr
+   \strong{response_date} \tab Date of data retrieval \cr
+   \strong{version} \tab Data version from the API \cr
    \strong{question_from_id} \tab Id of MP asking the question \cr
-   \strong{qustion_number} \tab Question number \cr
-   \strong{qustion_to_id} \tab Id of minister the question was asked to \cr
-   \strong{qustion_to_minister_id} \tab Department id of minister the question was asked to \cr
-   \strong{qustion_to_minister_title} \tab Department title of minister the question was asked to \cr
+   \strong{question_from_county_id} \tab Id of the county of the MP asking the question \cr
+   \strong{question_from_party_id} \tab Id of the party of the MP asking the question \cr
+   \strong{question_from_deputy} \tab Whether the MP asking the question is a substitute \cr
+   \strong{question_number} \tab Question number \cr
+   \strong{question_to_id} \tab Id of minister the question was asked to \cr
+   \strong{question_to_minister_id} \tab Department id of minister the question was asked to \cr
+   \strong{question_to_minister_title} \tab Department title of minister the question was asked to \cr
+   \strong{status} \tab Status of the question \cr
    \strong{answer_text} \tab Answer text (often empty) \cr
    \strong{title} \tab Question title \cr
    \strong{type} \tab Question type \cr
@@ -54,19 +58,11 @@ over a question, the \link{get_publication} function has to be used
 \dontrun{
 # An example of a possible workflow
 
-## Retreive sessions
-sessions <- get_parlsessions()
+## Retrieve all interpellations for a particular session
+qsesh <- get_session_questions("2012-2013", q_type = "interpellasjoner")
 
-## Retreive all interpellations for a particular session
-qsesh <- get_session_questions(sessions$id[9], q_type = "interpellasjoner")
-
-## Retreve detailed information on all interpellations in that session
-library(pbmcapply) # for progress bar. never use paralell on scraping
-int1213 <- pbmclapply(qsesh$id, function(x){
-    get_question(x, good_manners = 2)
-}, mc.cores = 1)
-
-quest1213 <- do.call(rbind, int1213)
+## Retrieve detailed information on all interpellations in that session
+int1213 <- get_question(qsesh$id, good_manners = 2)
 }
 
 }

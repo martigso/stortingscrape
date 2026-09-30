@@ -5,9 +5,10 @@
 \alias{speeches140213}
 \title{Speeches in the Storting's meeting on 13 February 2014}
 \format{
-A data frame with 26 columns and 48 rows (see \link{get_speeches} for details)
+A data frame with 27 columns and 48 rows (see \link{get_speeches} for details)
 
 \describe{
+\item{response_date}{Date and time of retrieval}
 \item{publication_id}{Id of the transcript}
 \item{session_id}{Id of the parliamentary session}
 \item{meeting_order}{Order of the meeting within the transcript}

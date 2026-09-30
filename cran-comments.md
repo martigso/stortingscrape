@@ -3,6 +3,9 @@
 0 errors | 0 warnings | 1 note
 
 * This is an update (0.4.1 to 0.5.0). See NEWS.md for the changes.
+* The maintainer's email address has changed from martin.soyland@stv.uio.no to
+  martin.soyland@uis.no (new employer). I will confirm the change from the
+  previous address.
 
 The NOTE is from the URL check: https://roedt.no/grafisk-materiell (in the
 documentation of `st_party_colors`) returns HTTP 429 (Too Many Requests) to

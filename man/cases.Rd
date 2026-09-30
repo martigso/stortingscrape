@@ -8,12 +8,15 @@
 A list with four elements
 
 \describe{
-\item{$root}{main data on the MP}
+\item{$root}{main data on the cases}
 \item{$topics}{named list by case id}
 \item{$proposers}{named list by case id}
 \item{$spokespersons}{named list by case id}
 \item{Further description:}{\link{get_session_cases}}
 }
+
+The dataset was retrieved with an earlier version of the package; \link{get_session_cases} now returns
+\verb{$spokespersons} as a data frame.
 }
 \source{
 \url{https://data.stortinget.no/eksport/saker?sesjonid=2019-2020}

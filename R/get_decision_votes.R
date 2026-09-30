@@ -1,4 +1,4 @@
-#' Retreive vote decision for a specified vote
+#' Retrieve vote decision for a specified vote
 #' 
 #' @description A function for retrieving vote decisions from a specific vote. 
 #' Vote data are only available from the 2011-2012 session
@@ -6,7 +6,7 @@
 #' @usage get_decision_votes(voteid = NA, good_manners = 0)
 #' 
 #' @param voteid Character string, or a vector of strings, indicating the id of the vote to retrieve decisions from
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame with the following variables:
 #' 

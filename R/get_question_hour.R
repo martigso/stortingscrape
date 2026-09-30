@@ -5,9 +5,9 @@
 #' @usage get_question_hour(meetingid = NA, good_manners = 0)
 #' 
 #' @param meetingid Character string, or a vector of strings, indicating the id of the meeting to retrieve the question hour from
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
-#' @return A list with ten data frames:
+#' @return A list with four data frames:
 #' 
 #' 1. **$root** (download meta data)
 #' 

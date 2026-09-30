@@ -6,7 +6,7 @@
 #' @usage get_result_vote(voteid = NA, good_manners = 0)
 #' 
 #' @param voteid Character string, or a vector of strings, indicating the id of the vote to retrieve results from
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame with the following variables:
 #' 
@@ -58,7 +58,7 @@ get_result_vote <- function(voteid = NA, good_manners = 0){
                        version = tmp |> html_elements("voteringsresultat_oversikt > versjon") |> html_text(),
                        vote_id = tmp |> html_elements("voteringsresultat_oversikt > votering_id") |> html_text(),
                        mp_id = tmp |> html_elements("representant_voteringsresultat > representant > id") |> html_text(),
-                       party_id = tmp |> html_elements("representant_voteringsresultat > representant > parti > id") |> html_text(),
+                       party_id = tmp |> html_elements("representant_voteringsresultat") |> html_element(xpath = "./representant/parti/id") |> html_text(),
                        vote = tmp |> html_elements("representant_voteringsresultat > votering") |> html_text())
     
     

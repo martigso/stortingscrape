@@ -10,9 +10,9 @@
 #'    |:------------------|:----------------------------------------------|
 #'    | **response_date** | Date of data retrieval                        |
 #'    | **version**       | Data version from the API                     |
-#'    | **from**          | Date session started                          |
-#'    | **id**            | Id of for session (used for other functions)  |
-#'    | **to**            | Date session ended                            |
+#'    | **from**          | Date period started                           |
+#'    | **id**            | Id of the period (used by other functions)    |
+#'    | **to**            | Date period ended                             |
 #'    | **years**         | From year to year in full format              |
 #'    
 #' @md

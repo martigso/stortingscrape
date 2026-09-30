@@ -5,9 +5,9 @@
 #' @usage get_written_hearing_input(hearingid = NA, good_manners = 0)
 #' 
 #' @param hearingid Character string, or a vector of strings, indicating the id of the hearing to retrieve.
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
-#' @return A data.frame the following variables:
+#' @return A data.frame with the following variables:
 #' 
 #'    |                                |                                             |
 #'    |:-------------------------------|:--------------------------------------------|
@@ -78,7 +78,7 @@ get_written_hearing_input <- function(hearingid = NA, good_manners = 0){
       call. = FALSE)
   }
   
-  if(resp_content_type(resp) != "text/xml") {
+  if(!identical(resp_content_type(resp), "text/xml")) {
     stop(
       paste0(
         "Response of ", 
@@ -101,7 +101,7 @@ get_written_hearing_input <- function(hearingid = NA, good_manners = 0){
                        version = tmp |> html_elements("skriftlige_innspill_oversikt > versjon") |> html_text(),
                        hearing_id = tmp |> html_elements("skriftlige_innspill_oversikt > horing_id") |> html_text(),
                        hearing_type = tmp |> html_elements("skriftlige_innspill_oversikt > horing_type") |> html_text(),
-                       committee_id = tmp |> html_elements("skriftlige_innspill_oversikt > komite > id") |> html_text(),
+                       committee_id = tmp |> html_element("skriftlige_innspill_oversikt > komite > id") |> html_text(),
                        hearing_input_date = NA,
                        hearing_input_id = NA,
                        hearing_input_organization = NA,
@@ -117,7 +117,7 @@ get_written_hearing_input <- function(hearingid = NA, good_manners = 0){
                      version = tmp |> html_elements("skriftlige_innspill_oversikt > versjon") |> html_text(),
                      hearing_id = tmp |> html_elements("skriftlige_innspill_oversikt > horing_id") |> html_text(),
                      hearing_type = tmp |> html_elements("skriftlige_innspill_oversikt > horing_type") |> html_text(),
-                     committee_id = tmp |> html_elements("skriftlige_innspill_oversikt > komite > id") |> html_text(),
+                     committee_id = tmp |> html_element("skriftlige_innspill_oversikt > komite > id") |> html_text(),
                      hearing_input_date = tmp |> html_elements("skriftlig_innspill > dato") |> html_text(),
                      hearing_input_id = tmp |> html_elements("skriftlig_innspill > id") |> html_text(),
                      hearing_input_organization = tmp |> html_elements("skriftlig_innspill > organisasjon") |> html_text(),

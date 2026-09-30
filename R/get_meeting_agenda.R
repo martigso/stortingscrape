@@ -1,11 +1,11 @@
-#' Retreive agenda for a specified meeting
+#' Retrieve agenda for a specified meeting
 #' 
 #' @description A function for retrieving the agenda for a specific meeting.
 #' 
 #' @usage get_meeting_agenda(meetingid = NA, good_manners = 0)
 #' 
 #' @param meetingid Character string, or a vector of strings, indicating the id of the meeting to retrieve the agenda from
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame with the following variables:
 #' 
@@ -24,7 +24,7 @@
 #'    | **footnote**              | Footnote for the case                                                    |
 #'    | **proposition_id**        | If relevant, belonging proposition id                                    |
 #'    | **committee_id**          | If relevant, id of the responsible committee                             |
-#'    | **legacy_question_id**    | Legacy question id, only used for mathing with old data (pre 10.12.2024) |
+#'    | **legacy_question_id**    | Legacy question id, only used for matching with old data (pre 10.12.2024) |
 #'    | **loose_proposals**       | Whether there are loose proposals to the case                            |
 #'    | **case_id**               | Id of the case                                                           |
 #'    | **question_hour_type**    | If relevant, type of question hour                                       |

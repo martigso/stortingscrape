@@ -5,13 +5,13 @@
 \alias{parl_sessions}
 \title{Parliamentary sessions}
 \format{
-A data frame with 6 columns and 36 rows
+A data frame with 6 columns and 43 rows (including sessions announced ahead of time)
 
 \describe{
 \item{response_date}{Date of data retrieval}
 \item{version}{Data version from the API}
 \item{from}{Date session started}
-\item{id}{Id of for session (used for other functions)}
+\item{id}{Id of the session (used by other functions)}
 \item{to}{Date session ended}
 \item{years}{From year to year in full format}
 }

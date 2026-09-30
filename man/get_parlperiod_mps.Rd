@@ -11,7 +11,7 @@ get_parlperiod_mps(periodid = NA, substitute = FALSE, good_manners = 0)
 
 \item{substitute}{Logical. Whether or not to include substitute MPs.}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+\item{good_manners}{Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 A data.frame with the following variables:\tabular{ll}{
@@ -37,13 +37,11 @@ A function for retrieving Norwegian MPs for a given parliamentary period from th
 
 \dontrun{
 
-# Request one MP by id
+# Request MPs from one period
 get_parlperiod_mps("2005-2009")
 
-# Request MPs from several periods by id
-ids <- c("1961-65", "1997-01", "2009-2013")
-mps <- lapply(ids, get_parlperiod_mps, good_manners = 2)
-mps <- do.call(rbind, mps)
+# Request MPs from several periods
+mps <- get_parlperiod_mps(c("1961-65", "1997-2001", "2009-2013"), good_manners = 2)
 
 }
 

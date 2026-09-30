@@ -2,26 +2,35 @@
 % Please edit documentation in R/get_proposal_votes.R
 \name{get_proposal_votes}
 \alias{get_proposal_votes}
-\title{Retreive all votes for a specified vote proposal}
+\title{Retrieve all proposals for a specified vote}
 \usage{
 get_proposal_votes(voteid = NA, good_manners = 0)
 }
 \arguments{
 \item{voteid}{Character string, or a vector of strings, indicating the id of the vote to retrieve proposals from}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+\item{good_manners}{Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 A list with two elements:
 \enumerate{
-\item \strong{$proposal_vote} (main data on the vote proposal)\tabular{ll}{
+\item \strong{$proposal_vote} (main data on the proposals, one row per proposal)\tabular{ll}{
     \tab  \cr
    \strong{response_date} \tab Date of data retrieval \cr
    \strong{version} \tab Data version from the API \cr
    \strong{vote_id} \tab Id of the vote \cr
+   \strong{proposal_designation} \tab Designation of the proposal \cr
+   \strong{proposal_designation_short} \tab Short designation of the proposal \cr
+   \strong{proposal_id} \tab Id of the proposal \cr
+   \strong{proposal_delivered_by_mp} \tab Id of the MP delivering the proposal \cr
+   \strong{proposal_on_behalf_of_text} \tab Text on whose behalf the proposal is \cr
+   \strong{proposal_sortingnumber} \tab Sorting number of the proposal \cr
+   \strong{proposal_text} \tab Text of the proposal \cr
+   \strong{proposal_type} \tab Type of proposal \cr
 }
 
-\item \strong{$proposal_by_parties$\{proposal_id\}} (what parties (id) stood behind proposal(s))
+\item \strong{$proposal_by_parties} (a list named by \code{proposal_id}, each element a character vector of the ids
+of the parties behind the proposal)
 }
 }
 \description{

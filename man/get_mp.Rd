@@ -9,7 +9,7 @@ get_mp(mpid = NA, good_manners = 0)
 \arguments{
 \item{mpid}{Character string, or a vector of strings, indicating the id of the MP to retrieve.}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+\item{good_manners}{Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
 A data.frame with the following variables:\tabular{ll}{
@@ -33,11 +33,7 @@ A function for retrieving information on Norwegian MPs from the parliament API
 get_mp("AAMH")
 
 # Request several MPs by id
-ids <- c("AAMH", "AMSK", "MAAA")
-
-mps <- lapply(ids, get_mp, good_manners = 2)
-
-mps <- do.call(rbind, mps)
+mps <- get_mp(c("AAMH", "AMSK", "MAAA"), good_manners = 2)
 }
 
 }

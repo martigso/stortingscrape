@@ -6,7 +6,7 @@
 #' @usage get_hearing_program(hearingid = NA, good_manners = 0)
 #' 
 #' @param hearingid Character string, or a vector of strings, indicating the id of the hearing to retrieve.
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
 #' @return A data.frame with the following variables:
 #' 
@@ -56,7 +56,7 @@ get_hearing_program <- function(hearingid = NA, good_manners = 0){
   version <- tmp |> html_elements("horingsprogram_oversikt > versjon") |> html_text()
   hearing_id <- tmp |> html_elements("horingsprogram_oversikt > horing_id") |> html_text()
   hearing_type <- tmp |> html_elements("horingsprogram_oversikt > horing_type") |> html_text()
-  committee_id <- tmp |> html_elements("komite > id") |> html_text()
+  committee_id <- tmp |> html_element("komite > id") |> html_text()
   hearing_program_date <- tmp |> html_elements("horingsprogram > dato") |> html_text()
   hearing_program_footnote <- tmp |> html_elements("horingsprogram > fotnote") |> html_text()
     
@@ -67,10 +67,13 @@ get_hearing_program <- function(hearingid = NA, good_manners = 0){
     text <- x |> html_elements("horingsprogram_element > tekst") |> html_text()
     time_indication <- x |> html_elements("horingsprogram_element > tidsangivelse") |> html_text()
     
-    data.frame(order_number = order_number[2:length(order_number)],
-               text = text[2:length(text)],
-               time_indication = time_indication[2:length(time_indication)],
-               date = text[1])
+    # The first element is the date header; the rest are the program items
+    items <- seq_along(order_number)[-1]
+
+    data.frame(order_number = order_number[items],
+               text = text[items],
+               time_indication = time_indication[items],
+               date = rep(text[1], length(items)))
     })
 
   
@@ -98,8 +101,9 @@ get_hearing_program <- function(hearingid = NA, good_manners = 0){
   } else {
     
     for(i in 1:length(hearing_program_participants)){
-      hearing_program_participants[[i]]$hearing_program_date <- hearing_program_date[i]
-      hearing_program_participants[[i]]$hearing_program_footnote <- hearing_program_footnote[i]
+      n <- nrow(hearing_program_participants[[i]])
+      hearing_program_participants[[i]]$hearing_program_date <- rep(hearing_program_date[i], n)
+      hearing_program_participants[[i]]$hearing_program_footnote <- rep(hearing_program_footnote[i], n)
     }
     
     

@@ -10,15 +10,15 @@ get_session_cases(sessionid = NA, good_manners = 0, cores = 1)
 \item{sessionid}{Character string, or a vector of strings, indicating the id of the parliamentary session to retrieve.
 With several ids, the result is a named list of the results below, keyed by session id.}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+\item{good_manners}{Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 
 \item{cores}{Integer. Number of cores (1 by default) to use in structuring the data.
-More than 1 will not work on windows}
+More than 1 will not work on Windows.}
 }
 \value{
-A data.frame with the following variables:
+A list with four elements:
 \enumerate{
-\item \strong{$root} (main data on the MP)\tabular{ll}{
+\item \strong{$root} (main data on the cases)\tabular{ll}{
     \tab  \cr
    \strong{response_date} \tab Date of data retrieval \cr
    \strong{version} \tab Data version from the API \cr
@@ -72,7 +72,7 @@ A function for retrieving all cases treated in a specified parliamentary session
 
 \dontrun{
 s0506 <- get_session_cases("2005-2006")
-head(s0506)
+head(s0506$root)
 }
 
 }

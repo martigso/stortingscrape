@@ -3,7 +3,7 @@
 \docType{data}
 \name{covid_relief_result}
 \alias{covid_relief_result}
-\title{Vote id 85196 results}
+\title{Vote id 17689 results}
 \format{
 A data frame with 8 columns and 169 rows
 
@@ -14,7 +14,7 @@ A data frame with 8 columns and 169 rows
 \item{mp_id}{MP id}
 \item{party_id}{Party id}
 \item{vote}{Vote: for, mot (against), ikke_tilstede (absent)}
-\item{permanent_sub_for}{Id of the MP originally holding the seat, if the substitute is }
+\item{permanent_sub_for}{Id of the MP originally holding the seat, if the substitute is permanent}
 \item{sub_for}{Id of the MP originally holding the seat}
 }
 }
@@ -25,6 +25,6 @@ A data frame with 8 columns and 169 rows
 covid_relief_result
 }
 \description{
-A dataset containing vote matrix on vote id 17689
+A dataset containing the vote matrix on vote id 17689
 }
 \keyword{datasets}

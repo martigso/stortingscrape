@@ -27,7 +27,7 @@ A function reading OBT-tagged files
 \examples{
 
 \dontrun{
-sample_text <- read_obt("./inst/extdata/obt_sample.txt")
+sample_text <- read_obt(system.file("extdata", "obt_sample.txt", package = "stortingscrape"))
 head(sample_text)
 }
 }

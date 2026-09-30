@@ -5,9 +5,9 @@
 #' @usage get_hearing_input(hearingid = NA, good_manners = 0)
 #' 
 #' @param hearingid Character string, or a vector of strings, indicating the id of the hearing to retrieve.
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' 
-#' @return A data.frame the following variables:
+#' @return A data.frame with the following variables:
 #' 
 #'    |                                |                                             |
 #'    |:-------------------------------|:--------------------------------------------|
@@ -33,7 +33,7 @@
 #' get_hearing_input(hearingid = 10004166)
 #' }
 #' 
-#' @import httr2 rvest parallel
+#' @import httr2 rvest
 #' @export
 #' 
 
@@ -46,7 +46,21 @@ get_hearing_input <- function(hearingid = NA, good_manners = 0){
   
   url <- paste0("https://data.stortinget.no/eksport/horingsinnspill?horingid=", hearingid)
   
-  tmp <- api_get(url)
+  resp <- api_perform(url)
+
+  # The API answers 500 for hearings without input (as for written input)
+  if(resp_status(resp) == 500) {
+    message("Hearing (", hearingid, ") did not have input. Returning NA.")
+    return(data.frame(response_date = NA, version = NA, hearing_id = hearingid, hearing_type = NA,
+                      committee_id = NA, hearing_input_date = NA, hearing_input_id = NA,
+                      hearing_input_organization = NA, hearing_input_text = NA, hearing_input_title = NA))
+  }
+
+  if(resp_status(resp) != 200) {
+    stop(paste0("Response of ", url, " is '", resp_status_desc(resp), "' (", resp_status(resp), ")."), call. = FALSE)
+  }
+
+  tmp <- resp |> resp_body_html(check_type = FALSE, encoding = "utf-8")
   
   
   if(html_text(html_elements(tmp, "horingsinnspill_liste")) == ""){
@@ -54,7 +68,7 @@ get_hearing_input <- function(hearingid = NA, good_manners = 0){
                        version = tmp |> html_elements("horingsinnspill_oversikt > versjon") |> html_text(),
                        hearing_id = tmp |> html_elements("horingsinnspill_oversikt > horing_id") |> html_text(),
                        hearing_type = tmp |> html_elements("horingsinnspill_oversikt > horing_type") |> html_text(),
-                       committee_id = tmp |> html_elements("komite > id") |> html_text(),
+                       committee_id = tmp |> html_element("komite > id") |> html_text(),
                        hearing_input_date = NA,
                        hearing_input_id = NA,
                        hearing_input_organization = NA,
@@ -67,7 +81,7 @@ get_hearing_input <- function(hearingid = NA, good_manners = 0){
                        version = tmp |> html_elements("horingsinnspill_oversikt > versjon") |> html_text(),
                        hearing_id = tmp |> html_elements("horingsinnspill_oversikt > horing_id") |> html_text(),
                        hearing_type = tmp |> html_elements("horingsinnspill_oversikt > horing_type") |> html_text(),
-                       committee_id = tmp |> html_elements("komite > id") |> html_text(),
+                       committee_id = tmp |> html_element("komite > id") |> html_text(),
                        hearing_input_date = tmp |> html_elements("horingsinnspill > dato") |> html_text(),
                        hearing_input_id = tmp |> html_elements("horingsinnspill > id") |> html_text(),
                        hearing_input_organization = tmp |> html_elements("horingsinnspill > organisasjon") |> html_text(),

@@ -9,6 +9,10 @@
 #' a hearing). These are split into one row per speaker; `speech_order` identifies the speech element
 #' and `speech_part` the speaker within it.
 #'
+#' The transcripts before about 2005 mostly do not say whether a speech is a main speech
+#' ("hovedinnlegg") or a reply ("replikk"); `speech_type` is then `NA`, except for the president's
+#' remarks ("presinnlegg").
+#'
 #' The meeting date is given both in the meeting heading (weekday, day, month, and, from 2007 onward,
 #' year) and in the publication id, and both contain occasional errors. When they agree, that date is
 #' used; when they disagree, the one whose weekday matches the weekday in the heading is used, and `NA`
@@ -38,7 +42,7 @@
 #'
 #' @param publicationid Character string, or a vector of strings, indicating the id of the transcript to retrieve.
 #' Ids can be found with [get_session_publications] (`type = "referat"`)
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
 #' @param link Logical. Whether to add person ids linked from the names of speakers and chairs
 #' (see [speaker_links]). Defaults to `TRUE`.
 #'
@@ -46,6 +50,7 @@
 #'
 #'    |                     |                                                                                       |
 #'    |:--------------------|:--------------------------------------------------------------------------------------|
+#'    | **response_date**   | Date and time of retrieval (the transcripts have no response date of their own)       |
 #'    | **publication_id**  | Id of the transcript                                                                  |
 #'    | **session_id**      | Id of the parliamentary session (see [get_parlsessions]), from `meeting_date`         |
 #'    | **meeting_order**   | Order of the meeting within the transcript (some transcripts hold several meetings)   |
@@ -59,11 +64,11 @@
 #'    | **speech_order**    | Order of the speech element within the transcript                                     |
 #'    | **speech_part**     | Order of the speaker within the speech element (usually 1)                            |
 #'    | **speech_id**       | Speech element id (from 2016-2017 onward)                                             |
-#'    | **speech_type**     | Type of speech ("hovedinnlegg", "replikk", or "presinnlegg")                          |
+#'    | **speech_type**     | Type of speech ("hovedinnlegg", "replikk", or "presinnlegg"; see details)            |
 #'    | **speaker_raw**     | Speaker as written in the transcript                                                  |
 #'    | **speaker_title**   | Title parsed from `speaker_raw` (e.g. "Statsråd", "Presidenten")                      |
 #'    | **speaker_name**    | Name parsed from `speaker_raw`                                                        |
-#'    | **speaker_party**   | Party parsed from `speaker_raw`, harmonized to the party ids of [get_all_parties]     |
+#'    | **speaker_party**   | Party parsed from `speaker_raw`, as a party id of [get_all_parties] (else NA)         |
 #'    | **speech_time**     | Time stamp parsed from `speaker_raw` (hh:mm:ss)                                       |
 #'    | **person_id**       | Id of the speaker (see [get_mp]), when given in the transcript                        |
 #'    | **linked_person_id**| Id of the speaker, linked from `speaker_name` (with `link = TRUE`)                    |
@@ -102,6 +107,10 @@ get_speeches <- function(publicationid = NA, good_manners = 0, link = TRUE){
   tmp <- api_get(url, as = "xml")
 
   tmp2 <- parse_speeches(tmp, publicationid)
+
+  # The transcripts have no response date of their own, so record the time of retrieval
+  retrieved <- sub("(\\d{2})(\\d{2})$", "\\1:\\2", format(Sys.time(), "%Y-%m-%dT%H:%M:%S%z"))
+  tmp2 <- data.frame(response_date = rep(retrieved, nrow(tmp2)), tmp2)
 
   if(link) tmp2 <- link_speakers(tmp2)
 
@@ -460,18 +469,22 @@ session_from_date <- function(x) {
 #' @noRd
 parse_speaker <- function(x) {
 
-  # Time stamps are usually in brackets, but sometimes in parentheses
-  time <- str_match(x, "[\\[(]\\s*(\\d{1,2})[:.](\\d{2})[:.](\\d{2})\\s*[\\])]")
+  # Time stamps are usually in brackets, but sometimes in parentheses or with a bracket missing.
+  # A garbled time stamp (extra digits, e.g. "12:02:329") is removed, but gives no time
+  time_pattern <- "[\\[(]?\\s*(\\d{1,2})[:.](\\d{2})[:.](\\d{2})(\\d*)\\s*[\\])]?"
+
+  time <- str_match(x, time_pattern)
 
   rest <- x |>
+    str_remove_all(time_pattern) |>
     str_remove_all("\\[[^\\]]*\\]") |>
-    str_remove_all("\\(\\s*\\d{1,2}[:.]\\d{2}[:.]\\d{2}\\s*\\)") |>
     str_remove_all("[\\[\\]]") |>
     str_squish() |>
-    str_remove("[\\s:]+$")
+    str_remove("[\\s:]+$") |>
+    str_remove("\\s*\\($")
 
   # Trailing parentheticals, e.g. "(Sp)" or "(A) (komiteens leder)": the party is the
-  # first one that is a party id, otherwise the last one as written
+  # first one that is a party id, and NA when none is (the text is kept in speaker_raw)
   parens <- str_extract(rest, "(\\s*\\([^()]+\\))+$")
 
   rest <- str_remove(rest, "(\\s*\\([^()]+\\))+$")
@@ -480,7 +493,7 @@ parse_speaker <- function(x) {
     if(is.na(p)) return(NA_character_)
     p <- str_squish(str_match_all(p, "\\(([^()]+)\\)")[[1]][, 2])
     known <- harmonize_party(p, known_only = TRUE)
-    if(any(!is.na(known))) known[!is.na(known)][1] else p[length(p)]
+    known[!is.na(known)][1]
   }, character(1), USE.NAMES = FALSE)
 
   title_pattern <- regex(
@@ -498,7 +511,7 @@ parse_speaker <- function(x) {
   name[name == ""] <- NA
 
   speech_time <- sprintf("%02d:%s:%s", as.integer(time[, 2]), time[, 3], time[, 4])
-  speech_time[is.na(time[, 1])] <- NA
+  speech_time[is.na(time[, 1]) | time[, 5] != ""] <- NA
 
   data.frame(
     speaker_title = title,

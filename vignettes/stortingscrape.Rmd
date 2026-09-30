@@ -65,9 +65,9 @@ examples of possible workflows for working with the package, before I summarize.
 
 The Norwegian parliament was comparatively early in granting open access to
 their data through an API when they launched [data.stortinget.no](https://data.stortinget.no) in 2012.
-The general purpose of the API is to priovide transparency in the form om raw
+The general purpose of the API is to provide transparency in the form of raw
 data, mirroring the frontend web-page information from [stortinget.no](https://stortinget.no). The
-format of the API has been fairly consistent over the time of its existance, but
+format of the API has been fairly consistent over the time of its existence, but
 there have been some small style changes over different versions.^[See
 `stortingscrape::get_publication()` for instance] `stortingscrape` was
 built under version $1.6$ of the API.
@@ -75,13 +75,13 @@ built under version $1.6$ of the API.
 Except for content that is blocked for the public (e.g. debates behind closed
 doors), the API contains all recorded data produced in Stortinget. These data
 include data on individual MPs, transcripts from debates, voting results,
-hearing input, and much more. For a exhaustive list of all data sources in the
-API.^[See https://martigso.github.io/stortingscrape/functions.html] The data
-available in the API can be accessed through XML of JSON
+hearing input, and much more. For an exhaustive list of all data sources in the
+API, see the list of functions.^[See https://martigso.github.io/stortingscrape/functions.html] The data
+available in the API can be accessed through XML or JSON
 format^[`stortingscrape` exclusively works with XML.], both of which
 are flexible formats for compressing data in nested lists.
 
-As an exmple, the raw data input for general information about a single
+As an example, the raw data input for general information about a single
 MP^[`stortingscrape::get_mp("MAAA")`] looks like this:
 
 
@@ -131,7 +131,7 @@ combined for different applications of the data.
 One of the core thoughts behind the workflow of the package is to make it easy
 to combine different parts of the API and to extract the data you actually need.
 To facilitate this, most functions within `stortingscrape` are built to work
-seemlessly with the `apply()` family or control flow constructs in
+seamlessly with the `apply()` family or control flow constructs in
 R. Because we do not want to call the API repeatedly, functions that
 are expected to often be ran repeatedly have a `good_manners` argument.
 This will make R sleep for the set amount of seconds after calling
@@ -166,23 +166,25 @@ these. One of the major benefits of this is that whether you want to extract,
 for instance, a single question found on the frontend web page, or all
 questions for a parliamentary session, the package is flexible enough to suit
 both needs (see the [workflow](#workflow) section). It will also enable users to
-quickly retreive data from the frontend
+quickly retrieve data from the frontend
 web-page.^[[stortinget.no](https://stortinget.no) as the ids are embedded in the
 urls.]
 
 Because of the interconnectedness of the API's data, there are some overlapping
-sources of data. For instance, both retreival of MP general information
-(`get_mp()`), biography (`get_mp_bio()`), and all MPs for a session
-(`get_parlperiod_mps()`) have the name of the MP in the API, but only
-`get_mp()` will return MP names in `stortingscrape`, because these two
-data sources are easily merged by the MP's id (see the [workflow](#workflow) section).
+sources of data. For instance, MP general information (`get_mp()`), biographies
+(`get_mp_bio()`), and all MPs for a parliamentary period (`get_parlperiod_mps()`)
+all have the names of the MPs in the API, but `get_mp_bio()` does not return them
+in `stortingscrape`, because these data sources are easily merged by the MP's id
+(see the [workflow](#workflow) section). Note that the same person id is called
+`mp_id` in most functions, `person_id` in `get_speeches()` and
+`get_parlperiod_presidency()`, and `id` in `get_mp()` and `get_mp_bio()`.
 
 
 The scope of `stortingscrape` is almost the entire API of Stortinget, with
 some notable shortcomings. First, there are no functions for dynamically
 updated data sources, such as current speaker lists
 (https://data.stortinget.no/dokumentasjon-og-hjelp/talerliste/). Second,
-as mentioned above, duplicated data i avoided whenever possible. Third, certain
+as mentioned above, duplicated data is avoided whenever possible. Third, certain
 unstandardized image sources -- such as publication attachment figures -- are
 not supported in the package. And finally, publications from the
 `get_publication()` function can be retrieved, but are returned as parsed XML
@@ -238,15 +240,15 @@ relatively rapidly proposed and treated in the Storting during the early days of
 June 2021. The case in its entirety can be found at
 [here](https://stortinget.no/no/Saker-og-publikasjoner/Saker/Sak/?p=85196). You 
 will see the procedure steps from a government proposal, through work in the
-finance committee, to debate and decision. Lets say a particular proposal under
+finance committee, to debate and decision. Let's say a particular proposal under
 the case caught our eye -- for instance, vote number 61 from the Labor Party
 asking the government to propose a plan for implementing the International Labor
 Organization's core conventions to the Human Rights Act
 (menneskerettighetsloven).
 
 As can be seen from the link to the case itself, we have an ID within the URL:
-"85196". This is the case ID. We can use the `get_case()`  function from
-`stortingscrape` to extract all votes  on this case:
+"85196". This is the case ID. We can use the `get_vote()` function from
+`stortingscrape` to extract all votes on this case:
 
 ```{r covid_relief, eval=-1}
 covid_relief <- get_vote("85196")
@@ -273,7 +275,7 @@ covid_relief$vote_id[which(grepl("217", covid_relief$vote_topic))]
 To get the personal MP vote results for this particular vote, we can use the
 `get_result_vote()` function:^[I have not decided if data values
 should be translated or not. In this case, "for" is "for", "mot" is
-"against", and "ikke_tilstede" is "absent".}]
+"against", and "ikke_tilstede" is "absent".]
 
 
 ```{r covid_relief_result, eval=-1}
@@ -296,9 +298,9 @@ table(covid_relief_result$party_id,
 
 ```
 
-As suspected, the vote was divided between the opposition (A, MDG, R, SP, and
-SV) and government parties (H, KrF, V, and FrP), and was not adopted by a thin
-margin of 2 votes. Of course, this is a minimal example, but I will highlight
+As suspected, the vote was divided between the opposition parties A, MDG, R, Sp,
+and SV on the one side, and the government parties (H, KrF, and V) together with
+FrP on the other, and was not adopted by a thin margin of 2 votes. Of course, this is a minimal example, but I will highlight
 more methods for extracting multiple votes below.
 
 ## Sequences of data extraction
@@ -364,7 +366,7 @@ transcript of the meeting (see Example 3 below).
 
 ## Example 2: From cases to MP vote results
 
-Next, I showcase how to get go from cases in a section, through extracting a case 
+Next, I showcase how to go from cases in a session, through extracting a case 
 of interest and vote results, to vote matrices for that case.
 
 First, I extract all cases in the 2019-2020 session:
@@ -380,8 +382,8 @@ the case ID in `$root` to access vote information for a case -- in this example
 the 48th row in the data:^[I will note that it is possible to extract
 vote information on all cases by either using the `apply()` family or
 control flow constructs available in R. However, in this case,
-calling the API 616 (`nrow(cases[["root"]])`) times, will require to pause
-between calls (with the {`good_manners` argument). This will increase
+calling the API 614 (`nrow(cases[["root"]])`) times will require pausing
+between calls (with the `good_manners` argument). This will increase
 running time substantially.]
 
 
@@ -416,7 +418,7 @@ And make an overall proportion table over party distribution for the three votes
 
 ```{r votetab, eval=FALSE}
 table(vote_result$vote, vote_result$party_id,
-      dnn = c("Vote result", "Vote ID")) |>
+      dnn = c("Vote result", "Party")) |>
   prop.table(margin = 2) |>
   round(digits = 2)
 

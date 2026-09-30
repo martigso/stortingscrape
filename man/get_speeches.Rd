@@ -10,7 +10,7 @@ get_speeches(publicationid = NA, good_manners = 0, link = TRUE)
 \item{publicationid}{Character string, or a vector of strings, indicating the id of the transcript to retrieve.
 Ids can be found with \link{get_session_publications} (\code{type = "referat"})}
 
-\item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
+\item{good_manners}{Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 
 \item{link}{Logical. Whether to add person ids linked from the names of speakers and chairs
 (see \link{speaker_links}). Defaults to \code{TRUE}.}
@@ -18,6 +18,7 @@ Ids can be found with \link{get_session_publications} (\code{type = "referat"})}
 \value{
 A data.frame with the following variables:\tabular{ll}{
     \tab  \cr
+   \strong{response_date} \tab Date and time of retrieval (the transcripts have no response date of their own) \cr
    \strong{publication_id} \tab Id of the transcript \cr
    \strong{session_id} \tab Id of the parliamentary session (see \link{get_parlsessions}), from \code{meeting_date} \cr
    \strong{meeting_order} \tab Order of the meeting within the transcript (some transcripts hold several meetings) \cr
@@ -31,11 +32,11 @@ A data.frame with the following variables:\tabular{ll}{
    \strong{speech_order} \tab Order of the speech element within the transcript \cr
    \strong{speech_part} \tab Order of the speaker within the speech element (usually 1) \cr
    \strong{speech_id} \tab Speech element id (from 2016-2017 onward) \cr
-   \strong{speech_type} \tab Type of speech ("hovedinnlegg", "replikk", or "presinnlegg") \cr
+   \strong{speech_type} \tab Type of speech ("hovedinnlegg", "replikk", or "presinnlegg"; see details) \cr
    \strong{speaker_raw} \tab Speaker as written in the transcript \cr
    \strong{speaker_title} \tab Title parsed from \code{speaker_raw} (e.g. "Statsråd", "Presidenten") \cr
    \strong{speaker_name} \tab Name parsed from \code{speaker_raw} \cr
-   \strong{speaker_party} \tab Party parsed from \code{speaker_raw}, harmonized to the party ids of \link{get_all_parties} \cr
+   \strong{speaker_party} \tab Party parsed from \code{speaker_raw}, as a party id of \link{get_all_parties} (else NA) \cr
    \strong{speech_time} \tab Time stamp parsed from \code{speaker_raw} (hh:mm:ss) \cr
    \strong{person_id} \tab Id of the speaker (see \link{get_mp}), when given in the transcript \cr
    \strong{linked_person_id} \tab Id of the speaker, linked from \code{speaker_name} (with \code{link = TRUE}) \cr
@@ -56,6 +57,10 @@ hearings, and meetings in the European Committee are all published as transcript
 Some speech elements in the transcripts hold more than one speaker (e.g. a question and an answer in
 a hearing). These are split into one row per speaker; \code{speech_order} identifies the speech element
 and \code{speech_part} the speaker within it.
+
+The transcripts before about 2005 mostly do not say whether a speech is a main speech
+("hovedinnlegg") or a reply ("replikk"); \code{speech_type} is then \code{NA}, except for the president's
+remarks ("presinnlegg").
 
 The meeting date is given both in the meeting heading (weekday, day, month, and, from 2007 onward,
 year) and in the publication id, and both contain occasional errors. When they agree, that date is

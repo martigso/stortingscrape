@@ -3,12 +3,13 @@
 #' A function for retrieving all speech activity from an MP during a specific parliamentary session. 
 #' Only available from the 2011-2012 session and onwards.
 #' 
-#' @usage get_session_mp_speech_activity(sessionid = NA, mp_id = NA, good_manners = 0)
+#' @usage get_session_mp_speech_activity(sessionid = NA, mpid = NA, good_manners = 0, mp_id = NULL)
 #' 
 #' @param sessionid Character string, or a vector of strings, indicating the session to retrieve speeches from.
-#' @param mp_id Character string, or a vector of strings, for the MP to retrieve all speeches of in a given session.
+#' @param mpid Character string, or a vector of strings, for the MP to retrieve all speeches of in a given session.
 #' With several sessions and/or MPs, all combinations are retrieved and bound together.
-#' @param good_manners Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param good_manners Numeric. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).
+#' @param mp_id Deprecated; use `mpid`.
 #' 
 #' @return A data.frame with the following variables:
 #' 
@@ -22,7 +23,7 @@
 #'    | **meeting_id**         | Meeting id                                       |
 #'    | **speech_start_time**  | Start time of speech                             |
 #'    | **speech_type**        | Type of speech                                   |
-#'    | **speech_length_secs** | Lenght of speech in seconds                      |
+#'    | **speech_length_secs** | Length of speech in seconds                      |
 #' 
 #' @md
 #' 
@@ -44,26 +45,31 @@
 
 
 
-get_session_mp_speech_activity <- function(sessionid = NA, mp_id = NA, good_manners = 0){
+get_session_mp_speech_activity <- function(sessionid = NA, mpid = NA, good_manners = 0, mp_id = NULL){
+
+  if(!is.null(mp_id)) {
+    warning("The `mp_id` argument is deprecated; use `mpid` instead.", call. = FALSE)
+    mpid <- mp_id
+  }
 
   if(length(sessionid) > 1)
-    return(fetch_multi(sessionid, get_session_mp_speech_activity, good_manners, mp_id = mp_id))
+    return(fetch_multi(sessionid, get_session_mp_speech_activity, good_manners, mpid = mpid))
 
-  if(length(mp_id) > 1)
-    return(fetch_multi(mp_id, function(id, good_manners) get_session_mp_speech_activity(sessionid, id, good_manners), good_manners))
+  if(length(mpid) > 1)
+    return(fetch_multi(mpid, function(id, good_manners) get_session_mp_speech_activity(sessionid, id, good_manners), good_manners))
   
-  url <- paste0("https://data.stortinget.no/eksport/representanttaleaktiviteter?personid=", mp_id, "&sesjonid=", sessionid)
+  url <- paste0("https://data.stortinget.no/eksport/representanttaleaktiviteter?personid=", mpid, "&sesjonid=", sessionid)
   
   tmp <- api_get(url)
   
   if(identical(tmp |> html_elements("representant_tale_aktivitet > tale_type") |> html_text(), character())){
     
-    message(mp_id, " had no activity in ", sessionid, ". \n\tReturning empty...")
+    message(mpid, " had no activity in ", sessionid, ". \n\tReturning empty...")
     
     tmp2 <- data.frame(response_date = tmp |> html_elements("representant_tale_aktivitet_oversikt > respons_dato_tid") |> html_text(),
                        version = tmp |> html_elements("representant_tale_aktivitet_oversikt > versjon") |> html_text(),
                        session_id = tmp |> html_elements("representant_tale_aktivitet_oversikt > sesjon_id") |> html_text(),
-                       mp_id = mp_id,
+                       mp_id = mpid,
                        agenda_case_number = NA,
                        meeting_id = NA,
                        speech_start_time = NA,
@@ -76,7 +82,7 @@ get_session_mp_speech_activity <- function(sessionid = NA, mp_id = NA, good_mann
     tmp2 <- data.frame(response_date = tmp |> html_elements("representant_tale_aktivitet_oversikt > respons_dato_tid") |> html_text(),
                        version = tmp |> html_elements("representant_tale_aktivitet_oversikt > versjon") |> html_text(),
                        session_id = tmp |> html_elements("representant_tale_aktivitet_oversikt > sesjon_id") |> html_text(),
-                       mp_id = mp_id,
+                       mp_id = mpid,
                        agenda_case_number = tmp |> html_elements("representant_tale_aktivitet > dagsorden_sak_nummer") |> html_text(),
                        meeting_id = tmp |> html_elements("representant_tale_aktivitet > mote_id") |> html_text(),
                        speech_start_time = tmp |> html_elements("representant_tale_aktivitet > tale_start_tid") |> html_text(),
