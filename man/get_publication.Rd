@@ -12,21 +12,26 @@ get_publication(publicationid = NA, good_manners = 0)
 \item{good_manners}{Integer. Seconds delay between calls when making multiple calls to the same function. Note that the Stortinget API is limited to 100 calls per minute (see \url{https://data.stortinget.no/nyhetsoversikt/begrensning-pa-api-kall/}).}
 }
 \value{
-A raw html_document
+A raw xml_document
 }
 \description{
 A function for retrieving a specific publication. Because these are formatted very differently in the API,
-the returning object is in a raw html_document format, best manipulated with html node extraction functions
-such as \code{\link[rvest:html_elements]{rvest::html_elements()}} .
+the returning object is the raw XML document, best manipulated with node extraction functions
+such as \code{\link[rvest:html_elements]{rvest::html_elements()}} or \code{\link[xml2:xml_find_all]{xml2::xml_find_all()}}.
+}
+\details{
+Note that element and attribute names are case sensitive. Publications from before the 2016-2017 session
+use lowercase names (e.g. \code{innlegg}, \code{sakid}), while later publications use capitalized names
+(e.g. \code{Replikk}, \code{personID}). For debate transcripts, \link{get_speeches} returns the speeches as a data frame.
 }
 \examples{
 
 \dontrun{
 pub <- get_publication("refs-201819-03-06")
-(pub |> html_elements("replikk"))[1] |> html_text()
+(pub |> html_elements("Replikk"))[1] |> html_text()
 }
  
 }
 \seealso{
-\link{get_question} \link{get_question_hour} \link{get_session_publications}
+\link{get_speeches} \link{get_question} \link{get_question_hour} \link{get_session_publications}
 }

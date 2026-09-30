@@ -7,6 +7,11 @@
 #' \code{Retry-After} header. Returns the raw response object with no status
 #' check, so callers can implement bespoke status handling.
 #'
+#' The throttle is a token bucket that starts full, so the most requests in any
+#' 60-second window is \code{capacity} plus what refills in 60 seconds. A bucket
+#' of 10 refilling at 90 per minute keeps that at 100, while still allowing short
+#' bursts (a bucket of 100 refilling at 100 per minute allows up to 200).
+#'
 #' @param url Character. Fully built request URL.
 #'
 #' @return An \pkg{httr2} response object (any status code).
@@ -16,7 +21,7 @@
 api_perform <- function(url) {
 
   request(url) |>
-    req_throttle(capacity = 100, fill_time_s = 60) |>
+    req_throttle(capacity = 10, fill_time_s = 10 / 1.5) |>
     req_retry(max_tries = 5, is_transient = function(resp) resp_status(resp) == 429) |>
     req_error(is_error = function(resp) FALSE) |>
     req_perform()
@@ -64,12 +69,16 @@ api_request <- function(url) {
 #' check and parses the body as HTML/XML.
 #'
 #' @param url Character. Fully built request URL.
+#' @param as Character. \code{"html"} (default) parses with the lenient HTML
+#'   parser, which lowercases element and attribute names. \code{"xml"} parses
+#'   as strict XML, preserving names and nesting; use this for documents where
+#'   case or structure matters (e.g. publications).
 #'
 #' @return A parsed \pkg{rvest}/\pkg{xml2} document.
 #'
 #' @keywords internal
 #' @noRd
-api_get <- function(url) {
+api_get <- function(url, as = "html") {
 
   resp <- api_request(url)
 
@@ -83,6 +92,10 @@ api_get <- function(url) {
         "'.",
         " Should be 'text/xml'."),
       call. = FALSE)
+  }
+
+  if(as == "xml") {
+    return(resp |> resp_body_xml(check_type = FALSE, encoding = "utf-8"))
   }
 
   resp |>

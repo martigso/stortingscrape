@@ -4,7 +4,6 @@
 .Rproj.user/*
 ./R/tests
 ./src/r/tests
-.Rbuildignore
 .httr-oauth
 .DS_Store
 
@@ -27,3 +26,5 @@ docs
 
 # CRAN stuff
 CRAN-SUBMISSION
+# Download cache for data-raw/speaker_links.R (about 1.4 GB)
+data-raw/cache/

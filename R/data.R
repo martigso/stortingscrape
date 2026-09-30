@@ -261,3 +261,98 @@
 #' 
 #' }
 "st_party_colors" 
+
+#' Person ids for speakers and chairs in debate transcripts
+#'
+#' A crosswalk from the names of speakers and chairs, as written in the debate
+#' transcripts (see [get_speeches]), to person ids, by parliamentary session.
+#' Join it to the output of [get_speeches] by `speaker_name` and `session_id`
+#' (speakers) or by `chair_name` and `session_id` (chairs).
+#'
+#' Names are linked to MPs and substitutes of the session's parliamentary period
+#' ([get_parlperiod_mps]) and to ministers in office during the session. A name
+#' is linked only when exactly one person matches, first on the full name and
+#' then on first and last name. Names with no such match can still be linked as
+#' a changed name (e.g. a surname added or dropped at marriage): when the first
+#' name is the same, every word of the shorter name is in the longer one, exactly
+#' one MP in the period fits, and the name is written with that MP's party
+#' throughout the session. A name that only matches a substitute registration,
+#' and is never written with a party, a title, or as chair in the session (e.g. a
+#' witness in a hearing), is not linked. There are no manual corrections: names
+#' that cannot be resolved this way (e.g. witnesses in hearings, misspelled names,
+#' and some changed names) have `linked_person_id` `NA`.
+#'
+#' The links are made from names only and do not use the `person_id` given in
+#' the transcripts from 2016-2017 onward, which is sometimes wrong in hearings
+#' and committee meetings.
+#'
+#' Ministers and their periods in office come from a list of ministers from 1945
+#' to January 2024, supplemented by the cabinet posts in [get_mp_bio] for
+#' ministers in office after that. The minister data will be updated in a later
+#' version.
+#'
+#' The dataset covers the transcripts available in the API when it was built
+#' (sessions 1998-99 onward). The API's list of transcripts for 2008-2009 fails,
+#' so these transcripts were found by their ids, constructed from
+#' [get_session_meetings]; open hearings in that session are therefore missing.
+#' Four listed transcripts (s031205, s050526k, s602081, o006051) could not be
+#' retrieved from the API.
+#'
+#' @format A data frame with 4 columns and 8195 rows
+#'
+#' \describe{
+#'    \item{speaker_name}{Name as written in the transcripts (`speaker_name` or `chair_name` in [get_speeches])}
+#'    \item{session_id}{Id of the parliamentary session}
+#'    \item{linked_person_id}{Id of the person (see [get_mp]), or `NA` when the name cannot be linked}
+#'    \item{link_method}{How the name was linked: on full name, first and last name, or as a changed name, to an MP roster and/or a minister spell; "ambiguous" when several persons match; "substitute only, no party or title" when not linked for that reason}
+#' }
+#'
+#' @source Built by `data-raw/speaker_links.R` from \url{https://data.stortinget.no/eksport/publikasjon},
+#' \url{https://data.stortinget.no/eksport/representanter}, and a list of ministers and their periods in
+#' office from regjeringen.no, supplemented by \url{https://data.stortinget.no/eksport/kodetbiografi}.
+#'
+#' @examples
+#' \dontrun{
+#'
+#' speeches <- get_speeches("refs-202425-06-12")
+#'
+#' speeches <- merge(speeches, speaker_links, by = c("speaker_name", "session_id"), all.x = TRUE)
+#'
+#' }
+"speaker_links"
+
+#' Speeches in the Storting's meeting on 13 February 2014
+#'
+#' A dataset containing all speeches in the transcript of the Storting's meeting
+#' on 13 February 2014 (publication id "s140213"), as returned by [get_speeches]
+#'
+#' @format A data frame with 23 columns and 48 rows (see [get_speeches] for details)
+#'
+#' \describe{
+#'    \item{publication_id}{Id of the transcript}
+#'    \item{session_id}{Id of the parliamentary session}
+#'    \item{meeting_order}{Order of the meeting within the transcript}
+#'    \item{meeting_id}{Meeting id, when given in the transcript}
+#'    \item{meeting_title}{Raw meeting heading}
+#'    \item{meeting_date}{Date of the meeting}
+#'    \item{section}{Name of the XML element directly containing the speech}
+#'    \item{case_id}{Id of the case the speech belongs to, when given in the transcript}
+#'    \item{agenda_no}{Agenda item number (from 2016-2017 onward)}
+#'    \item{agenda_merged}{Agenda item numbers debated together (from 2016-2017 onward)}
+#'    \item{speech_order}{Order of the speech element within the transcript}
+#'    \item{speech_part}{Order of the speaker within the speech element}
+#'    \item{speech_id}{Speech element id (from 2016-2017 onward)}
+#'    \item{speech_type}{Type of speech}
+#'    \item{speaker_raw}{Speaker as written in the transcript}
+#'    \item{speaker_title}{Title parsed from `speaker_raw`}
+#'    \item{speaker_name}{Name parsed from `speaker_raw`}
+#'    \item{speaker_party}{Party parsed from `speaker_raw`}
+#'    \item{speech_time}{Time stamp parsed from `speaker_raw`}
+#'    \item{person_id}{Id of the speaker, when given in the transcript}
+#'    \item{chair_name}{Name of the sitting chair}
+#'    \item{chair_id}{Id of the sitting chair, when given in the transcript}
+#'    \item{text}{Speech text, one line per paragraph}
+#' }
+#'
+#' @source \url{https://data.stortinget.no/eksport/publikasjon?publikasjonid=s140213}
+"speeches140213"
