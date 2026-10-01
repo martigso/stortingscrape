@@ -144,6 +144,10 @@
     and
     [`get_session_hearings()`](https://martigso.github.io/stortingscrape/reference/get_session_hearings.md)
     use one core on Windows, where `mclapply()` cannot use more.
+  - Requests with Æ, Ø, or Å in an id (e.g. some person ids) are now
+    sent as UTF-8, so they also work on systems whose native encoding is
+    not UTF-8, and weekday names with å or ø in meeting headings are
+    read correctly on such systems.
 
 ## stortingscrape 0.4.1
 

@@ -71,6 +71,7 @@
 <code><a href="../reference/get_hearing_program.html">get_hearing_program()</a></code> handles programs with a single element, and <code><a href="../reference/get_proceedings.html">get_proceedings()</a></code> compares step numbers as numbers.</li>
 <li>
 <code><a href="../reference/get_parlperiod_mps.html">get_parlperiod_mps()</a></code> no longer prints a message for each period, and <code><a href="../reference/get_session_cases.html">get_session_cases()</a></code> and <code><a href="../reference/get_session_hearings.html">get_session_hearings()</a></code> use one core on Windows, where <code>mclapply()</code> cannot use more.</li>
+<li>Requests with Æ, Ø, or Å in an id (e.g. some person ids) are now sent as UTF-8, so they also work on systems whose native encoding is not UTF-8, and weekday names with å or ø in meeting headings are read correctly on such systems.</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
