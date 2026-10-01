@@ -598,8 +598,11 @@ meeting_dates <- function(x, publicationid) {
   months <- c("januar", "februar", "mars", "april", "mai", "juni", "juli",
               "august", "september", "oktober", "november", "desember")
 
-  weekdays <- c(mandag = 1, "m\u00e5ndag" = 1, tirsdag = 2, tysdag = 2, onsdag = 3, torsdag = 4,
-                fredag = 5, "l\u00f8rdag" = 6, laurdag = 6, "s\u00f8ndag" = 0)
+  # Names assigned separately rather than in c(), where they would be converted to the native
+  # encoding (and "m\u00e5ndag" etc. garbled on systems where that is not UTF-8)
+  weekdays <- c(1, 1, 2, 2, 3, 4, 5, 6, 6, 0)
+  names(weekdays) <- c("mandag", "m\u00e5ndag", "tirsdag", "tysdag", "onsdag", "torsdag",
+                       "fredag", "l\u00f8rdag", "laurdag", "s\u00f8ndag")
 
   from_id <- rep(date_from_publicationid(publicationid), length(x))
 

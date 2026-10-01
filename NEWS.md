@@ -26,6 +26,7 @@
     * `get_hearing_input()` returns a row of `NA` for hearings without input (the API answers with an error), like `get_written_hearing_input()`.
     * `get_hearing_program()` handles programs with a single element, and `get_proceedings()` compares step numbers as numbers.
     * `get_parlperiod_mps()` no longer prints a message for each period, and `get_session_cases()` and `get_session_hearings()` use one core on Windows, where `mclapply()` cannot use more.
+    * Requests with Æ, Ø, or Å in an id (e.g. some person ids) are now sent as UTF-8, so they also work on systems whose native encoding is not UTF-8, and weekday names with å or ø in meeting headings are read correctly on such systems.
 
 # stortingscrape 0.4.1
 

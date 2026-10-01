@@ -48,11 +48,14 @@ get_mp_pic <- function(mpid = NA, size = "middels",
     return(invisible(NULL))
   }
   
-  url <- paste0("https://data.stortinget.no/eksport/personbilde?personid=", 
-                mpid, 
-                "&storrelse=", 
+  url <- paste0("https://data.stortinget.no/eksport/personbilde?personid=",
+                mpid,
+                "&storrelse=",
                 size)
-  
+
+  # Percent-encoded as UTF-8, as the url is also used directly by download.file() and magick
+  url <- URLencode(enc2utf8(url))
+
   resp <- api_request(url)
   
   if(!identical(resp_content_type(resp), "image/jpeg")) {

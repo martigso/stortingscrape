@@ -17,8 +17,13 @@
 #' @return An \pkg{httr2} response object (any status code).
 #'
 #' @keywords internal
+#' @importFrom utils URLencode
 #' @noRd
 api_perform <- function(url) {
+
+  # Percent-encode the URL as UTF-8 (e.g. person ids with \u00c6, \u00d8, or \u00c5), so requests
+  # do not depend on the native encoding of the system
+  url <- URLencode(enc2utf8(url))
 
   request(url) |>
     req_throttle(capacity = 10, fill_time_s = 10 / 1.5) |>

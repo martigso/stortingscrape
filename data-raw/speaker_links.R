@@ -101,7 +101,7 @@ message(length(ids), " transcript ids, ", length(todo), " to download")
 for(i in seq_along(todo)) {
   id <- todo[i]
   t0 <- Sys.time()
-  resp <- api_raw(paste0("https://data.stortinget.no/eksport/publikasjon?publikasjonid=", URLencode(id, reserved = TRUE)))
+  resp <- api_raw(paste0("https://data.stortinget.no/eksport/publikasjon?publikasjonid=", URLencode(enc2utf8(id), reserved = TRUE)))
   status <- if(is.null(resp)) NA else resp_status(resp)
   if(status %in% 200) writeBin(resp_body_raw(resp), file.path(cache_dir, "xml", paste0(id, ".xml")))
   write.table(data.frame(id, status, bytes = if(is.null(resp)) NA else length(resp_body_raw(resp)),
